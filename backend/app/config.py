@@ -5,11 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# On Vercel serverless functions, only /tmp is writable
-if os.getenv("VERCEL"):
-    DEFAULT_DB_PATH = "/tmp/krishivani.db"
-else:
-    DEFAULT_DB_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "krishivani.db"))
+DEFAULT_DB_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "krishivani.db"))
 
 class Settings(BaseSettings):
     OPENWEATHER_API_KEY: str = os.getenv("OPENWEATHER_API_KEY", "")
