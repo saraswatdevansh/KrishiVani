@@ -1,0 +1,191 @@
+[
+  {
+    "state": "Punjab",
+    "nitrogen": 85.0,
+    "phosphorus": 46.0,
+    "potassium": 35.0,
+    "ph": 7.2,
+    "rainfall": 85.0,
+    "major_crops": ["rice", "maize", "cotton", "blackgram", "chickpea"]
+  },
+  {
+    "state": "Haryana",
+    "nitrogen": 80.0,
+    "phosphorus": 45.0,
+    "potassium": 28.0,
+    "ph": 7.4,
+    "rainfall": 80.0,
+    "major_crops": ["cotton", "maize", "chickpea", "rice", "mungbean"]
+  },
+  {
+    "state": "Uttar Pradesh",
+    "nitrogen": 76.0,
+    "phosphorus": 48.0,
+    "potassium": 25.0,
+    "ph": 6.8,
+    "rainfall": 88.0,
+    "major_crops": ["maize", "rice", "pigeonpeas", "lentil", "chickpea", "blackgram"]
+  },
+  {
+    "state": "Madhya Pradesh",
+    "nitrogen": 38.0,
+    "phosphorus": 65.0,
+    "potassium": 30.0,
+    "ph": 7.1,
+    "rainfall": 80.0,
+    "major_crops": ["chickpea", "blackgram", "pigeonpeas", "cotton", "lentil"]
+  },
+  {
+    "state": "Maharashtra",
+    "nitrogen": 50.0,
+    "phosphorus": 55.0,
+    "potassium": 35.0,
+    "ph": 6.9,
+    "rainfall": 82.0,
+    "major_crops": ["cotton", "pomegranate", "grapes", "pigeonpeas", "banana", "mango"]
+  },
+  {
+    "state": "Gujarat",
+    "nitrogen": 60.0,
+    "phosphorus": 42.0,
+    "potassium": 28.0,
+    "ph": 7.5,
+    "rainfall": 70.0,
+    "major_crops": ["cotton", "mothbeans", "watermelon", "muskmelon", "chickpea"]
+  },
+  {
+    "state": "Rajasthan",
+    "nitrogen": 25.0,
+    "phosphorus": 45.0,
+    "potassium": 22.0,
+    "ph": 7.8,
+    "rainfall": 52.0,
+    "major_crops": ["mothbeans", "mungbean", "chickpea", "watermelon", "muskmelon"]
+  },
+  {
+    "state": "Bihar",
+    "nitrogen": 72.0,
+    "phosphorus": 45.0,
+    "potassium": 25.0,
+    "ph": 6.6,
+    "rainfall": 105.0,
+    "major_crops": ["maize", "rice", "lentil", "jute", "pigeonpeas"]
+  },
+  {
+    "state": "West Bengal",
+    "nitrogen": 80.0,
+    "phosphorus": 46.0,
+    "potassium": 38.0,
+    "ph": 6.3,
+    "rainfall": 175.0,
+    "major_crops": ["rice", "jute", "mango", "banana"]
+  },
+  {
+    "state": "Odisha",
+    "nitrogen": 75.0,
+    "phosphorus": 40.0,
+    "potassium": 35.0,
+    "ph": 6.4,
+    "rainfall": 150.0,
+    "major_crops": ["rice", "blackgram", "pigeonpeas", "coconut"]
+  },
+  {
+    "state": "Andhra Pradesh",
+    "nitrogen": 70.0,
+    "phosphorus": 48.0,
+    "potassium": 45.0,
+    "ph": 6.8,
+    "rainfall": 120.0,
+    "major_crops": ["cotton", "rice", "mango", "papaya", "banana"]
+  },
+  {
+    "state": "Telangana",
+    "nitrogen": 68.0,
+    "phosphorus": 45.0,
+    "potassium": 35.0,
+    "ph": 7.0,
+    "rainfall": 100.0,
+    "major_crops": ["cotton", "maize", "pigeonpeas", "rice"]
+  },
+  {
+    "state": "Karnataka",
+    "nitrogen": 95.0,
+    "phosphorus": 35.0,
+    "potassium": 35.0,
+    "ph": 6.5,
+    "rainfall": 160.0,
+    "major_crops": ["coffee", "coconut", "banana", "maize", "cotton"]
+  },
+  {
+    "state": "Tamil Nadu",
+    "nitrogen": 80.0,
+    "phosphorus": 50.0,
+    "potassium": 48.0,
+    "ph": 6.9,
+    "rainfall": 140.0,
+    "major_crops": ["rice", "coconut", "banana", "cotton", "coffee"]
+  },
+  {
+    "state": "Kerala",
+    "nitrogen": 95.0,
+    "phosphorus": 32.0,
+    "potassium": 35.0,
+    "ph": 5.8,
+    "rainfall": 180.0,
+    "major_crops": ["coconut", "coffee", "banana", "rice"]
+  },
+  {
+    "state": "Assam",
+    "nitrogen": 80.0,
+    "phosphorus": 45.0,
+    "potassium": 40.0,
+    "ph": 5.6,
+    "rainfall": 185.0,
+    "major_crops": ["rice", "jute", "orange", "banana"]
+  },
+  {
+    "state": "Himachal Pradesh",
+    "nitrogen": 22.0,
+    "phosphorus": 130.0,
+    "potassium": 195.0,
+    "ph": 6.1,
+    "rainfall": 115.0,
+    "major_crops": ["apple", "maize", "kidneybeans", "pomegranate"]
+  },
+  {
+    "state": "Jammu and Kashmir",
+    "nitrogen": 22.0,
+    "phosphorus": 130.0,
+    "potassium": 195.0,
+    "ph": 6.2,
+    "rainfall": 110.0,
+    "major_crops": ["apple", "kidneybeans", "maize", "rice"]
+  },
+  {
+    "state": "Uttarakhand",
+    "nitrogen": 25.0,
+    "phosphorus": 70.0,
+    "potassium": 40.0,
+    "ph": 6.3,
+    "rainfall": 120.0,
+    "major_crops": ["kidneybeans", "lentil", "apple", "rice", "maize"]
+  },
+  {
+    "state": "Chhattisgarh",
+    "nitrogen": 72.0,
+    "phosphorus": 42.0,
+    "potassium": 30.0,
+    "ph": 6.4,
+    "rainfall": 130.0,
+    "major_crops": ["rice", "blackgram", "pigeonpeas", "maize"]
+  },
+  {
+    "state": "Jharkhand",
+    "nitrogen": 68.0,
+    "phosphorus": 40.0,
+    "potassium": 28.0,
+    "ph": 6.2,
+    "rainfall": 120.0,
+    "major_crops": ["rice", "maize", "pigeonpeas", "lentil"]
+  }
+]

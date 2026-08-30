@@ -1,0 +1,349 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Krishivani - Alerts &amp; Notifications</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#88d982",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#002203",
+                      "surface-container": "#eceeec",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#acf4a4",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#191c1b",
+                      "secondary-container": "#abf4ac",
+                      "on-secondary-container": "#2e7238",
+                      "tertiary": "#00450d",
+                      "inverse-primary": "#91d78a",
+                      "on-primary-fixed-variant": "#0c5216",
+                      "primary-container": "#1b5e20",
+                      "background": "#f8faf8",
+                      "on-surface-variant": "#41493e",
+                      "inverse-on-surface": "#eff1ef",
+                      "on-surface": "#191c1b",
+                      "on-primary-container": "#90d689",
+                      "on-tertiary-fixed": "#002204",
+                      "secondary": "#286b33",
+                      "outline": "#717a6d",
+                      "primary": "#00450d",
+                      "inverse-surface": "#2e3130",
+                      "tertiary-container": "#055f18",
+                      "surface-container-highest": "#e1e3e1",
+                      "tertiary-fixed": "#a3f69c",
+                      "primary-fixed-dim": "#91d78a",
+                      "surface": "#f8faf8",
+                      "surface-container-high": "#e6e9e7",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#2a6b2c",
+                      "surface-variant": "#e1e3e1",
+                      "surface-bright": "#f8faf8",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#abf4ac",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#86d881",
+                      "on-tertiary-fixed-variant": "#005312",
+                      "secondary-fixed-dim": "#90d792",
+                      "surface-dim": "#d8dad9",
+                      "outline-variant": "#c0c9bb",
+                      "surface-container-low": "#f2f4f2",
+                      "on-secondary-fixed-variant": "#07521d",
+                      "on-secondary-fixed": "#002107"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "margin-desktop": "32px",
+                      "touch-target-min": "48px",
+                      "gutter": "16px",
+                      "card-padding": "20px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "button-text": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-lg": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "button-text": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen md:pb-0 font-body-md text-body-md flex flex-col md:flex-row">
+<!-- Mobile TopAppBar -->
+<header class="md:hidden flex justify-between items-center w-full px-margin-mobile h-touch-target-min z-50 bg-surface dark:bg-on-surface border-b border-outline-variant dark:border-outline fixed top-0 full-width">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface dark:text-primary-fixed cursor-pointer" data-icon="arrow_back">arrow_back</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed"><br></span>
+</div>
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-full transition-transform duration-150 active:scale-95 relative">
+  <span class="material-symbols-outlined">notifications</span>
+  <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface dark:border-surface-dim"></span>
+</button>
+</header>
+<!-- Desktop SideNav -->
+<aside class="hidden md:flex flex-col p-gutter gap-base bg-surface dark:bg-surface-dim shadow-xl h-screen w-80 rounded-r-xl fixed left-0 z-40">
+<div class="px-4 py-6 flex items-center gap-4 border-b border-outline-variant mb-4">
+<img alt="Krishivani Logo" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WtWPQOEqBpEvFNiY7E0sSCTGbmBFkS8hoewaRRT2rn_rbzAQMoTOsrIfPWOXO9ZQABAQYGFc9EqtIgTPtGmQKBdnyDZvcTQAOX3VIoOv1AS3ANaqAylwpsfc-SM2oBKd8KzYPkF9LGDly-7gdPlgUVTc_oUQn4dFUz2ZEnfyumcqQt49SimxhzdDKzVT-sKoF-9RErtuzg_HOlNo9nnt143LoOWfodJ1B4uPhTL7Nvf8k5rwwwwwh1Wykkmj94AiWyglkxuYV_Zw">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">KRISHIVANI</span>
+</div>
+<nav class="flex-1 overflow-y-auto">
+<ul class="space-y-2">
+<li class="">
+<a class="flex items-center gap-4 px-6 py-4 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="potted_plant">potted_plant</span>
+<span class="font-button-text text-button-text">Crops</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-4 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-button-text text-button-text">Mandi</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-4 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="cloud">cloud</span>
+<span class="font-button-text text-button-text">Weather</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-4 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="psychiatry">psychiatry</span>
+<span class="font-button-text text-button-text">Advise</span>
+</a>
+</li>
+</ul>
+<div class="mt-8 pt-8 border-t border-outline-variant">
+<ul class="space-y-2">
+<li class="">
+<a class="flex items-center gap-4 px-6 py-3 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-body-md text-body-md">Profile</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-3 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+<span class="font-body-md text-body-md">Language</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-3 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-body-md text-body-md">WhatsApp Support</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-3 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+<span class="font-body-md text-body-md">Call Expert</span>
+</a>
+</li>
+<li class="">
+<a class="flex items-center gap-4 px-6 py-3 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<div class="mt-auto px-4 py-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img class="object-cover w-full h-full" data-alt="A portrait of a male Indian farmer, roughly 45 years old, wearing traditional attire like a kurta and a turban, looking confident and smiling slightly. The setting is bright and sunny, implying an outdoor agricultural context. Professional and clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_HDB3ej6-qh1Vg_QSl_tqBQK45jW_ZHT32hnsUSOOx3eMceZwnqq5bLXC9ug3Ll5N5LVmaQM4NqV7xdGOCPBmlRW39dOdmE0IyRfyLdUAKZ3ntepEbE_s4m3Px8m3bu2LG8YO8FLFv2fKUIUi4w7VoV0w9HWuvf9GaM2q0_MgARcLQfftKwcW0dB7LGUlyQwRFJafYiwBmcUL-Byw8CoTHfiO1TwJb9kk9EFHkssAlq4X60hFUQuJ">
+</div>
+<div class="flex flex-col">
+<span class="font-button-text text-button-text font-bold">Ram Singh</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant">Village: Sonipat</span>
+<span class="font-label-lg text-label-lg text-primary text-[10px]">Premium Member</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-3xl mx-auto mt-16 md:mt-0 md:ml-80 p-margin-mobile md:p-margin-desktop min-h-screen">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div class="flex items-center gap-4">
+<img alt="Krishivani Logo" class="h-10 w-auto object-contain md:hidden" src="https://lh3.googleusercontent.com/aida/AEtjO1WtWPQOEqBpEvFNiY7E0sSCTGbmBFkS8hoewaRRT2rn_rbzAQMoTOsrIfPWOXO9ZQABAQYGFc9EqtIgTPtGmQKBdnyDZvcTQAOX3VIoOv1AS3ANaqAylwpsfc-SM2oBKd8KzYPkF9LGDly-7gdPlgUVTc_oUQn4dFUz2ZEnfyumcqQt49SimxhzdDKzVT-sKoF-9RErtuzg_HOlNo9nnt143LoOWfodJ1B4uPhTL7Nvf8k5rwwwwwh1Wykkmj94AiWyglkxuYV_Zw">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Alerts</h1>
+</div>
+<button class="text-primary font-button-text text-button-text hover:bg-surface-container-low px-4 py-2 rounded-full transition-colors h-touch-target-min flex items-center">
+                Mark all as read
+            </button>
+</div>
+<!-- Alerts List -->
+<div class="space-y-4">
+<!-- Alert Card 1: Weather (Urgent) - Unread -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_12px_0_rgba(0,0,0,0.05)] border-l-4 border-error relative overflow-hidden group hover:shadow-[0_8px_24px_0_rgba(0,0,0,0.08)] transition-shadow">
+<div class="absolute top-0 right-0 w-3 h-3 bg-primary rounded-full mt-4 mr-4"></div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center flex-shrink-0 text-error">
+<span class="material-symbols-outlined text-[24px]" data-icon="cloud_alert">cloud_alert</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface text-[18px] mb-1">Weather Alert</h3>
+<span class="font-label-lg text-label-lg text-on-surface-variant whitespace-nowrap">2m ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Heavy rainfall expected in next 48 hours. Avoid irrigation and ensure drainage.</p>
+</div>
+</div>
+</div>
+<!-- Alert Card 4: Advisory (Urgent) - Unread -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_12px_0_rgba(0,0,0,0.05)] border-l-4 border-error relative overflow-hidden group hover:shadow-[0_8px_24px_0_rgba(0,0,0,0.08)] transition-shadow">
+<div class="absolute top-0 right-0 w-3 h-3 bg-primary rounded-full mt-4 mr-4"></div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center flex-shrink-0 text-error">
+<span class="material-symbols-outlined text-[24px]" data-icon="warning">warning</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface text-[18px] mb-1">Urgent Farm Advisory</h3>
+<span class="font-label-lg text-label-lg text-on-surface-variant whitespace-nowrap">1h ago</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Possible Yellow Rust detection reported in neighboring farms. Inspect your wheat crop immediately.</p>
+</div>
+</div>
+</div>
+<!-- Alert Card 2: Crop Stage (Info/Growth) - Read -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_12px_0_rgba(0,0,0,0.05)] border-l-4 border-primary relative overflow-hidden opacity-80 group hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0 text-on-primary">
+<span class="material-symbols-outlined text-[24px]" data-icon="eco">eco</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface text-[18px] mb-1">Crop Stage Alert</h3>
+<span class="font-label-lg text-label-lg text-on-surface-variant whitespace-nowrap">Yesterday</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Your Wheat (Field A) has reached the 'Vegetative Growth' stage. Optimal time for secondary fertilization.</p>
+</div>
+</div>
+</div>
+<!-- Alert Card 3: Market Price (Info) - Read -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_12px_0_rgba(0,0,0,0.05)] border-l-4 border-secondary relative overflow-hidden opacity-80 group hover:opacity-100 transition-opacity">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0 text-on-secondary-container">
+<span class="material-symbols-outlined text-[24px]" data-icon="payments">payments</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface text-[18px] mb-1">Market Price Alert</h3>
+<span class="font-label-lg text-label-lg text-on-surface-variant whitespace-nowrap">Yesterday</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Wheat market price in Sonipat Mandi increased by 5% (₹2,450 -&gt; ₹2,570).</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile BottomNavBar -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>

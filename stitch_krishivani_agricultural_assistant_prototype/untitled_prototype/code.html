@@ -1,0 +1,453 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Krishivani - Agricultural Management</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#eceeec",
+                        "secondary-container": "#abf4ac",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1b",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8faf8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#2e7238",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#002203",
+                        "on-background": "#191c1b",
+                        "surface": "#f8faf8",
+                        "on-tertiary-fixed": "#002204",
+                        "surface-container-low": "#f2f4f2",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#005312",
+                        "on-primary-fixed-variant": "#0c5216",
+                        "tertiary-fixed-dim": "#88d982",
+                        "secondary": "#286b33",
+                        "secondary-fixed-dim": "#90d792",
+                        "surface-container-high": "#e6e9e7",
+                        "on-surface-variant": "#41493e",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#91d78a",
+                        "tertiary-container": "#055f18",
+                        "inverse-surface": "#2e3130",
+                        "primary": "#00450d",
+                        "tertiary": "#00450d",
+                        "outline-variant": "#c0c9bb",
+                        "surface-bright": "#f8faf8",
+                        "tertiary-fixed": "#a3f69c",
+                        "surface-dim": "#d8dad9",
+                        "on-tertiary-container": "#86d881",
+                        "on-primary-container": "#90d689",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#abf4ac",
+                        "surface-container-highest": "#e1e3e1",
+                        "on-secondary-fixed": "#002107",
+                        "on-secondary-fixed-variant": "#07521d",
+                        "primary-fixed": "#acf4a4",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#91d78a",
+                        "inverse-on-surface": "#eff1ef",
+                        "primary-container": "#1b5e20",
+                        "surface-variant": "#e1e3e1",
+                        "outline": "#717a6d",
+                        "surface-tint": "#2a6b2c"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "gutter": "16px",
+                        "touch-target-min": "48px",
+                        "margin-desktop": "32px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "card-padding": "20px"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "button-text": ["Inter", "sans-serif"],
+                        "label-lg": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "button-text": ["16px", { lineHeight: "24px", fontWeight: "600" }],
+                        "label-lg": ["14px", { lineHeight: "20px", fontWeight: "600" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Styles for utility */
+        body { font-family: 'Inter', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Circular Gauge Styles */
+        .gauge-circle {
+            transition: stroke-dashoffset 1s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        /* View Transition Styles */
+        .view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .view.active {
+            display: flex;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased w-full h-[100dvh] overflow-hidden flex flex-col items-center justify-center relative">
+<!-- Mobile Container (Max width for web viewing) -->
+<div class="w-full max-w-md h-full relative bg-surface shadow-2xl overflow-hidden flex flex-col overflow-y-auto">
+<!-- ==================== SCREEN 1: LOGIN ==================== -->
+<!-- Suppressing Nav Shell (Linear Transactional Intent) -->
+<div class="view active flex-col h-full bg-surface" id="view-login">
+<!-- Hero Image -->
+<div class="h-[40%] w-full relative">
+<img class="w-full h-full object-cover" data-alt="A high-quality, professional photograph of lush, green agricultural fields stretching into the horizon under a clear blue sky. The image features a modern, clean aesthetic with vibrant, natural green tones that evoke trust and growth, perfectly suited for an agricultural app's welcome screen. Soft, natural sunlight illuminates the crops, creating a bright and optimistic light-mode atmosphere. 8k resolution, highly detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjrZRfgy0RHZF8UBNSouBtbKQsJpYG45E3P6E4-gsVk-jNYM3f6pwyhLICgYbYA8GLBMozsxTtuzHx4diVmb77SySAxebBA6bqZ3wABzICuayYT8RR6Wcd3T48zhs7ggMRveP0KagMCGTcLY5cd9M6lX-wcX2AZ0SvQnlTPmIKLmGlxHFbLgSBkkB3cr5z-ubuf3nb1PDvwJ4X35C_NtgFBfXRw4I3ZevidDhyX49-fz478ivEOQtg">
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+</div>
+<div class="flex-1 px-gutter py-8 flex flex-col">
+<div class="mb-8">
+<div class="mb-4"><img alt="Krishivani Logo" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwga-KvDMHBaLi4ZnTYYswdWDDdu0Ac13QnAl5reBoTq6q5z-q7-a9hxF7cstqoXurL7pxma6B_yJT9DfJ6SQOk2nJb7pGK_ZAFGil_8sdnk0Cp8t8FGl0Vo4AxME-TTFKggzy6w2o8jRpqXlH0v4NAJjk42RMnYlPa9jstS-qz86sb4I4uImxknIr2oU8l2RNx1nUkIMQylW1mDVJaSx4an6zUAIcHKFzYhYvrG2wNucPg7hUuzVZTteRoYYQ4X3nzw"></div>
+
+<p class="font-body-md text-body-md text-on-surface-variant mt-4">Enter your details to get started with KrishiVani.</p></div>
+<div class="flex flex-col flex-1 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">Phone Number</label>
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg h-touch-target-min overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors">
+<div class="px-4 border-r border-outline-variant bg-surface-container-low font-body-md text-body-md text-on-surface flex items-center justify-center h-full">
+                                +91
+                            </div>
+<input class="flex-1 h-full px-4 border-none focus:ring-0 font-body-md text-body-md text-on-surface bg-transparent outline-none" inputmode="numeric" pattern="[0-9]*" placeholder="98765 43210" type="tel">
+</div>
+</div>
+<!-- Full Name Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">Full Name</label>
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg h-touch-target-min overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors">
+<input class="flex-1 h-full px-4 border-none focus:ring-0 font-body-md text-body-md text-on-surface bg-transparent outline-none" placeholder="Enter your name" type="text">
+</div>
+</div>
+<!-- Location Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">Location</label>
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg h-touch-target-min overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors">
+<div class="px-4 border-r border-outline-variant bg-surface-container-low text-on-surface-variant flex items-center justify-center h-full">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<input class="flex-1 h-full px-4 border-none focus:ring-0 font-body-md text-body-md text-on-surface bg-transparent outline-none" placeholder="Enter your village or city" type="text">
+</div>
+</div>
+<!-- Farm Size Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-lg text-label-lg text-on-surface">Farm Size</label>
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-lg h-touch-target-min overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-colors">
+<input class="flex-1 h-full px-4 border-none focus:ring-0 font-body-md text-body-md text-on-surface bg-transparent outline-none" inputmode="decimal" placeholder="0.0" type="number">
+<div class="px-2 border-l border-outline-variant bg-surface-container-low h-full flex items-center">
+<select class="bg-transparent border-none focus:ring-0 font-label-lg text-label-lg text-on-surface py-0">
+<option>Acres</option>
+<option>Hectares</option>
+</select>
+</div>
+</div>
+</div></div>
+<button class="h-touch-target-min w-full bg-primary-container text-on-primary-container rounded-lg font-button-text text-button-text flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity mb-4 mt-4" onclick="switchView('view-otp')">
+                    Send OTP
+                </button>
+</div>
+</div>
+<!-- ==================== SCREEN 2: OTP ==================== -->
+<!-- Suppressing Nav Shell (Linear Transactional Intent) -->
+<div class="view flex-col h-full bg-surface" id="view-otp">
+<div class="px-gutter pt-8 pb-4 flex items-center">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface" onclick="switchView('view-login')">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+<div class="flex-1 px-gutter py-4 flex flex-col">
+<div class="mb-8">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">Verify your number</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">We've sent a 4-digit code to +91 98765 43210</p>
+</div>
+<div class="flex justify-between gap-4 mb-8">
+<!-- OTP Inputs -->
+<input class="w-16 h-16 text-center text-headline-md font-headline-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" maxlength="1" type="text" value="1">
+<input class="w-16 h-16 text-center text-headline-md font-headline-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" maxlength="1" type="text" value="4">
+<input class="w-16 h-16 text-center text-headline-md font-headline-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" maxlength="1" type="text">
+<input class="w-16 h-16 text-center text-headline-md font-headline-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-xl focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" maxlength="1" type="text">
+</div>
+<div class="text-center font-body-md text-body-md text-on-surface-variant mb-auto">
+                    Resend code in <span class="text-primary font-bold">00:45</span>
+</div>
+<button class="h-touch-target-min w-full bg-primary-container text-on-primary-container rounded-lg font-button-text text-button-text flex items-center justify-center shadow-sm hover:opacity-90 transition-opacity mb-4" onclick="switchView('view-profile')">
+                    Verify &amp; Proceed
+                </button>
+</div>
+</div>
+<!-- ==================== SCREEN 3: PROFILE ==================== -->
+<div class="view flex-col h-full bg-background relative" id="view-profile">
+<!-- TopAppBar Component (from JSON) -->
+<div class="flex justify-between items-center w-full px-margin-mobile h-touch-target-min z-50 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex-shrink-0">
+<div class="flex items-center gap-2 text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">KRISHIVANI</span>
+</div>
+<div class="text-primary dark:text-primary-fixed hover:bg-surface-container-high dark:hover:bg-surface-variant p-2 rounded-full cursor-pointer transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+</div>
+<!-- Profile Content Area -->
+<div class="flex-1 overflow-y-auto hide-scrollbar pb-24">
+<!-- Profile Header Card (Glassmorphism inspired clean card) -->
+<div class="p-gutter pt-8">
+<div class="bg-surface-container-lowest rounded-[24px] p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)] flex flex-col items-center relative overflow-hidden border border-outline-variant/30">
+<!-- Decorative background element -->
+<div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-secondary-container/50 to-transparent"></div>
+<!-- Avatar -->
+<div class="w-24 h-24 rounded-full border-4 border-surface-container-lowest shadow-md overflow-hidden relative z-10 mb-4">
+<img class="w-full h-full object-cover" data-alt="A professional, warm, and approachable close-up portrait of an Indian farmer in his 40s named Harpreet Singh. He is wearing a clean, simple collared shirt. The background is a soft, out-of-focus green agricultural field, providing a contextual yet uncluttered backdrop. The lighting is soft and natural, creating a high-contrast, bright, and optimistic aesthetic suitable for a modern corporate agricultural application. 8k resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCREVMyGpA1LfVOihARerQoVzb4wyndm7FZ-6j8sIx7jgkDPEEcE1vBupK_B2LYGSc6lnmds73nnl6WDmOuLwZlDAxNdwGWa13XHY3zmRZYuRW9QxPiqhY-8xodDlyT9WBKUuDSstDinK4rCWJZEmfu4MWaUvE_4hqY--WWbkhQxPyIGIkq-b7m-OVnJbEhDtW4S4PtJ_oED2jw2gTjz3pBSJkwMIXVhwRskc1WMVi9rw0wA5XCXKU">
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface z-10">Harpreet Singh</h2>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-md text-body-md z-10 mt-1">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                            Ludhiana, Punjab
+                        </div><div class="flex items-center gap-1 text-on-surface-variant font-body-md text-body-md z-10 mt-1"><span class="material-symbols-outlined text-[18px]">language</span>Preferred Language: English</div>
+<div class="mt-4 bg-tertiary-container/10 text-tertiary-container px-4 py-1.5 rounded-full font-label-lg text-label-lg flex items-center gap-1.5 z-10 border border-tertiary-container/20">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">verified</span>
+                            Premium Member
+                        </div>
+</div>
+</div>
+<!-- Farm Info Bento Grid -->
+<div class="px-gutter pb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Farm Overview</h3>
+<div class="mb-4 bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_12px_0_rgba(0,0,0,0.03)] border border-surface-container flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center"><span class="material-symbols-outlined text-secondary">translate</span></div><div><div class="font-body-md text-body-md text-on-surface-variant text-[14px]">Preferred Language</div><div class="font-headline-md text-headline-md text-on-surface text-[18px]">English</div></div></div><span class="material-symbols-outlined text-on-surface-variant">expand_more</span></div><div class="grid grid-cols-2 gap-4">
+<!-- Farm Size -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_12px_0_rgba(0,0,0,0.03)] border border-surface-container flex flex-col justify-between">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary">landscape</span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Total Area</div>
+<div class="font-headline-md text-headline-md text-on-surface">2.5 <span class="text-body-md text-on-surface-variant">Acres</span></div>
+</div>
+<!-- Primary Crop -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-[0_4px_12px_0_rgba(0,0,0,0.03)] border border-surface-container flex flex-col justify-between">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-secondary">grass</span>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant">Active Crop</div>
+<div class="font-headline-md text-headline-md text-on-surface">Wheat</div>
+</div>
+</div>
+<!-- Soil Health Action Button -->
+<button class="mt-4 w-full bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-[0_4px_12px_0_rgba(0,0,0,0.03)] flex items-center justify-between hover:bg-surface-container-low transition-colors group" onclick="switchView('view-soil')">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">science</span>
+</div>
+<div class="text-left">
+<div class="font-headline-md text-headline-md text-on-surface text-[18px]">Soil Information</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[14px]">View NPK, pH &amp; Moisture</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- BottomNavBar Component (from JSON) -->
+<!-- Note: Profile is not in the JSON labels, so rendering active state on "Crops" as fallback to show component functionality per instructions, though purely semantically we are on a profile screen. The rules state: "Automatic Suppression: You MUST exclude the navigation shell if the page intent is: ...Task-Focused". Profile is top-level. Nav drawer has profile. We'll render nav without active state as it doesn't match. -->
+<div class="fixed bottom-0 left-0 w-full max-w-md z-50 flex items-center justify-between px-2 pb-2 pt-1 shadow-[0_-4px_12px_0_rgba(0,0,0,0.05)] bg-surface-container-lowest dark:bg-inverse-surface rounded-t-xl border-t border-outline-variant/30"><!-- Crops -->
+<div class="flex-1 flex flex-col items-center justify-center h-touch-target-min text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">potted_plant</span>
+<span class="font-label-lg text-[12px] mt-1">Crops</span>
+</div>
+<!-- Mandi -->
+<div class="flex-1 flex flex-col items-center justify-center h-touch-target-min text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-lg text-[12px] mt-1">Mandi</span>
+</div>
+<!-- Weather -->
+<div class="flex-1 flex flex-col items-center justify-center h-touch-target-min text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">cloud</span>
+<span class="font-label-lg text-[12px] mt-1">Weather</span>
+</div>
+<!-- Advise -->
+<div class="flex-1 flex flex-col items-center justify-center h-touch-target-min text-on-surface-variant dark:text-surface-variant hover:bg-surface-container dark:hover:bg-surface-variant transition-colors cursor-pointer">
+<span class="material-symbols-outlined">psychiatry</span>
+<span class="font-label-lg text-[12px] mt-1">Advise</span>
+</div></div>
+</div>
+<!-- ==================== SCREEN 4: SOIL INFORMATION ==================== -->
+<!-- Sub-page: Suppressing global navigation -->
+<div class="view flex-col h-full bg-background relative" id="view-soil">
+<!-- Custom App Bar for Sub-page -->
+<div class="flex items-center w-full px-margin-mobile h-touch-target-min z-50 bg-surface border-b border-outline-variant flex-shrink-0">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface -ml-2 mr-2" onclick="switchView('view-profile')">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="font-headline-md text-headline-md font-bold text-on-surface flex-1">Soil Analysis</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto hide-scrollbar p-gutter pb-8">
+<!-- Hero Graphic Area for Soil -->
+<div class="w-full h-40 rounded-2xl bg-surface-container-lowest shadow-sm border border-outline-variant/30 mb-6 relative overflow-hidden flex items-end p-4">
+<div class="absolute inset-0 z-0 opacity-40">
+<div class="bg-cover bg-center w-full h-full" data-alt="A highly detailed, digital topographical map visualization showing variations in soil quality across a specific plot of land. The map utilizes a sophisticated color palette of varying shades of modern, deep primary green (#1B5E20) and soft secondary greens (#abf4ac) against a clean, bright white background. The aesthetic is highly technical, precise, and data-driven, fitting a professional agricultural management tool. Clean lines, subtle gradients." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASO49OkMjLvPRphvAzdh7L9JYNhv903yueC5DUKbUuqEKEyQeGv-9x-l8nesbwW56-28k8qgLsJ5aNWSu4eQhItG2sCAiJCp7caqLwTJaQnlTsyVe2ChsZ-xXMgYOTvCUUqNK-q-uSb3Vo4DVBdPmjYDtWq-i5dzJ7vloKwJiq95OwTwi8THlvrrHHDWyUG5_rulwYnAp_IAOKnrVbQJcZjxrZkmGsT_739gF3-IHEMtVVy9dcneEB')"></div>
+</div>
+<div class="relative z-10 w-full flex justify-between items-center bg-surface-container-lowest/80 backdrop-blur-sm p-3 rounded-xl border border-white/50">
+<div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[12px] uppercase tracking-wider font-bold">Status</div>
+<div class="font-headline-md text-headline-md text-primary">Optimal Health</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[32px]">check_circle</span>
+</div>
+</div>
+<!-- NPK Gauges Grid -->
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4 text-[18px]">Macronutrients (NPK)</h3>
+<div class="grid grid-cols-3 gap-3 mb-8">
+<!-- Nitrogen -->
+<div class="bg-surface-container-lowest rounded-xl p-3 shadow-sm border border-surface-container flex flex-col items-center">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full" viewBox="0 0 36 36">
+<path class="text-surface-container stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+<path class="text-primary stroke-current gauge-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="100, 100" stroke-dashoffset="35" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-button-text text-button-text text-on-surface">N</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-surface text-[16px]">65<span class="text-[12px] text-on-surface-variant font-normal">mg/kg</span></div>
+<div class="font-label-lg text-label-lg text-primary mt-1 text-[10px] bg-primary-container/20 px-2 py-0.5 rounded-full">Good</div>
+</div>
+<!-- Phosphorus -->
+<div class="bg-surface-container-lowest rounded-xl p-3 shadow-sm border border-surface-container flex flex-col items-center">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full" viewBox="0 0 36 36">
+<path class="text-surface-container stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+<path class="text-secondary stroke-current gauge-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="100, 100" stroke-dashoffset="55" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-button-text text-button-text text-on-surface">P</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-surface text-[16px]">45<span class="text-[12px] text-on-surface-variant font-normal">mg/kg</span></div>
+<div class="font-label-lg text-label-lg text-secondary mt-1 text-[10px] bg-secondary-container/30 px-2 py-0.5 rounded-full">Low</div>
+</div>
+<!-- Potassium -->
+<div class="bg-surface-container-lowest rounded-xl p-3 shadow-sm border border-surface-container flex flex-col items-center">
+<div class="relative w-16 h-16 flex items-center justify-center mb-2">
+<svg class="w-full h-full" viewBox="0 0 36 36">
+<path class="text-surface-container stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+<path class="text-primary-container stroke-current gauge-circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="100, 100" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-button-text text-button-text text-on-surface">K</div>
+</div>
+<div class="font-headline-md text-headline-md text-on-surface text-[16px]">85<span class="text-[12px] text-on-surface-variant font-normal">mg/kg</span></div>
+<div class="font-label-lg text-label-lg text-primary-container mt-1 text-[10px] bg-primary-container/20 px-2 py-0.5 rounded-full">High</div>
+</div>
+</div>
+<!-- Environment Factors -->
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4 text-[18px]">Environment Factors</h3>
+<div class="flex flex-col gap-3">
+<!-- pH Level Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm border border-surface-container flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">water_ph</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[14px]">Soil pH</div>
+<div class="font-headline-md text-headline-md text-on-surface text-[18px]">6.8 <span class="text-[12px] font-normal text-on-surface-variant">(Slightly Acidic)</span></div>
+</div>
+</div>
+<div class="w-16 h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[68%]"></div>
+</div>
+</div>
+<!-- Moisture -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm border border-surface-container flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">water_drop</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[14px]">Moisture Level</div>
+<div class="font-headline-md text-headline-md text-on-surface text-[18px]">42%</div>
+</div>
+</div>
+<div class="w-16 h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%]"></div>
+</div>
+</div>
+<!-- Temperature -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-sm border border-surface-container flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">device_thermostat</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface-variant text-[14px]">Soil Temperature</div>
+<div class="font-headline-md text-headline-md text-on-surface text-[18px]">24°C</div>
+</div>
+</div>
+<div class="w-16 h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[60%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Simple Interaction Script -->
+<script>
+        function switchView(viewId) {
+            // Hide all views
+            const views = document.querySelectorAll('.view');
+            views.forEach(v => {
+                v.classList.remove('active');
+            });
+            
+            // Show requested view
+            const activeView = document.getElementById(viewId);
+            if(activeView) {
+                // Small timeout for fade effect logic if needed, or rely on CSS transition classes
+                setTimeout(() => {
+                    activeView.classList.add('active');
+                }, 50);
+            }
+        }
+    </script>
+
+
+
+
+
+
+</body></html>

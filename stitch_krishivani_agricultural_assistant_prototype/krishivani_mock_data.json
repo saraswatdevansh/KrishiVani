@@ -1,0 +1,44 @@
+{
+  "app_name": "KRISHIVANI",
+  "logo_id": "{{DATA:IMAGE:IMAGE_1}}",
+  "farmer": {
+    "name": "Harpreet Singh",
+    "location": "Ludhiana, Punjab",
+    "farm_size": 2.5,
+    "unit": "Acres",
+    "is_logged_in": false
+  },
+  "crops": [
+    {
+      "id": "wheat_1",
+      "name": "Wheat",
+      "type": "Wheat",
+      "planted_date": "2024-07-15",
+      "stage": "Growing",
+      "status": "Healthy",
+      "image": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&q=80&w=400"
+    },
+    {
+      "id": "rice_1",
+      "name": "Rice",
+      "type": "Rice",
+      "planted_date": "2024-06-10",
+      "stage": "Growing",
+      "status": "Needs Attention",
+      "image": "https://images.unsplash.com/photo-1536630596251-b01c6253911e?auto=format&fit=crop&q=80&w=400"
+    }
+  ],
+  "market_prices": [
+    { "crop": "Wheat", "price": 2450, "trend": "up", "change": "+4.2%", "demand": "High" },
+    { "crop": "Rice", "price": 3120, "trend": "down", "change": "-1.8%", "demand": "Medium" },
+    { "crop": "Mustard", "price": 5850, "trend": "up", "change": "+3.6%", "demand": "High" }
+  ],
+  "weather": {
+    "temp": 27,
+    "condition": "Mostly Cloudy",
+    "feels_like": 33,
+    "humidity": 72,
+    "wind": 12,
+    "rain_prob": 20
+  }
+}

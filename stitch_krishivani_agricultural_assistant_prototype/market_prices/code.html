@@ -1,0 +1,350 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Krishivani - Mandi Market Prices</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#eceeec",
+                        "secondary-container": "#abf4ac",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#191c1b",
+                        "on-tertiary": "#ffffff",
+                        "background": "#f8faf8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#2e7238",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#002203",
+                        "on-background": "#191c1b",
+                        "surface": "#f8faf8",
+                        "on-tertiary-fixed": "#002204",
+                        "surface-container-low": "#f2f4f2",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#005312",
+                        "on-primary-fixed-variant": "#0c5216",
+                        "tertiary-fixed-dim": "#88d982",
+                        "secondary": "#286b33",
+                        "secondary-fixed-dim": "#90d792",
+                        "surface-container-high": "#e6e9e7",
+                        "on-surface-variant": "#41493e",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#91d78a",
+                        "tertiary-container": "#055f18",
+                        "inverse-surface": "#2e3130",
+                        "primary": "#00450d",
+                        "tertiary": "#00450d",
+                        "outline-variant": "#c0c9bb",
+                        "surface-bright": "#f8faf8",
+                        "tertiary-fixed": "#a3f69c",
+                        "surface-dim": "#d8dad9",
+                        "on-tertiary-container": "#86d881",
+                        "on-primary-container": "#90d689",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#abf4ac",
+                        "surface-container-highest": "#e1e3e1",
+                        "on-secondary-fixed": "#002107",
+                        "on-secondary-fixed-variant": "#07521d",
+                        "primary-fixed": "#acf4a4",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#91d78a",
+                        "inverse-on-surface": "#eff1ef",
+                        "primary-container": "#1b5e20",
+                        "surface-variant": "#e1e3e1",
+                        "outline": "#717a6d",
+                        "surface-tint": "#2a6b2c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "touch-target-min": "48px",
+                        "margin-desktop": "32px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "card-padding": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "button-text": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "button-text": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .material-symbols-outlined {
+                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 z-50 sticky top-0 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
+<!-- Brand / Leading -->
+<div class="flex items-center gap-2">
+<div class="md:hidden h-10 flex items-center"><img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCGwvl-1UtP2YKVYcaMDY_WD5KX9mGwmWgU8B4K5hEAw6F96wSigR782NeN2WSHfalkHLYgWX0DH9I1Bq0JY2hl8jjksEuu9abkVSF8TzT-gIivNSFd25wFpZyL_cfuzACq1RYFiQGOTZriidbqMxxzN-AwIaKbP37H7Ofw2hWVB5ubMs1cy3gtgrNl_mvJcp5I1yUh_EUDbpGnYrnAf9DrMB4HQxtbqtMjU9kPnUNUjtkUGfHu3mRjPfyoc5jm6W9ww" alt="KrishiVani Logo" class="h-full w-auto object-contain"></div>
+<div class="hidden md:flex w-10 h-10 items-center justify-center text-primary bg-surface-container rounded-full mr-1">
+<span class="material-symbols-outlined">agriculture</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight"><br></h1>
+</div>
+<!-- Web Navigation Shell (Hidden on Mobile) -->
+<nav class="hidden md:flex gap-8 items-center h-full">
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors flex items-center h-full" href="#">Crops</a>
+<a class="font-button-text text-button-text text-primary border-b-2 border-primary flex items-center h-full pt-[2px]" href="#">Mandi</a>
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors flex items-center h-full" href="#">Weather</a>
+<a class="font-button-text text-button-text text-on-surface-variant hover:text-primary transition-colors flex items-center h-full" href="#">Advise</a>
+</nav>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-1 md:gap-3">
+
+<button aria-label="Notifications" class="w-12 h-12 flex items-center justify-center text-primary hover:bg-surface-container-high rounded-full transition-transform duration-150 active:scale-95 relative"><span class="material-symbols-outlined">notifications</span><span class="absolute top-3 right-3 w-2 h-2 bg-error rounded-full"></span></button>
+<button class="hidden md:flex items-center gap-2 pl-2 pr-4 py-2 bg-primary-container text-on-primary-container rounded-full font-button-text text-button-text hover:bg-tertiary-container hover:text-on-tertiary transition-colors ml-2">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a mature Indian farmer wearing a traditional turban, smiling confidently against a bright, modern, high-contrast agricultural background with soft natural lighting and vibrant green accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcZdLE4eYNY6t6QS3mELFmQ8k6pw5T_nHv8EuU3nziuUElnERESiUufGDCMhiq2fk_U7IlMXdIz28yHKlUiofw-jFAj2WeKYfnIlcesEB9SBjmZnLixZQMq4PJqSS7KfzyeyqLZYUZPAdw2gUpaObbmJmi6qNqhBYsjAsGBZjLW-VuHvc99iG-mkeRNoLkotgKMqVz297IKdXE06x1lfFVWBQnNtas4yJux1zW4YiOWcRmo-S_tWHW">
+</div>
+                Profile
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-32 md:pb-12">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Market Prices</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Live updates from your local Mandi</p>
+</div>
+<!-- Contextual Filter -->
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 h-touch-target-min bg-surface-container-lowest border border-outline-variant rounded-full font-button-text text-button-text text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                    Sonipat Mandi
+                    <span class="material-symbols-outlined text-sm ml-1">arrow_drop_down</span>
+</button>
+</div>
+</div>
+<!-- Search & Filter Bar -->
+<div class="mb-8 flex gap-4">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 h-touch-target-min bg-surface-container-lowest border border-outline-variant rounded-xl font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm placeholder:text-on-surface-variant" placeholder="Search crops in Mandi..." type="text">
+</div>
+<button aria-label="Filter" class="w-touch-target-min h-touch-target-min flex items-center justify-center border border-outline-variant rounded-xl bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+<!-- Data Source Notice -->
+<div class="mb-6 p-4 bg-surface-container-low rounded-lg border border-outline-variant flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">info</span>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Data Source Document</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">The following market prices are sourced directly from: <span class="font-button-text text-primary">{{DATA:DOCUMENT:DOCUMENT_2}}</span></p>
+</div>
+</div>
+<!-- Bento Grid / Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1: Wheat -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-md border border-outline-variant flex flex-col gap-5 hover:shadow-lg transition-shadow relative overflow-hidden group">
+<!-- Subtle decorative background element -->
+<div class="absolute -right-6 -top-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<!-- Header -->
+<div class="flex justify-between items-start relative z-10">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist high-contrast photograph of fresh golden wheat grains neatly arranged on a pure white surface, lit with bright, soft studio lighting to emphasize texture and agricultural quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTrCpLh65DLPvYFnfKpG6zB-9QTUdbFqu2En1JRpVaGjm_TduLa5mB1lTvIFt6BykmWOyqoKQ8BbpilhXj2AG-mNinRENDMaXTWfy1Ecxnu5XvRyRYyohw36eh-Z-QBjV2MUdjiGOtISv_-7dEMiw_dS_PKwwvJ1uonJW8XDuxeMesVWAaOu4TCAyPx4s0O62aBUV0CGln09wC1ui1qoZ2okEp4aNIp4smjdAungGVMRiuE-qG5Q7n">
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Wheat</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Grade A • Sharbati</p>
+</div>
+</div>
+</div>
+<!-- Demand & Trend -->
+<div class="flex justify-between items-center relative z-10 mt-2">
+<span class="bg-error-container text-on-error-container font-label-lg text-label-lg px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span> High Demand
+                    </span>
+<div class="flex items-center gap-1 text-primary bg-secondary-container/30 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="font-button-text text-button-text">+4.2%</span>
+</div>
+</div>
+<hr class="border-outline-variant/50 relative z-10">
+<!-- Price -->
+<div class="relative z-10">
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1 uppercase tracking-wider">Current Price</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₹2,450</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/ quintal</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Rice -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-md border border-outline-variant flex flex-col gap-5 hover:shadow-lg transition-shadow relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<!-- Header -->
+<div class="flex justify-between items-start relative z-10">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A macro shot of pristine white basmati rice grains piled on a light grey background, featuring high contrast and sharp focus, conveying purity and high agricultural standards in a modern light mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHnzFaX3uK9UTRNWUaSmMUR4ZaW7ewHYtxN8iz4Yspu7FnYRb2DLGSMdztv1w7rcbx5IOR2YAyPn0KAmlGjQRm9AHpHANMlQt7zyTHNx2Gmr0KRsAH9PzxOgwiiiWZEdsMAGb8gq6El0OktCTzxtw0QnE7rQZNvbz2-RrKB0QF6BrdPXWpLFdpalpoMYkSPgvVO6kEDy6ohEfVrhBfuQKUczSCGZs0fCF6WeWiaBmePSBWHlNsAV3C">
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Rice</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Basmati • 1121</p>
+</div>
+</div>
+</div>
+<!-- Demand & Trend -->
+<div class="flex justify-between items-center relative z-10 mt-2">
+<span class="bg-surface-container-highest text-on-surface font-label-lg text-label-lg px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">balance</span> Medium Demand
+                    </span>
+<div class="flex items-center gap-1 text-error bg-error-container/30 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+<span class="font-button-text text-button-text">-1.5%</span>
+</div>
+</div>
+<hr class="border-outline-variant/50 relative z-10">
+<!-- Price -->
+<div class="relative z-10">
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1 uppercase tracking-wider">Current Price</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₹3,800</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/ quintal</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Mustard -->
+<div class="bg-surface-container-lowest rounded-xl p-card-padding shadow-md border border-outline-variant flex flex-col gap-5 hover:shadow-lg transition-shadow relative overflow-hidden group">
+<div class="absolute -right-6 -top-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<!-- Header -->
+<div class="flex justify-between items-start relative z-10">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A stylized flat-lay photograph of dark brown and yellow mustard seeds against a bright white background, illuminated with even, professional lighting to highlight texture, fitting a clean agricultural app UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcolfTQQtYMjze4h5J9NjLLU4Gp6c-RiYLsOVDwQRVuuXRdnoNbRzNDbaohXLHA7nb8srumGMkt-tDBrjEScYDZviffoc445EjRfvbC-UL-PehDA8lb5fzio9PRJYUufV4WMzjkKwnR5eg99GAeAimQBDpwCM0Kd5tR_jxKyQ4-1ZjpZ1JxonkWxkWO5hNbQ_YMtDfIm6BCOwp8lvncuTp6ITwuxErcAtnBhcnGH6FuX-K44whsIGU">
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface leading-tight">Mustard</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Black • Premium</p>
+</div>
+</div>
+</div>
+<!-- Demand & Trend -->
+<div class="flex justify-between items-center relative z-10 mt-2">
+<span class="bg-error-container text-on-error-container font-label-lg text-label-lg px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span> High Demand
+                    </span>
+<div class="flex items-center gap-1 text-primary bg-secondary-container/30 px-2 py-1 rounded-md">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="font-button-text text-button-text">+2.1%</span>
+</div>
+</div>
+<hr class="border-outline-variant/50 relative z-10">
+<!-- Price -->
+<div class="relative z-10">
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-1 uppercase tracking-wider">Current Price</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₹5,100</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/ quintal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Call to Action / Support -->
+<div class="mt-12 p-6 rounded-xl bg-secondary-container text-on-secondary-container flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-lowest flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">support_agent</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md">Need expert advice?</h3>
+<p class="font-body-md text-body-md opacity-90 mt-1">Talk to our agricultural economists for market trends.</p>
+</div>
+</div>
+<button class="whitespace-nowrap px-6 h-touch-target-min bg-primary text-on-primary rounded-full font-button-text text-button-text hover:bg-primary-fixed-variant transition-colors shadow-md w-full md:w-auto">
+                Call Expert Now
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 bg-surface-container-lowest border-t border-outline-variant/30 shadow-[0_-4px_12px_0_rgba(0,0,0,0.05)]">
+  <!-- Home -->
+  <button class="flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:bg-surface-container transition-colors">
+    <span class="material-symbols-outlined text-2xl">home</span>
+    <span class="text-[11px] font-label-lg">Home</span>
+  </button>
+  <!-- Crops -->
+  <button class="flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:bg-surface-container transition-colors">
+    <span class="material-symbols-outlined text-2xl">potted_plant</span>
+    <span class="text-[11px] font-label-lg">Crops</span>
+  </button>
+  <!-- Mandi (Active) -->
+  <button class="flex flex-col items-center justify-center flex-1 h-full text-primary transition-colors">
+    <div class="bg-secondary-container/30 px-6 py-1 rounded-full flex items-center justify-center mb-1">
+      <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+    </div>
+    <span class="text-[11px] font-button-text">Mandi</span>
+  </button>
+  <!-- Weather -->
+  <button class="flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:bg-surface-container transition-colors">
+    <span class="material-symbols-outlined text-2xl">cloud</span>
+    <span class="text-[11px] font-label-lg">Weather</span>
+  </button>
+  <!-- Advise -->
+  <button class="flex flex-col items-center justify-center flex-1 h-full text-on-surface-variant hover:bg-surface-container transition-colors">
+    <span class="material-symbols-outlined text-2xl">psychiatry</span>
+    <span class="text-[11px] font-label-lg">Advise</span>
+  </button>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
