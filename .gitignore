@@ -44,3 +44,7 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Design assets
+stitch_krishivani_agricultural_assistant_prototype/
+
