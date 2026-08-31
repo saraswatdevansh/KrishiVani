@@ -52,7 +52,7 @@ app.include_router(soil.router)
 app.include_router(farm.router)
 app.include_router(alerts.router)
 
-@app.get("/")
+@app.get("/api")
 def root():
     return {
         "message": "Welcome to KrishiVani Smart Crop Advisory API",
@@ -66,6 +66,6 @@ def root():
         ]
     }
 
-@app.get("/health")
+@app.get("/api/health")
 def health():
     return {"status": "healthy"}
