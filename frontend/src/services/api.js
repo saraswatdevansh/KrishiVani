@@ -1,5 +1,6 @@
 import cropLifecycleData from '../data/crop_lifecycle.json';
 import cropProfilesData from '../data/crop_profiles.json';
+import { supabase } from './supabaseClient';
 
 const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 const API_BASE = isLocal ? 'http://localhost:8000/api' : '/api';
@@ -170,38 +171,58 @@ export const api = {
     }
   },
 
-  // Profile
+  // Profile (Supabase Connected)
   async getProfile() {
     try {
       const res = await fetch(`${API_BASE}/profile`, { headers: getAuthHeaders() });
-      return await handleResponse(res);
-    } catch {
-      const raw = localStorage.getItem('krishivani_farmer_profile');
-      if (raw) return JSON.parse(raw);
-      return {
-        id: 1,
-        full_name: 'Harpreet Singh',
-        phone: '9876543210',
-        village_or_city: 'Khanna',
-        district: 'Ludhiana',
-        state: 'Punjab',
-        latitude: 30.7046,
-        longitude: 76.2215,
-        farm_size: 4.5,
-        farm_size_unit: 'acres',
-        preferred_language: 'en',
-        nitrogen: 85.0,
-        phosphorus: 46.0,
-        potassium: 35.0,
-        ph: 7.2,
-        rainfall: 650.0,
-        selected_crop: 'rice'
-      };
+      if (res.ok) return await handleResponse(res);
+    } catch {}
+
+    try {
+      const { data, error } = await supabase
+        .from('farmer_profiles')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1);
+      if (!error && data && data.length > 0) {
+        localStorage.setItem('krishivani_farmer_profile', JSON.stringify(data[0]));
+        return data[0];
+      }
+    } catch (e) {
+      console.warn('Supabase profile fetch fallback:', e);
     }
+
+    const raw = localStorage.getItem('krishivani_farmer_profile');
+    if (raw) return JSON.parse(raw);
+    return null;
   },
 
   async saveProfile(profileData) {
     localStorage.setItem('krishivani_farmer_profile', JSON.stringify(profileData));
+    
+    try {
+      await supabase.from('farmer_profiles').insert([{
+        full_name: profileData.full_name,
+        phone: profileData.phone,
+        village_or_city: profileData.village_or_city,
+        district: profileData.district,
+        state: profileData.state,
+        latitude: profileData.latitude,
+        longitude: profileData.longitude,
+        farm_size: profileData.farm_size,
+        farm_size_unit: profileData.farm_size_unit,
+        preferred_language: profileData.preferred_language,
+        nitrogen: profileData.nitrogen,
+        phosphorus: profileData.phosphorus,
+        potassium: profileData.potassium,
+        ph: profileData.ph,
+        rainfall: profileData.rainfall,
+        selected_crop: profileData.selected_crop
+      }]);
+    } catch (err) {
+      console.warn('Supabase profile insert error:', err);
+    }
+
     try {
       const res = await fetch(`${API_BASE}/profile`, {
         method: 'POST',
@@ -223,8 +244,10 @@ export const api = {
       return await handleResponse(res);
     } catch {
       const profile = await this.getProfile();
-      profile.selected_crop = cropName;
-      localStorage.setItem('krishivani_farmer_profile', JSON.stringify(profile));
+      if (profile) {
+        profile.selected_crop = cropName;
+        localStorage.setItem('krishivani_farmer_profile', JSON.stringify(profile));
+      }
       return { message: 'Crop updated', selected_crop: cropName };
     }
   },
@@ -563,8 +586,39 @@ export const api = {
     };
   },
 
-  // Farm - Crop Registration
+  // Farm - Crop Registration (Supabase Integrated)
   async registerCrop(data) {
+    const stageInfo = computeCropStageClient(data.crop_name, data.sowing_date);
+    
+    // 1. Insert into Supabase cloud table
+    try {
+      const { data: dbCrop, error } = await supabase.from('registered_crops').insert([{
+        crop_name: data.crop_name,
+        season: data.season || 'kharif',
+        sowing_date: data.sowing_date,
+        expected_harvest_date: stageInfo.expected_harvest_date,
+        current_stage: stageInfo.current_stage,
+        stage_start_date: stageInfo.stage_start_date,
+        next_stage: stageInfo.next_stage,
+        next_stage_date: stageInfo.next_stage_date,
+        notes: data.notes || '',
+        status: 'active'
+      }]).select();
+
+      if (!error && dbCrop && dbCrop.length > 0) {
+        const cropRes = {
+          ...dbCrop[0],
+          ...stageInfo
+        };
+        const crops = getStoredCrops();
+        crops.unshift(cropRes);
+        localStorage.setItem('krishivani_registered_crops', JSON.stringify(crops));
+        return cropRes;
+      }
+    } catch (e) {
+      console.warn('Supabase registerCrop notice:', e);
+    }
+
     try {
       const res = await fetch(`${API_BASE}/farm/register-crop`, {
         method: 'POST',
@@ -582,7 +636,7 @@ export const api = {
         sowing_date: data.sowing_date,
         notes: data.notes || '',
         status: 'active',
-        ...computeCropStageClient(data.crop_name, data.sowing_date)
+        ...stageInfo
       };
       crops.push(newCrop);
       localStorage.setItem('krishivani_registered_crops', JSON.stringify(crops));
@@ -591,6 +645,25 @@ export const api = {
   },
 
   async getMyCrops() {
+    // 1. Fetch from Supabase
+    try {
+      const { data, error } = await supabase
+        .from('registered_crops')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (!error && Array.isArray(data) && data.length > 0) {
+        const enriched = data.map(c => ({
+          ...c,
+          ...computeCropStageClient(c.crop_name, c.sowing_date)
+        }));
+        localStorage.setItem('krishivani_registered_crops', JSON.stringify(enriched));
+        return enriched;
+      }
+    } catch (e) {
+      console.warn('Supabase getMyCrops notice:', e);
+    }
+
     try {
       const res = await fetch(`${API_BASE}/farm/my-crops`, { headers: getAuthHeaders() });
       return await handleResponse(res);
@@ -618,6 +691,12 @@ export const api = {
   },
 
   async updateCropStatus(cropId, status) {
+    try {
+      await supabase.from('registered_crops').update({ status }).eq('id', cropId);
+    } catch (e) {
+      console.warn('Supabase updateCropStatus notice:', e);
+    }
+
     try {
       const res = await fetch(`${API_BASE}/farm/crop/${cropId}/status`, {
         method: 'PATCH',
@@ -652,6 +731,12 @@ export const api = {
   },
 
   async deleteCrop(cropId) {
+    try {
+      await supabase.from('registered_crops').delete().eq('id', cropId);
+    } catch (e) {
+      console.warn('Supabase deleteCrop notice:', e);
+    }
+
     try {
       const res = await fetch(`${API_BASE}/farm/crop/${cropId}`, {
         method: 'DELETE',
