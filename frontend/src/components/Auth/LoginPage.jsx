@@ -7,11 +7,17 @@ export const LoginPage = ({ onCompleteAuth, onOpenLanguage }) => {
   const { login, signup } = useAuth();
 
   const [isSignUpMode, setIsSignUpMode] = useState(false);
-  const [phone, setPhone] = useState('9876543210');
+  const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
-  const [password, setPassword] = useState('farmer123');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const fillDemoCredentials = () => {
+    setPhone('9876543210');
+    setPassword('farmer123');
+    setErrorMsg('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -164,11 +170,25 @@ export const LoginPage = ({ onCompleteAuth, onOpenLanguage }) => {
               </div>
             </div>
 
+            {/* Quick Demo Credentials Link */}
+            {!isSignUpMode && (
+              <div className="flex justify-end -mt-1">
+                <button
+                  type="button"
+                  onClick={fillDemoCredentials}
+                  className="text-[11px] text-primary hover:text-primary-container font-semibold flex items-center gap-1 cursor-pointer transition-colors bg-primary/5 hover:bg-primary/10 px-2 py-0.5 rounded-lg border border-primary/20"
+                >
+                  <span className="material-symbols-outlined text-[13px]">badge</span>
+                  <span>Demo: Harpreet Singh (9876543210)</span>
+                </button>
+              </div>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full h-11 bg-primary hover:bg-primary-container text-on-primary rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition-all active:scale-[0.98] disabled:opacity-50"
+              className="mt-1 w-full h-11 bg-primary hover:bg-primary-container text-on-primary rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition-all active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? (
                 <span className="material-symbols-outlined animate-spin text-lg">progress_activity</span>
@@ -221,6 +241,9 @@ export const LoginPage = ({ onCompleteAuth, onOpenLanguage }) => {
               type="button"
               onClick={() => {
                 setIsSignUpMode(!isSignUpMode);
+                setPhone('');
+                setName('');
+                setPassword('');
                 setErrorMsg('');
               }}
               className="text-xs text-primary font-semibold hover:underline"
