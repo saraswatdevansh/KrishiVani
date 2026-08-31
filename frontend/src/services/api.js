@@ -406,19 +406,82 @@ export const api = {
         { state: 'Punjab', nitrogen: 85.0, phosphorus: 46.0, potassium: 35.0, ph: 7.2, rainfall: 650.0 },
         { state: 'Haryana', nitrogen: 78.0, phosphorus: 42.0, potassium: 38.0, ph: 7.4, rainfall: 580.0 },
         { state: 'Uttar Pradesh', nitrogen: 82.0, phosphorus: 45.0, potassium: 40.0, ph: 7.1, rainfall: 850.0 },
+        { state: 'Delhi', nitrogen: 75.0, phosphorus: 40.0, potassium: 36.0, ph: 7.3, rainfall: 620.0 },
+        { state: 'Rajasthan', nitrogen: 55.0, phosphorus: 32.0, potassium: 45.0, ph: 7.8, rainfall: 420.0 },
         { state: 'Madhya Pradesh', nitrogen: 65.0, phosphorus: 38.0, potassium: 32.0, ph: 6.8, rainfall: 950.0 },
-        { state: 'Maharashtra', nitrogen: 60.0, phosphorus: 35.0, potassium: 45.0, ph: 6.9, rainfall: 1100.0 }
+        { state: 'Maharashtra', nitrogen: 60.0, phosphorus: 35.0, potassium: 45.0, ph: 6.9, rainfall: 1100.0 },
+        { state: 'Gujarat', nitrogen: 70.0, phosphorus: 40.0, potassium: 42.0, ph: 7.5, rainfall: 780.0 },
+        { state: 'Bihar', nitrogen: 75.0, phosphorus: 42.0, potassium: 35.0, ph: 6.8, rainfall: 1150.0 },
+        { state: 'West Bengal', nitrogen: 80.0, phosphorus: 48.0, potassium: 38.0, ph: 6.5, rainfall: 1450.0 },
+        { state: 'Karnataka', nitrogen: 65.0, phosphorus: 35.0, potassium: 40.0, ph: 6.6, rainfall: 1150.0 },
+        { state: 'Andhra Pradesh', nitrogen: 72.0, phosphorus: 40.0, potassium: 42.0, ph: 7.0, rainfall: 900.0 },
+        { state: 'Telangana', nitrogen: 68.0, phosphorus: 38.0, potassium: 39.0, ph: 7.1, rainfall: 880.0 },
+        { state: 'Tamil Nadu', nitrogen: 70.0, phosphorus: 36.0, potassium: 44.0, ph: 6.8, rainfall: 920.0 },
+        { state: 'Kerala', nitrogen: 60.0, phosphorus: 30.0, potassium: 35.0, ph: 5.8, rainfall: 2500.0 },
+        { state: 'Odisha', nitrogen: 70.0, phosphorus: 38.0, potassium: 36.0, ph: 6.4, rainfall: 1350.0 },
+        { state: 'Assam', nitrogen: 75.0, phosphorus: 40.0, potassium: 34.0, ph: 5.6, rainfall: 2100.0 },
+        { state: 'Himachal Pradesh', nitrogen: 60.0, phosphorus: 35.0, potassium: 38.0, ph: 6.5, rainfall: 1200.0 },
+        { state: 'Uttarakhand', nitrogen: 65.0, phosphorus: 38.0, potassium: 36.0, ph: 6.6, rainfall: 1300.0 }
       ];
     }
   },
 
   async reverseGeocode(lat, lon) {
+    // 1. Try BigDataCloud real-time client-side reverse geocoder
     try {
-      const res = await fetch(`${API_BASE}/geocode/reverse?lat=${lat}&lon=${lon}`, { headers: getAuthHeaders() });
-      return await handleResponse(res);
-    } catch {
-      return { city: 'Ludhiana', district: 'Ludhiana', state: 'Punjab' };
+      const bdcRes = await fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+      );
+      if (bdcRes.ok) {
+        const bdc = await bdcRes.json();
+        const city = bdc.locality || bdc.city || bdc.principalSubdivision || 'Local Area';
+        const district = bdc.locality || bdc.city || bdc.principalSubdivision || 'Local District';
+        const state = bdc.principalSubdivision || 'Uttar Pradesh';
+        return {
+          name: city,
+          city: city,
+          district: district,
+          state: state,
+          latitude: lat,
+          longitude: lon
+        };
+      }
+    } catch (e) {
+      console.warn('BigDataCloud geocode failed:', e);
     }
+
+    // 2. Try OpenWeather Reverse Geocoding
+    try {
+      const owRes = await fetch(
+        `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=3353f59123d2feedf26fce5b178a1fea`
+      );
+      if (owRes.ok) {
+        const ow = await owRes.json();
+        if (Array.isArray(ow) && ow.length > 0) {
+          const loc = ow[0];
+          return {
+            name: loc.name,
+            city: loc.name,
+            district: loc.name,
+            state: loc.state || 'Uttar Pradesh',
+            latitude: lat,
+            longitude: lon
+          };
+        }
+      }
+    } catch (e) {
+      console.warn('OpenWeather geocode failed:', e);
+    }
+
+    // 3. Fallback with GPS coordinate label
+    return {
+      name: `GPS (${lat.toFixed(2)}°N, ${lon.toFixed(2)}°E)`,
+      city: 'Local Area',
+      district: 'Local District',
+      state: 'Uttar Pradesh',
+      latitude: lat,
+      longitude: lon
+    };
   },
 
   // Farm - Crop Registration
