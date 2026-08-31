@@ -217,11 +217,12 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
     try {
       const lat = profile?.latitude || 30.9010;
       const lon = profile?.longitude || 75.8573;
-      const state = profile?.state || 'Punjab';
+      const state = profile?.state || 'Uttar Pradesh';
+      const locName = profile?.village_or_city || profile?.district || profile?.state || 'Ghaziabad';
       const crop = profile?.selected_crop || 'rice';
 
-      // 1. Fetch live weather & 5-day forecast
-      const forecastData = await api.getForecast(crop, lat, lon, state);
+      // 1. Fetch live weather & 5-day forecast for user's specific location
+      const forecastData = await api.getForecast(crop, lat, lon, state, locName);
       if (forecastData.current_weather) {
         setWeather(forecastData.current_weather);
       }
@@ -241,7 +242,7 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, [profile?.selected_crop, profile?.state]);
+  }, [profile?.selected_crop, profile?.state, profile?.village_or_city, profile?.district]);
 
   const activeCrops = registeredCrops.filter(c => c.status === 'active');
   const primaryCropName = profile?.selected_crop || (activeCrops.length > 0 ? activeCrops[0].crop_name : 'rice');
@@ -264,9 +265,11 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
     }
 
     const farmerName = profile?.full_name || 'Farmer';
-    const temp = weather?.temperature ? `${weather.temperature} degree` : '28 degree';
-    const hum = weather?.humidity ? `${weather.humidity}%` : '60%';
-    const location = profile?.village_or_city || profile?.state || 'your region';
+    const tempVal = weather?.temperature ?? forecast?.[0]?.temp_max ?? 30;
+    const temp = `${tempVal} degree`;
+    const humVal = weather?.humidity ?? forecast?.[0]?.humidity ?? 65;
+    const hum = `${humVal}%`;
+    const location = weather?.city || profile?.village_or_city || profile?.district || profile?.state || 'your area';
 
     let cropReports = '';
     if (activeCrops.length === 0) {
