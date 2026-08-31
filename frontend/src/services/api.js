@@ -418,7 +418,7 @@ export const api = {
     };
   },
 
-  // Market & Mandi Prices
+  // Market & Mandi Prices (100% Live Agmarknet)
   async getMarketPrices(commodity, state, district) {
     const targetState = state || 'Bihar';
     const govKey = '579b464db66ec23bdd000001da78d01d004f473c5ba558a7ca1b2eec';
@@ -441,16 +441,17 @@ export const api = {
 
     // 2. Query Agmarknet API on data.gov.in directly in real-time
     try {
-      const url = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${govKey}&format=json&limit=50&filters[state]=${encodeURIComponent(targetState)}`;
+      const stateFilter = targetState && targetState !== 'All India' ? `&filters[state]=${encodeURIComponent(targetState)}` : '';
+      const url = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${govKey}&format=json&limit=100${stateFilter}`;
       const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
-        if (data.records && Array.isArray(data.records) && data.records.length > 0) {
-          const fetched = data.records.map(r => {
-            const modal = parseInt(r.modal_price) || 2500;
-            const minP = parseInt(r.min_price) || Math.round(modal * 0.95);
-            const maxP = parseInt(r.max_price) || Math.round(modal * 1.05);
-            const cropName = r.commodity ? r.commodity.toLowerCase().split(' ')[0] : 'rice';
+        if (data.records && Array.isArray(data.records)) {
+          return data.records.map(r => {
+            const modal = parseInt(r.modal_price) || 0;
+            const minP = parseInt(r.min_price) || modal;
+            const maxP = parseInt(r.max_price) || modal;
+            const cropName = r.commodity ? r.commodity.toLowerCase().split(' ')[0] : '';
             return {
               crop: cropName,
               commodity: r.commodity,
@@ -461,97 +462,17 @@ export const api = {
               modal_price: modal,
               min_price: minP,
               max_price: maxP,
-              trend: 'up',
+              trend: modal > 4000 ? 'up' : 'stable',
               demand: modal > 4000 ? 'High' : 'Medium'
             };
           });
-
-          // Ensure staple crops (Moong, Rice, Maize, Wheat, Arhar) are always present for searchability
-          const hasMoong = fetched.some(r => r.commodity?.toLowerCase().includes('moong') || r.commodity?.toLowerCase().includes('green gram'));
-          const hasRice = fetched.some(r => r.commodity?.toLowerCase().includes('paddy') || r.commodity?.toLowerCase().includes('rice') || r.commodity?.toLowerCase().includes('dhan'));
-          const hasMaize = fetched.some(r => r.commodity?.toLowerCase().includes('maize') || r.commodity?.toLowerCase().includes('makka'));
-          const hasArhar = fetched.some(r => r.commodity?.toLowerCase().includes('arhar') || r.commodity?.toLowerCase().includes('tur') || r.commodity?.toLowerCase().includes('toor'));
-
-          const extraBenchmarks = [];
-          const todayStr = new Date().toLocaleDateString('en-IN');
-          
-          if (!hasMoong) {
-            extraBenchmarks.push({
-              crop: 'mungbean',
-              commodity: 'Green Gram (Moong)',
-              market: `${targetState} State APMC`,
-              district: district || 'Central',
-              state: targetState,
-              arrival_date: todayStr,
-              modal_price: 7850,
-              min_price: 7200,
-              max_price: 8100,
-              trend: 'up',
-              demand: 'High'
-            });
-          }
-          if (!hasRice) {
-            extraBenchmarks.push({
-              crop: 'rice',
-              commodity: 'Paddy (Dhan)',
-              market: `${targetState} APMC Benchmark`,
-              district: district || 'Central',
-              state: targetState,
-              arrival_date: todayStr,
-              modal_price: 2450,
-              min_price: 2300,
-              max_price: 2550,
-              trend: 'up',
-              demand: 'High'
-            });
-          }
-          if (!hasMaize) {
-            extraBenchmarks.push({
-              crop: 'maize',
-              commodity: 'Maize (Corn)',
-              market: `${targetState} APMC Benchmark`,
-              district: district || 'Central',
-              state: targetState,
-              arrival_date: todayStr,
-              modal_price: 2150,
-              min_price: 2000,
-              max_price: 2250,
-              trend: 'stable',
-              demand: 'Medium'
-            });
-          }
-          if (!hasArhar) {
-            extraBenchmarks.push({
-              crop: 'pigeonpeas',
-              commodity: 'Arhar / Toor (Pigeonpeas)',
-              market: `${targetState} Grain Yard`,
-              district: district || 'Central',
-              state: targetState,
-              arrival_date: todayStr,
-              modal_price: 8400,
-              min_price: 7900,
-              max_price: 8700,
-              trend: 'stable',
-              demand: 'High'
-            });
-          }
-
-          return [...fetched, ...extraBenchmarks];
         }
       }
     } catch (e) {
-      console.warn('Agmarknet live fetch fallback:', e);
+      console.warn('Agmarknet live fetch notice:', e);
     }
 
-    // 3. Realistic Agmarknet Market arrivals
-    const todayStr = new Date().toLocaleDateString('en-IN');
-    return [
-      { crop: 'rice', commodity: 'Paddy (Dhan)', market: `${targetState} Mandi`, district: district || 'Central', state: targetState, arrival_date: todayStr, modal_price: 2450, min_price: 2300, max_price: 2550, trend: 'up', demand: 'High' },
-      { crop: 'mungbean', commodity: 'Green Gram (Moong)', market: `${targetState} APMC`, district: district || 'Central', state: targetState, arrival_date: todayStr, modal_price: 7850, min_price: 7200, max_price: 8100, trend: 'up', demand: 'High' },
-      { crop: 'pigeonpeas', commodity: 'Arhar / Toor', market: `${targetState} Grain Market`, district: district || 'Central', state: targetState, arrival_date: todayStr, modal_price: 8400, min_price: 7900, max_price: 8700, trend: 'stable', demand: 'High' },
-      { crop: 'maize', commodity: 'Maize (Corn)', market: `${targetState} APMC`, district: district || 'Central', state: targetState, arrival_date: todayStr, modal_price: 2150, min_price: 2000, max_price: 2250, trend: 'stable', demand: 'Medium' },
-      { crop: 'cotton', commodity: 'Cotton (Kapas)', market: `${targetState} Cotton Yard`, district: district || 'Central', state: targetState, arrival_date: todayStr, modal_price: 7100, min_price: 6800, max_price: 7400, trend: 'up', demand: 'High' }
-    ];
+    return [];
   },
 
   // Soil defaults & reverse geocode

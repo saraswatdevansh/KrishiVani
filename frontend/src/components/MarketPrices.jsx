@@ -5,6 +5,7 @@ import { api } from '../services/api';
 import { getLocalizedCropName, getLocalizedCommodityName, CROP_TRANSLATIONS } from '../data/cropTranslations';
 
 const POPULAR_STATES = [
+  'All India',
   'Punjab',
   'Haryana',
   'Uttar Pradesh',
@@ -21,7 +22,7 @@ export const MarketPrices = () => {
   const { profile } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedState, setSelectedState] = useState(profile?.state || 'Punjab');
+  const [selectedState, setSelectedState] = useState(profile?.state || 'Bihar');
   const [pricesList, setPricesList] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -124,14 +125,23 @@ export const MarketPrices = () => {
             </span>
           </div>
         ) : filteredPrices.length === 0 ? (
-          <div className="bg-surface-container-lowest rounded-3xl p-8 text-center text-xs text-on-surface-variant shadow-card border border-outline-variant/40">
-            <span className="material-symbols-outlined text-4xl text-on-surface-variant/40 mb-2">store_mall_directory</span>
-            <p className="font-semibold">
-              {i18n.language === 'hi' ? `"${searchQuery}" से मेल खाती कोई मंडी नहीं मिली।` : i18n.language === 'pa' ? `"${searchQuery}" ਨਾਲ ਮਿਲਦੀ ਕੋਈ ਮੰਡੀ ਨਹੀਂ ਮਿਲੀ।` : `No mandis found matching "${searchQuery}" in ${selectedState}.`}
+          <div className="bg-surface-container-lowest rounded-3xl p-8 text-center text-xs text-on-surface-variant shadow-card border border-outline-variant/40 flex flex-col items-center gap-2">
+            <span className="material-symbols-outlined text-4xl text-on-surface-variant/40">store_mall_directory</span>
+            <p className="font-bold text-on-surface">
+              {i18n.language === 'hi' ? `"${searchQuery}" के लिए ${selectedState} में आज कोई आवक नहीं है।` : i18n.language === 'pa' ? `"${searchQuery}" ਲਈ ${selectedState} ਵਿੱਚ ਅੱਜ ਕੋਈ ਆਮਦ ਨਹੀਂ ਹੈ।` : `No live arrivals for "${searchQuery}" in ${selectedState} today.`}
             </p>
-            <p className="text-[11px] text-on-surface-variant/70 mt-1">
-              {i18n.language === 'hi' ? 'कृपया अन्य फसल या राज्य चुनें।' : i18n.language === 'pa' ? 'ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਹੋਰ ਫਸਲ ਜਾਂ ਰਾਜ ਚੁਣੋ।' : 'Try another search term or state.'}
+            <p className="text-[11px] text-on-surface-variant/70">
+              {i18n.language === 'hi' ? 'एगमार्कनेट पर केवल वही मंडियां दिखाई जाती हैं जहां आज वास्तविक फसल की आवक हुई है।' : i18n.language === 'pa' ? 'ਐਗਮਾਰਕਨੇਟ \'ਤੇ ਸਿਰਫ਼ ਉਹੀ ਮੰਡੀਆਂ ਦਿਖਾਈਆਂ ਜਾਂਦੀਆਂ ਹਨ ਜਿੱਥੇ ਅੱਜ ਅਸਲ ਆਮਦ ਹੋਈ ਹੈ।' : 'Agmarknet APMC only lists mandis where physical crop arrivals were recorded today.'}
             </p>
+            {selectedState !== 'All India' && (
+              <button
+                onClick={() => setSelectedState('All India')}
+                className="mt-2 bg-primary text-on-primary font-semibold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 shadow-sm hover:scale-105 active:scale-95 transition-all"
+              >
+                <span className="material-symbols-outlined text-sm">public</span>
+                {i18n.language === 'hi' ? 'पूरे भारत की मंडियों में खोजें' : i18n.language === 'pa' ? 'ਪੂਰੇ ਭਾਰਤ ਦੀਆਂ ਮੰਡੀਆਂ ਵਿੱਚ ਖੋਜੋ' : 'Search Across All Indian Mandis'}
+              </button>
+            )}
           </div>
         ) : (
           filteredPrices.map((item, idx) => {
