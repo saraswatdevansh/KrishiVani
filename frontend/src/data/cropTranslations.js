@@ -179,11 +179,155 @@ export const CROP_TRANSLATIONS = {
   }
 };
 
+export const COMMODITY_TRANSLATIONS = {
+  garlic: { en: "Garlic", hi: "लहसुन", pa: "ਲਸਣ" },
+  firewood: { en: "Firewood", hi: "ईंधन लकड़ी", pa: "ਬਾਲਣ ਦੀ ਲੱਕੜ" },
+  paddy: { en: "Paddy (Dhan)", hi: "धान / चावल", pa: "ਝੋਨਾ / ਚੌਲ" },
+  rice: { en: "Rice / Paddy", hi: "धान / चावल", pa: "ਝੋਨਾ / ਚੌਲ" },
+  wheat: { en: "Wheat", hi: "गेहूं", pa: "ਕਣਕ" },
+  maize: { en: "Maize (Corn)", hi: "मक्का", pa: "ਮੱਕੀ" },
+  cotton: { en: "Cotton", hi: "कपास (नरमा)", pa: "ਕਪਾਹ / ਨਰਮਾ" },
+  moong: { en: "Moong (Green Gram)", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
+  mungbean: { en: "Green Gram / Moong", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
+  arhar: { en: "Arhar / Toor", hi: "अरहर / तूर", pa: "ਅਰਹਰ / ਤੂਰ" },
+  pigeonpeas: { en: "Arhar / Pigeon Peas", hi: "अरहर / तूर", pa: "ਅਰਹਰ / ਤੂਰ" },
+  potato: { en: "Potato", hi: "आलू", pa: "ਆਲੂ" },
+  onion: { en: "Onion", hi: "प्याज", pa: "ਪਿਆਜ਼" },
+  tomato: { en: "Tomato", hi: "टमाटर", pa: "ਟਮਾਟਰ" },
+  mustard: { en: "Mustard", hi: "सरसों / राई", pa: "ਸਰ੍ਹੋਂ / ਰਾਈ" },
+  sugarcane: { en: "Sugarcane", hi: "गन्ना", pa: "ਗੰਨਾ" },
+  soyabean: { en: "Soybean", hi: "सोयाबीन", pa: "ਸੋਇਆਬੀਨ" },
+  groundnut: { en: "Groundnut / Peanut", hi: "मूंगफली", pa: "ਮੂੰਗਫਲੀ" },
+  gram: { en: "Gram / Chana", hi: "चना", pa: "ਛੋਲੇ" },
+  chickpea: { en: "Chickpea", hi: "चना", pa: "ਛੋਲੇ" },
+  ginger: { en: "Ginger", hi: "अदरक", pa: "ਅਦਰਕ" },
+  turmeric: { en: "Turmeric", hi: "हल्दी", pa: "ਹਲਦੀ" },
+  chilli: { en: "Green Chilli", hi: "हरी मिर्च", pa: "ਹਰੀ ਮਿਰਚ" },
+  capsicum: { en: "Capsicum", hi: "शिमला मिर्च", pa: "ਸ਼ਿਮਲਾ ਮਿਰਚ" },
+  cauliflower: { en: "Cauliflower", hi: "फूलगोभी", pa: "ਫੁੱਲਗੋਭੀ" },
+  cabbage: { en: "Cabbage", hi: "पत्तागोभी", pa: "ਬੰਦਗੋਭੀ" },
+  brinjal: { en: "Brinjal / Eggplant", hi: "बैंगन", pa: "ਬੈਂਗਣ" },
+  apple: { en: "Apple", hi: "सेब", pa: "ਸੇਬ" },
+  banana: { en: "Banana", hi: "केला", pa: "ਕੇਲਾ" },
+  mango: { en: "Mango", hi: "आम", pa: "ਅੰਬ" }
+};
+
+export const WEATHER_TRANSLATIONS = {
+  "clouds": { en: "Clouds", hi: "बादल", pa: "ਬੱਦਲ" },
+  "broken clouds": { en: "Broken Clouds", hi: "घने बादल", pa: "ਸੰਘਣੇ ਬੱਦਲ" },
+  "scattered clouds": { en: "Scattered Clouds", hi: "बिखरे बादल", pa: "ਖਿੰਡੇ ਹੋਏ ਬੱਦਲ" },
+  "few clouds": { en: "Few Clouds", hi: "हल्के बादल", pa: "ਹਲਕੇ ਬੱਦਲ" },
+  "overcast clouds": { en: "Overcast", hi: "बादल छाए रहेंगे", pa: "ਘਣੇ ਬੱਦਲ" },
+  "clear": { en: "Clear Sky", hi: "साफ मौसम", pa: "ਸਾਫ਼ ਮੌਸਮ" },
+  "clear sky": { en: "Clear Sky", hi: "साफ आसमान", pa: "ਸਾਫ਼ ਆਸਮਾਨ" },
+  "rain": { en: "Rain Expected", hi: "बारिश का अनुमान", pa: "ਮੀਂਹ ਦੀ ਸੰਭਾਵਨਾ" },
+  "light rain": { en: "Light Rain", hi: "हल्की बारिश", pa: "ਹਲਕੀ ਬਾਰਿਸ਼" },
+  "moderate rain": { en: "Moderate Rain", hi: "मध्यम बारिश", pa: "ਦਰਮਿਆਨੀ ਬਾਰਿਸ਼" },
+  "heavy intensity rain": { en: "Heavy Rain", hi: "तेज़ बारिश", pa: "ਭਾਰੀ ਮੀਂਹ" },
+  "thunderstorm": { en: "Thunderstorm", hi: "गरज के साथ बारिश", pa: "ਤੂਫਾਨ / ਗਰਜ" },
+  "drizzle": { en: "Drizzle", hi: "बूंदाबांदी", pa: "ਬੂੰਦਾ-ਬਾਂਦੀ" },
+  "haze": { en: "Haze", hi: "धुंध", pa: "ਧੁੰਦ" },
+  "mist": { en: "Mist", hi: "हल्की धुंध", pa: "ਧੁੰਦ" },
+  "fog": { en: "Fog", hi: "कोहरा", pa: "ਕੋਹਰਾ" }
+};
+
+export const DAYS_TRANSLATIONS = {
+  "today": { en: "Today", hi: "आज", pa: "ਅੱਜ" },
+  "tomorrow": { en: "Tomorrow", hi: "कल", pa: "ਭਲਕੇ" },
+  "monday": { en: "Monday", hi: "सोमवार", pa: "ਸੋਮਵਾਰ" },
+  "tuesday": { en: "Tuesday", hi: "मंगलवार", pa: "ਮੰਗਲਵਾਰ" },
+  "wednesday": { en: "Wednesday", hi: "बुधवार", pa: "ਬੁੱਧਵਾਰ" },
+  "thursday": { en: "Thursday", hi: "गुरुवार", pa: "ਵੀਰਵਾਰ" },
+  "friday": { en: "Friday", hi: "शुक्रवार", pa: "ਸ਼ੁੱਕਰਵਾਰ" },
+  "saturday": { en: "Saturday", hi: "शनिवार", pa: "ਸ਼ਨੀਵਾਰ" },
+  "sunday": { en: "Sunday", hi: "रविवार", pa: "ਐਤਵਾਰ" }
+};
+
 export const getLocalizedCropName = (cropKey, lang = 'en') => {
   if (!cropKey) return 'Crop';
-  const crop = CROP_TRANSLATIONS[cropKey.toLowerCase()];
+  const k = cropKey.toLowerCase().trim();
+  const crop = CROP_TRANSLATIONS[k] || COMMODITY_TRANSLATIONS[k];
   if (crop && crop[lang]) {
     return crop[lang];
   }
   return cropKey.charAt(0).toUpperCase() + cropKey.slice(1);
+};
+
+export const getLocalizedCommodityName = (commodityName, lang = 'en') => {
+  if (!commodityName) return '';
+  const firstWord = commodityName.toLowerCase().split(/[\s(/]/)[0];
+  const item = COMMODITY_TRANSLATIONS[firstWord] || COMMODITY_TRANSLATIONS[commodityName.toLowerCase().trim()];
+  if (item && item[lang]) {
+    return item[lang];
+  }
+  return commodityName;
+};
+
+export const getLocalizedWeatherCondition = (condition, lang = 'en') => {
+  if (!condition) return 'Clear';
+  const c = condition.toLowerCase().trim();
+  const found = WEATHER_TRANSLATIONS[c];
+  if (found && found[lang]) {
+    return found[lang];
+  }
+  return condition;
+};
+
+export const getLocalizedDayName = (dayName, lang = 'en') => {
+  if (!dayName) return '';
+  const d = dayName.toLowerCase().trim();
+  const found = DAYS_TRANSLATIONS[d];
+  if (found && found[lang]) {
+    return found[lang];
+  }
+  return dayName;
+};
+
+export const localizeAdvisory = (text, lang = 'en') => {
+  if (!text) return '';
+  if (lang === 'en') return text;
+
+  if (lang === 'hi') {
+    if (text.includes('rain probability') || text.includes('DO NOT IRRIGATE') || text.includes('waterlogging')) {
+      return text.replace(/(\d+)% rain probability\. DO NOT IRRIGATE to prevent waterlogging\./, '$1% बारिश की संभावना। जलभराव रोकने के लिए सिंचाई न करें।')
+                 .replace(/DO NOT IRRIGATE to prevent waterlogging/, 'जलभराव और जड़ों के सड़ने से बचने के लिए सिंचाई न करें।')
+                 .replace(/Postpone broadcasting urea \/ nitrogen fertilizers before expected rainfall\./, 'संभावित बारिश से पहले यूरिया और नाइट्रोजन उर्वरक का प्रयोग टालें।');
+    }
+    if (text.includes('High temperature') || text.includes('root zone moisture')) {
+      return text.replace(/High temperature \((\d+)°C\)\. Provide light evening irrigation to maintain root zone moisture\./, 'अधिक तापमान ($1°C)। नमी बनाए रखने के लिए शाम को हल्की सिंचाई करें।')
+                 .replace(/Apply balanced foliar nutrient spray during cool morning hours\./, 'सुबह के ठंडे समय संतुलित पोषक तत्वों का पर्णीय छिड़काव करें।');
+    }
+    if (text.includes('Wind speed') || text.includes('Avoid pesticide spraying')) {
+      return text.replace(/Wind speed (\d+) km\/h\. Avoid pesticide spraying to eliminate drift hazards\./, 'तेज़ हवा ($1 किमी/घंटा)। कीटनाशक छिड़काव से बचें ताकि दवा व्यर्थ न बहे।');
+    }
+    if (text.includes('Optimal conditions for fertilizer application')) {
+      return 'उर्वरक प्रयोग, निराई-गुड़ाई और नियमित सिंचाई के लिए अनुकूल मौसम।';
+    }
+    if (text.includes('Favorable weather')) {
+      return 'अनुकूल मौसम। सामान्य सिंचाई और उर्वरक प्रबंधन जारी रखें।';
+    }
+  }
+
+  if (lang === 'pa') {
+    if (text.includes('rain probability') || text.includes('DO NOT IRRIGATE') || text.includes('waterlogging')) {
+      return text.replace(/(\d+)% rain probability\. DO NOT IRRIGATE to prevent waterlogging\./, '$1% ਮੀਂਹ ਦੀ ਸੰਭਾਵਨਾ। ਪਾਣੀ ਖੜ੍ਹਨ ਤੋਂ ਬਚਾਅ ਲਈ ਸਿੰਚਾਈ ਨਾ ਕਰੋ।')
+                 .replace(/DO NOT IRRIGATE to prevent waterlogging/, 'ਜੜ੍ਹਾਂ ਨੂੰ ਨੁਕਸਾਨ ਤੋਂ ਬਚਾਉਣ ਲਈ ਸਿੰਚਾਈ ਰੋਕੋ।')
+                 .replace(/Postpone broadcasting urea \/ nitrogen fertilizers before expected rainfall\./, 'ਮੀਂਹ ਤੋਂ ਪਹਿਲਾਂ ਯੂਰੀਆ ਖਾਦ ਪਾਉਣਾ ਮੁਲਤਵੀ ਕਰੋ।');
+    }
+    if (text.includes('High temperature') || text.includes('root zone moisture')) {
+      return text.replace(/High temperature \((\d+)°C\)\. Provide light evening irrigation to maintain root zone moisture\./, 'ਵੱਧ ਤਾਪਮਾਨ ($1°C)। ਨਮੀ ਬਣਾਈ ਰੱਖਣ ਲਈ ਸ਼ਾਮ ਨੂੰ ਹਲਕੀ ਸਿੰਚਾਈ ਕਰੋ।')
+                 .replace(/Apply balanced foliar nutrient spray during cool morning hours\./, 'ਸਵੇਰ ਦੇ ਠੰਡੇ ਸਮੇਂ ਪੌਸ਼ਟਿਕ ਸਪਰੇਅ ਕਰੋ।');
+    }
+    if (text.includes('Wind speed') || text.includes('Avoid pesticide spraying')) {
+      return text.replace(/Wind speed (\d+) km\/h\. Avoid pesticide spraying to eliminate drift hazards\./, 'ਤੇਜ਼ ਹਵਾ ($1 ਕਿਲੋਮੀਟਰ/ਘੰਟਾ)। ਕੀਟਨਾਸ਼ਕ ਸਪਰੇਅ ਕਰਨ ਤੋਂ ਗੁਰੇਜ਼ ਕਰੋ।');
+    }
+    if (text.includes('Optimal conditions for fertilizer application')) {
+      return 'ਖਾਦ ਪਾਉਣ, ਗੋਡੀ ਕਰਨ ਅਤੇ ਆਮ ਸਿੰਚਾਈ ਲਈ ਢੁਕਵਾਂ ਮੌਸਮ।';
+    }
+    if (text.includes('Favorable weather')) {
+      return 'ਅਨੁਕੂਲ ਮੌਸਮ। ਆਮ ਸਿੰਚਾਈ ਅਤੇ ਖਾਦ ਪ੍ਰਬੰਧਨ ਜਾਰੀ ਰੱਖੋ।';
+    }
+  }
+
+  return text;
 };

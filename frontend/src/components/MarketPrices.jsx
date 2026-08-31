@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { getLocalizedCropName, CROP_TRANSLATIONS } from '../data/cropTranslations';
+import { getLocalizedCropName, getLocalizedCommodityName, CROP_TRANSLATIONS } from '../data/cropTranslations';
 
 const POPULAR_STATES = [
   'Punjab',
@@ -48,7 +48,7 @@ export const MarketPrices = () => {
     const commName = (item.commodity || '').toLowerCase();
     const marketName = (item.market || '').toLowerCase();
     const districtName = (item.district || '').toLowerCase();
-    const locName = getLocalizedCropName(item.crop, i18n.language).toLowerCase();
+    const locName = getLocalizedCommodityName(item.commodity || item.crop, i18n.language).toLowerCase();
     return (
       cropName.includes(term) ||
       commName.includes(term) ||
@@ -75,7 +75,7 @@ export const MarketPrices = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search crop, mandi or district..."
+            placeholder={t('mandi.search_placeholder')}
             className="flex-1 bg-transparent text-xs font-medium text-on-surface outline-none placeholder:text-on-surface-variant/50"
           />
           {searchQuery && (
@@ -106,10 +106,10 @@ export const MarketPrices = () => {
         <div className="flex items-center justify-between text-xs px-1">
           <span className="font-bold text-primary flex items-center gap-1">
             <span className="material-symbols-outlined text-[16px]">location_on</span>
-            Mandis in {selectedState}
+            {i18n.language === 'hi' ? `${selectedState} में मंडियां` : i18n.language === 'pa' ? `${selectedState} ਵਿੱਚ ਮੰਡੀਆਂ` : `Mandis in ${selectedState}`}
           </span>
           <span className="text-[11px] text-on-surface-variant font-medium">
-            {filteredPrices.length} Mandis Listed
+            {i18n.language === 'hi' ? `${filteredPrices.length} मंडियां सूचीबद्ध` : i18n.language === 'pa' ? `${filteredPrices.length} ਮੰਡੀਆਂ ਸੂਚੀਬੱਧ` : `${filteredPrices.length} Mandis Listed`}
           </span>
         </div>
       </div>
@@ -120,20 +120,25 @@ export const MarketPrices = () => {
           <div className="py-12 flex flex-col items-center justify-center gap-2">
             <span className="material-symbols-outlined animate-spin text-3xl text-primary">progress_activity</span>
             <span className="text-xs font-semibold text-on-surface-variant">
-              Fetching real-time {selectedState} Mandi arrivals...
+              {i18n.language === 'hi' ? `${selectedState} मंडी के ताज़ा भाव लोड हो रहे हैं...` : i18n.language === 'pa' ? `${selectedState} ਮੰਡੀ ਦੇ ਤਾਜ਼ਾ ਭਾਅ ਪ੍ਰਾਪਤ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ...` : `Fetching real-time ${selectedState} Mandi arrivals...`}
             </span>
           </div>
         ) : filteredPrices.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-3xl p-8 text-center text-xs text-on-surface-variant shadow-card border border-outline-variant/40">
             <span className="material-symbols-outlined text-4xl text-on-surface-variant/40 mb-2">store_mall_directory</span>
-            <p className="font-semibold">No mandis found matching &quot;{searchQuery}&quot; in {selectedState}.</p>
-            <p className="text-[11px] text-on-surface-variant/70 mt-1">Try another search term or state.</p>
+            <p className="font-semibold">
+              {i18n.language === 'hi' ? `"${searchQuery}" से मेल खाती कोई मंडी नहीं मिली।` : i18n.language === 'pa' ? `"${searchQuery}" ਨਾਲ ਮਿਲਦੀ ਕੋਈ ਮੰਡੀ ਨਹੀਂ ਮਿਲੀ।` : `No mandis found matching "${searchQuery}" in ${selectedState}.`}
+            </p>
+            <p className="text-[11px] text-on-surface-variant/70 mt-1">
+              {i18n.language === 'hi' ? 'कृपया अन्य फसल या राज्य चुनें।' : i18n.language === 'pa' ? 'ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਹੋਰ ਫਸਲ ਜਾਂ ਰਾਜ ਚੁਣੋ।' : 'Try another search term or state.'}
+            </p>
           </div>
         ) : (
           filteredPrices.map((item, idx) => {
             const cropKey = item.crop?.toLowerCase();
             const meta = CROP_TRANSLATIONS[cropKey] || {};
             const isHighDemand = item.demand === 'High';
+            const localizedName = getLocalizedCommodityName(item.commodity || item.crop, i18n.language);
 
             return (
               <div
@@ -152,7 +157,7 @@ export const MarketPrices = () => {
                     </div>
                     <div>
                       <h3 className="font-extrabold text-sm text-on-surface">
-                        {getLocalizedCropName(item.crop, i18n.language)}
+                        {localizedName}
                         <span className="text-[11px] font-normal text-on-surface-variant ml-1">
                           ({item.commodity})
                         </span>
@@ -178,7 +183,9 @@ export const MarketPrices = () => {
                         : 'bg-secondary-container text-on-secondary-container border border-secondary/30'
                     }`}
                   >
-                    {isHighDemand ? '🔥 High Demand' : '✨ Normal'}
+                    {isHighDemand
+                      ? (i18n.language === 'hi' ? '🔥 भारी मांग' : i18n.language === 'pa' ? '🔥 ਭਾਰੀ ਮੰਗ' : '🔥 High Demand')
+                      : (i18n.language === 'hi' ? '✨ सामान्य' : i18n.language === 'pa' ? '✨ ਆਮ' : '✨ Normal')}
                   </span>
                 </div>
 
@@ -195,7 +202,9 @@ export const MarketPrices = () => {
                     <span className="text-sm font-black text-primary">
                       ₹{Math.round(item.modal_price)?.toLocaleString('en-IN')}
                     </span>
-                    <span className="text-[9px] text-on-surface-variant font-normal block">/Quintal</span>
+                    <span className="text-[9px] text-on-surface-variant font-normal block">
+                      {i18n.language === 'hi' ? '/क्विंटल' : i18n.language === 'pa' ? '/ਕੁਇੰਟਲ' : '/Quintal'}
+                    </span>
                   </div>
                   <div>
                     <span className="text-[10px] text-on-surface-variant font-medium block">{t('mandi.max_price')}</span>
@@ -211,11 +220,19 @@ export const MarketPrices = () => {
                     <span className="material-symbols-outlined text-[14px]">
                       {item.trend === 'up' ? 'trending_up' : 'trending_flat'}
                     </span>
-                    <span>{item.trend === 'up' ? 'Rising Trend' : 'Stable Market'}</span>
+                    <span>
+                      {item.trend === 'up'
+                        ? (i18n.language === 'hi' ? 'बढ़ता भाव' : i18n.language === 'pa' ? 'ਵਧਦਾ ਭਾਅ' : 'Rising Trend')
+                        : (i18n.language === 'hi' ? 'स्थिर बाज़ार' : i18n.language === 'pa' ? 'ਸਥਿਰ ਬਾਜ਼ਾਰ' : 'Stable Market')}
+                    </span>
                   </span>
                   <span className="flex items-center gap-1">
                     <span className={`w-1.5 h-1.5 rounded-full ${item.is_live ? 'bg-green-500 animate-pulse' : 'bg-secondary'}`}></span>
-                    <span>{item.is_live ? 'Live Agmarknet' : `${item.state} APMC`}</span>
+                    <span>
+                      {item.is_live
+                        ? (i18n.language === 'hi' ? 'लाइव एगमार्कनेट' : i18n.language === 'pa' ? 'ਲਾਈਵ ਐਗਮਾਰਕਨੇਟ' : 'Live Agmarknet')
+                        : `${item.state} APMC`}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -231,15 +248,19 @@ export const MarketPrices = () => {
             <span className="material-symbols-outlined text-xl">support_agent</span>
           </div>
           <div>
-            <div className="font-bold text-xs text-on-surface">Kisan Call Centre (KCC)</div>
-            <div className="text-[10px] text-on-surface-variant">Toll-free Mandi Hotline: 1800-180-1551</div>
+            <div className="font-bold text-xs text-on-surface">
+              {i18n.language === 'hi' ? 'किसान कॉल सेंटर (KCC)' : i18n.language === 'pa' ? 'ਕਿਸਾਨ ਕਾਲ ਸੈਂਟਰ (KCC)' : 'Kisan Call Centre (KCC)'}
+            </div>
+            <div className="text-[10px] text-on-surface-variant">
+              {i18n.language === 'hi' ? 'टोल-फ्री मंडी हेल्पलाइन: 1800-180-1551' : i18n.language === 'pa' ? 'ਟੋਲ-ਫ੍ਰੀ ਮੰਡੀ ਹੈਲਪਲਾਈਨ: 1800-180-1551' : 'Toll-free Mandi Hotline: 1800-180-1551'}
+            </div>
           </div>
         </div>
         <a
           href="tel:18001801551"
           className="bg-primary hover:bg-primary-container text-on-primary font-bold text-xs px-3.5 py-2 rounded-xl shadow-sm transition-all active:scale-95"
         >
-          Call
+          {i18n.language === 'hi' ? 'कॉल करें' : i18n.language === 'pa' ? 'ਕਾਲ ਕਰੋ' : 'Call'}
         </a>
       </div>
     </div>

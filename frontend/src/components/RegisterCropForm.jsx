@@ -91,14 +91,16 @@ export const RegisterCropForm = ({ onClose, onSuccess, initialCrop }) => {
           
           <div>
             <label className="block text-xs font-bold text-on-surface-variant mb-1">
-              Crop Name *
+              {i18n.language === 'hi' ? 'फसल का नाम *' : i18n.language === 'pa' ? 'ਫਸਲ ਦਾ ਨਾਮ *' : 'Crop Name *'}
             </label>
             <select
               value={formData.crop_name}
               onChange={(e) => setFormData({ ...formData, crop_name: e.target.value })}
               className="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-xl px-4 py-3 text-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             >
-              <option value="" disabled>Select a crop</option>
+              <option value="" disabled>
+                {i18n.language === 'hi' ? 'फसल चुनें' : i18n.language === 'pa' ? 'ਫਸਲ ਚੁਣੋ' : 'Select a crop'}
+              </option>
               {CROPS.map(c => (
                 <option key={c} value={c}>
                   {getLocalizedCropName(c, i18n.language)}
@@ -109,14 +111,19 @@ export const RegisterCropForm = ({ onClose, onSuccess, initialCrop }) => {
 
           <div>
             <label className="block text-xs font-bold text-on-surface-variant mb-1">
-              Season *
+              {i18n.language === 'hi' ? 'मौसम / फसल चक्र *' : i18n.language === 'pa' ? 'ਸੀਜ਼ਨ / ਮੌਸਮ *' : 'Season *'}
             </label>
             <div className="grid grid-cols-2 gap-2">
-              {['kharif', 'rabi', 'zaid', 'perennial'].map(s => (
+              {[
+                { id: 'kharif', label: i18n.language === 'hi' ? 'खरीफ (Kharif)' : i18n.language === 'pa' ? 'ਖਰੀਫ (Kharif)' : 'Kharif' },
+                { id: 'rabi', label: i18n.language === 'hi' ? 'रबी (Rabi)' : i18n.language === 'pa' ? 'ਰਬੀ (Rabi)' : 'Rabi' },
+                { id: 'zaid', label: i18n.language === 'hi' ? 'जायद (Zaid)' : i18n.language === 'pa' ? 'ਜ਼ਾਇਦ (Zaid)' : 'Zaid' },
+                { id: 'perennial', label: i18n.language === 'hi' ? 'बारहमासी' : i18n.language === 'pa' ? 'ਬਾਰਾਮਾਸੀ' : 'Perennial' },
+              ].map(s => (
                 <label 
-                  key={s} 
+                  key={s.id} 
                   className={`flex items-center gap-2 p-3 rounded-xl border cursor-pointer transition-colors ${
-                    formData.season === s 
+                    formData.season === s.id 
                       ? 'bg-secondary-container border-secondary text-on-secondary-container' 
                       : 'bg-surface-container-lowest border-outline-variant/50 text-on-surface-variant'
                   }`}
@@ -124,12 +131,12 @@ export const RegisterCropForm = ({ onClose, onSuccess, initialCrop }) => {
                   <input
                     type="radio"
                     name="season"
-                    value={s}
-                    checked={formData.season === s}
+                    value={s.id}
+                    checked={formData.season === s.id}
                     onChange={(e) => setFormData({ ...formData, season: e.target.value })}
                     className="hidden"
                   />
-                  <span className="capitalize text-sm font-medium">{s}</span>
+                  <span className="text-xs font-bold">{s.label}</span>
                 </label>
               ))}
             </div>
@@ -150,14 +157,14 @@ export const RegisterCropForm = ({ onClose, onSuccess, initialCrop }) => {
 
           <div>
             <label className="block text-xs font-bold text-on-surface-variant mb-1">
-              Notes (Optional)
+              {i18n.language === 'hi' ? 'विशेष टिप्पणी (वैकल्पिक)' : i18n.language === 'pa' ? 'ਵਿਸ਼ੇਸ਼ ਨੋਟ (ਵਿਕਲਪਿਕ)' : 'Notes (Optional)'}
             </label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               className="w-full bg-surface-container-lowest border border-outline-variant/50 rounded-xl px-4 py-3 text-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
               rows={2}
-              placeholder="Any specific notes about this crop..."
+              placeholder={i18n.language === 'hi' ? 'खेत या फसल संबंधी कोई टिप्पणी...' : i18n.language === 'pa' ? 'ਫਸਲ ਬਾਰੇ ਕੋਈ ਖਾਸ ਨੋਟ...' : 'Any specific notes about this crop...'}
             />
           </div>
 
@@ -171,7 +178,7 @@ export const RegisterCropForm = ({ onClose, onSuccess, initialCrop }) => {
             ) : (
               <>
                 <span className="material-symbols-outlined text-[20px]">add_circle</span>
-                Register Crop
+                {t('farming.register_crop')}
               </>
             )}
           </button>

@@ -192,7 +192,9 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[20px] text-primary">landscape</span>
             <div>
-              <span className="text-xs font-bold text-on-surface">Region: </span>
+              <span className="text-xs font-bold text-on-surface">
+                {i18n.language === 'hi' ? 'क्षेत्र: ' : i18n.language === 'pa' ? 'ਖੇਤਰ: ' : 'Region: '}
+              </span>
               <span className="text-xs font-extrabold text-primary">{soilData.state}</span>
             </div>
           </div>
@@ -200,16 +202,18 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
             onClick={() => setShowEditSoil(!showEditSoil)}
             className="text-xs text-primary font-bold hover:underline bg-secondary-container/50 px-3 py-1 rounded-full"
           >
-            {showEditSoil ? 'Hide Parameters' : 'Adjust Soil / State'}
+            {showEditSoil
+              ? (i18n.language === 'hi' ? 'छिपाएं' : i18n.language === 'pa' ? 'ਲੁਕਾਓ' : 'Hide Parameters')
+              : (i18n.language === 'hi' ? 'मिट्टी / राज्य बदलें' : i18n.language === 'pa' ? 'ਮਿੱਟੀ / ਰਾਜ ਬਦਲੋ' : 'Adjust Soil / State')}
           </button>
         </div>
 
         {/* Live Weather Indicator */}
         {weatherData && (
           <div className="text-[11px] text-on-surface-variant bg-surface-container-low/70 rounded-xl px-3 py-1.5 flex items-center justify-between mt-1">
-            <span>🌡️ Temp: <strong>{weatherData.temperature}°C</strong></span>
-            <span>💧 Humidity: <strong>{weatherData.humidity}%</strong></span>
-            <span>🌧️ Rain: <strong>{soilData.rainfall} mm</strong></span>
+            <span>🌡️ {i18n.language === 'hi' ? 'तापमान:' : i18n.language === 'pa' ? 'ਤਾਪਮਾਨ:' : 'Temp:'} <strong>{weatherData.temperature}°C</strong></span>
+            <span>💧 {i18n.language === 'hi' ? 'नमी:' : i18n.language === 'pa' ? 'ਨਮੀ:' : 'Humidity:'} <strong>{weatherData.humidity}%</strong></span>
+            <span>🌧️ {i18n.language === 'hi' ? 'वर्षा:' : i18n.language === 'pa' ? 'ਵਰਖਾ:' : 'Rain:'} <strong>{soilData.rainfall} mm</strong></span>
           </div>
         )}
 
@@ -217,7 +221,7 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
           <form onSubmit={handleRecalculate} className="space-y-3 mt-3 pt-3 border-t border-outline-variant/40 animate-fade-in">
             <div>
               <label className="block text-[10px] font-bold uppercase text-on-surface-variant mb-1">
-                Switch State (Auto-Fills Soil Health Card)
+                {i18n.language === 'hi' ? 'राज्य चुनें (मृदा स्वास्थ्य कार्ड स्वतः भरें)' : i18n.language === 'pa' ? 'ਰਾਜ ਚੁਣੋ (ਸੋਇਲ ਹੈਲਥ ਕਾਰਡ ਆਟੋ-ਭਰੋ)' : 'Switch State (Auto-Fills Soil Health Card)'}
               </label>
               <select 
                 value={soilData.state}
@@ -229,25 +233,25 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
             </div>
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className="block text-[10px] font-bold text-on-surface mb-0.5">Nitrogen (N)</label>
+                <label className="block text-[10px] font-bold text-on-surface mb-0.5">नाइट्रोजन (N)</label>
                 <input type="number" value={soilData.nitrogen} onChange={e => setSoilData({...soilData, nitrogen: e.target.value})} className="w-full bg-surface-container-lowest rounded-lg px-2 py-1 text-xs font-bold border border-outline-variant/60 outline-none" />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-on-surface mb-0.5">Phosphorus (P)</label>
+                <label className="block text-[10px] font-bold text-on-surface mb-0.5">फास्फोरस (P)</label>
                 <input type="number" value={soilData.phosphorus} onChange={e => setSoilData({...soilData, phosphorus: e.target.value})} className="w-full bg-surface-container-lowest rounded-lg px-2 py-1 text-xs font-bold border border-outline-variant/60 outline-none" />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-on-surface mb-0.5">Potassium (K)</label>
+                <label className="block text-[10px] font-bold text-on-surface mb-0.5">पोटेशियम (K)</label>
                 <input type="number" value={soilData.potassium} onChange={e => setSoilData({...soilData, potassium: e.target.value})} className="w-full bg-surface-container-lowest rounded-lg px-2 py-1 text-xs font-bold border border-outline-variant/60 outline-none" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[10px] font-bold text-on-surface mb-0.5">Soil pH: {soilData.ph}</label>
+                <label className="block text-[10px] font-bold text-on-surface mb-0.5">मिट्टी का pH: {soilData.ph}</label>
                 <input type="range" min="4" max="9" step="0.1" value={soilData.ph} onChange={e => setSoilData({...soilData, ph: e.target.value})} className="w-full accent-primary h-1" />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-on-surface mb-0.5">Seasonal Rain: {soilData.rainfall} mm</label>
+                <label className="block text-[10px] font-bold text-on-surface mb-0.5">वार्षिक वर्षा: {soilData.rainfall} mm</label>
                 <input type="range" min="30" max="300" step="5" value={soilData.rainfall} onChange={e => setSoilData({...soilData, rainfall: e.target.value})} className="w-full accent-primary h-1" />
               </div>
             </div>
@@ -270,7 +274,9 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
       {loading ? (
         <div className="flex flex-col items-center justify-center p-8 gap-3">
           <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-          <p className="text-xs font-semibold text-on-surface-variant">Analyzing soil match & fetching Agmarknet mandi rates...</p>
+          <p className="text-xs font-semibold text-on-surface-variant">
+            {i18n.language === 'hi' ? 'मिट्टी की उपयुक्तता और लाइव एगमार्कनेट मंडी भाव का विश्लेषण किया जा रहा है...' : i18n.language === 'pa' ? 'ਮਿੱਟੀ ਦੀ ਅਨੁਕੂਲਤਾ ਅਤੇ ਲਾਈਵ ਮੰਡੀ ਭਾਅ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : 'Analyzing soil match & fetching Agmarknet mandi rates...'}
+          </p>
         </div>
       ) : error ? (
         <div className="bg-error/10 text-error p-4 rounded-2xl text-xs text-center flex flex-col gap-2 border border-error/20">
@@ -279,7 +285,7 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
             onClick={() => fetchRecommendations(soilData)}
             className="self-center px-4 py-1.5 bg-error text-white rounded-xl text-xs font-bold shadow-sm"
           >
-            Retry Analysis
+            {i18n.language === 'hi' ? 'पुनः प्रयास करें' : i18n.language === 'pa' ? 'ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ' : 'Retry Analysis'}
           </button>
         </div>
       ) : (
@@ -297,7 +303,6 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
                   isTop ? 'border-primary/50 bg-gradient-to-b from-primary/5 to-transparent' : 'border-outline-variant/40'
                 }`}
               >
-                
                 {/* Header Badge */}
                 <div className="flex justify-between items-center mb-2.5">
                   <div className="flex items-center gap-1.5">
@@ -308,7 +313,7 @@ export const AIRecommendations = ({ onNavigateWeather, onSwitchToFarm }) => {
                       </span>
                     ) : (
                       <span className="text-[10px] font-bold bg-surface-container text-on-surface-variant px-2 py-0.5 rounded-full">
-                        #{idx + 1} Alternative Match
+                        #{idx + 1} {i18n.language === 'hi' ? 'वैकल्पिक विकल्प' : i18n.language === 'pa' ? 'ਬਦਲਵਾਂ ਵਿਕਲਪ' : 'Alternative Match'}
                       </span>
                     )}
                     <span className="text-[10px] font-bold bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full capitalize">

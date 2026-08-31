@@ -69,15 +69,19 @@ export const MyFarm = () => {
       {/* Top Banner with Multi-Crop Add Button */}
       <div className="flex items-center justify-between bg-surface-container-lowest p-3 rounded-2xl border border-outline-variant/40 shadow-sm">
         <div>
-          <h3 className="text-xs font-extrabold text-on-surface">Registered Farm Crops ({crops.length})</h3>
-          <p className="text-[10px] text-on-surface-variant">Manage multiple active crops simultaneously</p>
+          <h3 className="text-xs font-extrabold text-on-surface">
+            {i18n.language === 'hi' ? `पंजीकृत फसलें (${crops.length})` : i18n.language === 'pa' ? `ਦਰਜ ਕੀਤੀਆਂ ਫਸਲਾਂ (${crops.length})` : `Registered Farm Crops (${crops.length})`}
+          </h3>
+          <p className="text-[10px] text-on-surface-variant">
+            {i18n.language === 'hi' ? 'एक साथ कई फसलों का प्रबंधन करें' : i18n.language === 'pa' ? 'ਇੱਕੋ ਸਮੇਂ ਕਈ ਫਸਲਾਂ ਦਾ ਪ੍ਰਬੰਧ ਕਰੋ' : 'Manage multiple active crops simultaneously'}
+          </p>
         </div>
         <button
           onClick={() => setShowRegisterForm(true)}
           className="bg-primary text-on-primary text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-sm hover:shadow active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined text-[16px]">add</span>
-          <span>+ Add Crop</span>
+          <span>{i18n.language === 'hi' ? '+ फसल जोड़ें' : i18n.language === 'pa' ? '+ ਫਸਲ ਜੋੜੋ' : '+ Add Crop'}</span>
         </button>
       </div>
 
@@ -127,7 +131,7 @@ export const MyFarm = () => {
                         {isPrimary && (
                           <span className="text-[10px] font-extrabold bg-primary text-on-primary px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow-sm">
                             <span className="material-symbols-filled text-[11px] text-yellow-300">star</span>
-                            Primary
+                            {i18n.language === 'hi' ? 'मुख्य' : i18n.language === 'pa' ? 'ਮੁੱਖ' : 'Primary'}
                           </span>
                         )}
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
@@ -150,7 +154,7 @@ export const MyFarm = () => {
                         className="text-[10px] font-bold text-primary bg-primary/10 hover:bg-primary/20 px-2 py-1 rounded-lg transition-colors"
                         title="Set as Primary Crop"
                       >
-                        Make Primary
+                        {i18n.language === 'hi' ? 'मुख्य बनाएं' : i18n.language === 'pa' ? 'ਮੁੱਖ ਬਣਾਓ' : 'Make Primary'}
                       </button>
                     )}
                     {crop.status === 'active' && (
@@ -172,13 +176,17 @@ export const MyFarm = () => {
                           <p className="text-[10px] text-on-surface-variant font-bold uppercase">{t('farming.current_stage')}</p>
                           <p className="text-sm font-extrabold text-primary">{crop.current_stage || 'Growing'}</p>
                           {crop.days_in_stage !== undefined && (
-                            <p className="text-[10px] text-on-surface-variant">Day {crop.days_in_stage} in this stage</p>
+                            <p className="text-[10px] text-on-surface-variant">
+                              {i18n.language === 'hi' ? `इस चरण में दिन ${crop.days_in_stage}` : i18n.language === 'pa' ? `ਇਸ ਪੜਾਅ 'ਚ ਦਿਨ ${crop.days_in_stage}` : `Day ${crop.days_in_stage} in this stage`}
+                            </p>
                           )}
                         </div>
                         <div className="text-right">
                           <p className="text-xs text-primary font-bold">{crop.days_remaining} {t('farming.days_remaining')}</p>
                           {crop.expected_harvest_date && (
-                            <p className="text-[10px] text-on-surface-variant">Harvest: {crop.expected_harvest_date}</p>
+                            <p className="text-[10px] text-on-surface-variant">
+                              {i18n.language === 'hi' ? `कटाई: ${crop.expected_harvest_date}` : i18n.language === 'pa' ? `ਵਾਢੀ: ${crop.expected_harvest_date}` : `Harvest: ${crop.expected_harvest_date}`}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -186,7 +194,7 @@ export const MyFarm = () => {
                       {/* Dynamic Stage Progress Bar */}
                       <div className="flex flex-col gap-1 mt-2">
                         <div className="flex justify-between text-[10px] font-semibold text-on-surface-variant">
-                          <span>Stage Progress</span>
+                          <span>{i18n.language === 'hi' ? 'चरण प्रगति' : i18n.language === 'pa' ? 'ਪੜਾਅ ਪ੍ਰਗਤੀ' : 'Stage Progress'}</span>
                           <span className="font-bold text-primary">{crop.stage_progress_pct || 0}%</span>
                         </div>
                         <div className="w-full h-2.5 bg-surface-container rounded-full overflow-hidden">
@@ -197,8 +205,13 @@ export const MyFarm = () => {
                         </div>
                         {crop.next_stage && (
                           <div className="text-[10px] text-on-surface-variant flex items-center justify-between mt-1 pt-1 border-t border-outline-variant/30">
-                            <span>Next: <strong>{crop.next_stage}</strong></span>
-                            {crop.next_stage_date && <span>Est: {crop.next_stage_date}</span>}
+                            <span>
+                              {i18n.language === 'hi' ? 'अगला: ' : i18n.language === 'pa' ? 'ਅਗਲਾ: ' : 'Next: '}
+                              <strong>{crop.next_stage}</strong>
+                            </span>
+                            {crop.next_stage_date && (
+                              <span>{crop.next_stage_date}</span>
+                            )}
                           </div>
                         )}
                       </div>
