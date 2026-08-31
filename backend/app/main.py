@@ -53,11 +53,12 @@ app.include_router(farm.router)
 app.include_router(alerts.router)
 
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 # Static files & SPA handling
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DIST_CANDIDATES = [
+    os.path.join(BASE_DIR, "dist"),
     os.path.abspath(os.path.join(BASE_DIR, "..", "..", "frontend", "dist")),
     os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "dist")),
     os.path.abspath(os.path.join(os.getcwd(), "frontend", "dist")),
@@ -71,14 +72,23 @@ if DIST_DIR:
     if os.path.exists(assets_dir):
         app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
-    @app.get("/{full_path:path}")
-    async def serve_spa(full_path: str):
-        if full_path.startswith("api"):
-            return {"error": "Endpoint not found"}
-        target_file = os.path.join(DIST_DIR, full_path)
-        if full_path and os.path.isfile(target_file):
+    @app.get("/")
+    async def serve_root():
+        index_file = os.path.join(DIST_DIR, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        return {"message": "KrishiVani Frontend loading..."}
+
+    @app.exception_handler(404)
+    async def custom_404_handler(request, exc):
+        path = request.url.path
+        if path.startswith("/api"):
+            return JSONResponse(status_code=404, content={"detail": f"API endpoint '{path}' not found"})
+        clean_path = path.lstrip("/")
+        target_file = os.path.join(DIST_DIR, clean_path)
+        if clean_path and os.path.isfile(target_file):
             return FileResponse(target_file)
         index_file = os.path.join(DIST_DIR, "index.html")
         if os.path.exists(index_file):
             return FileResponse(index_file)
-        return {"message": "KrishiVani Frontend built dist not found"}
+        return JSONResponse(status_code=404, content={"detail": "Not found"})
