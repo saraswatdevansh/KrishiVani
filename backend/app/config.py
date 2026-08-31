@@ -5,8 +5,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-if os.getenv("VERCEL"):
+is_serverless = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+
+if is_serverless:
     DEFAULT_DB_PATH = "/tmp/krishivani.db"
+    db_env = os.getenv("DATABASE_URL", "")
+    if not db_env or "sqlite" in db_env:
+        os.environ["DATABASE_URL"] = f"sqlite:///{DEFAULT_DB_PATH}"
 else:
     DEFAULT_DB_PATH = os.path.abspath(os.path.join(BASE_DIR, "..", "krishivani.db"))
 
