@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useSpeechSynthesis } from '../hooks/useSpeechSynthesis';
 import { api } from '../services/api';
-import { getLocalizedCropName, CROP_TRANSLATIONS } from '../data/cropTranslations';
+import { getLocalizedCropName, getLocalizedStageName, getLocalizedSeason, getLocalizedWeatherCondition, CROP_TRANSLATIONS } from '../data/cropTranslations';
 
 // Intelligent rule-based evaluation of live weather, rainfall forecast, irrigation & fertilizer actions per crop
-function getCropWeatherSuitability(cropName, weather, forecast) {
+function getCropWeatherSuitability(cropName, weather, forecast, lang = 'en') {
   const crop = cropName?.toLowerCase() || 'rice';
   const temp = weather?.temperature ?? 28;
   const humidity = weather?.humidity ?? 60;
@@ -22,23 +22,31 @@ function getCropWeatherSuitability(cropName, weather, forecast) {
   // 2. Compute universal Irrigation Action Directive
   let irrigation = {
     status: 'normal',
-    action: 'NORMAL MOISTURE',
-    reason: 'Maintain standard field moisture levels.',
+    action: lang === 'hi' ? 'सामान्य सिंचाई' : lang === 'pa' ? 'ਆਮ ਸਿੰਚਾਈ' : 'NORMAL MOISTURE',
+    reason: lang === 'hi' ? 'खेत में सामान्य नमी का स्तर बनाए रखें।' : lang === 'pa' ? 'ਖੇਤ ਵਿੱਚ ਆਮ ਨਮੀ ਬਣਾਈ ਰੱਖੋ।' : 'Maintain standard field moisture levels.',
     icon: 'water_drop'
   };
 
   if (isRainImminent) {
     irrigation = {
       status: 'stop',
-      action: 'DO NOT IRRIGATE',
-      reason: `Rain forecast (${maxRainProb}% chance in 24-48h). Avoid over-saturation and root rot.`,
+      action: lang === 'hi' ? 'सिंचाई न करें' : lang === 'pa' ? 'ਸਿੰਚਾਈ ਨਾ ਕਰੋ' : 'DO NOT IRRIGATE',
+      reason: lang === 'hi'
+        ? `24-48 घंटों में बारिश (${maxRainProb}%) का अनुमान। जलभराव और जड़ों के सड़ने से बचें।`
+        : lang === 'pa'
+        ? `24-48 ਘੰਟਿਆਂ 'ਚ ਮੀਂਹ (${maxRainProb}%) ਦੀ ਸੰਭਾਵਨਾ। ਜੜ੍ਹਾਂ ਦੇ ਗਲਣ ਤੋਂ ਬਚੋ।`
+        : `Rain forecast (${maxRainProb}% chance in 24-48h). Avoid over-saturation and root rot.`,
       icon: 'block'
     };
   } else if (temp >= 32 && maxRainProb < 20) {
     irrigation = {
       status: 'needed',
-      action: 'IRRIGATION RECOMMENDED',
-      reason: `Dry & warm conditions (${temp}°C, low rain risk). Schedule light early morning watering.`,
+      action: lang === 'hi' ? 'सिंचाई की सिफारिश' : lang === 'pa' ? 'ਸਿੰਚਾਈ ਦੀ ਲੋੜ' : 'IRRIGATION RECOMMENDED',
+      reason: lang === 'hi'
+        ? `गर्म व सूखा मौसम (${temp}°C)। सुबह के समय हल्की सिंचाई करें।`
+        : lang === 'pa'
+        ? `ਗਰਮ ਤੇ ਸੁੱਕਾ ਮੌਸਮ (${temp}°C)। ਸਵੇਰ ਵੇਲੇ ਹਲਕੀ ਸਿੰਚਾਈ ਕਰੋ।`
+        : `Dry & warm conditions (${temp}°C, low rain risk). Schedule light early morning watering.`,
       icon: 'water_drop'
     };
   }
@@ -46,23 +54,35 @@ function getCropWeatherSuitability(cropName, weather, forecast) {
   // 3. Compute universal Fertilizer & Chemical Directive
   let fertilizer = {
     status: 'safe',
-    action: 'SAFE TO APPLY',
-    reason: 'Dry canopy & moderate conditions. Optimal window for basal/foliar nutrients.',
+    action: lang === 'hi' ? 'उर्वरक प्रयोग सुरक्षित' : lang === 'pa' ? 'ਖਾਦ ਪਾਉਣਾ ਸੁਰੱਖਿਅਤ' : 'SAFE TO APPLY',
+    reason: lang === 'hi'
+      ? 'पत्तियां सूखी और मौसम अनुकूल है। यूरिया या पोषक तत्वों के छिड़काव का सही समय।'
+      : lang === 'pa'
+      ? 'ਮੌਸਮ ਅਨੁਕੂਲ ਹੈ। ਖਾਦ ਜਾਂ ਪੌਸ਼ਟਿਕ ਸਪਰੇਅ ਲਈ ਸਹੀ ਸਮਾਂ।'
+      : 'Dry canopy & moderate conditions. Optimal window for basal/foliar nutrients.',
     icon: 'check_circle'
   };
 
   if (isRainImminent) {
     fertilizer = {
       status: 'delay',
-      action: 'POSTPONE FERTILIZER & UREA',
-      reason: `Rainfall (${maxRainProb}% chance) will leach dissolved nitrogen into runoff. Apply only after rain.`,
+      action: lang === 'hi' ? 'उर्वरक और यूरिया का प्रयोग टालें' : lang === 'pa' ? 'ਖਾਦ ਅਤੇ ਯੂਰੀਆ ਮੁਲਤਵੀ ਕਰੋ' : 'POSTPONE FERTILIZER & UREA',
+      reason: lang === 'hi'
+        ? `बारिश (${maxRainProb}%) के पानी के साथ नाइट्रोजन बह जाएगा। बारिश रुकने के बाद ही यूरिया डालें।`
+        : lang === 'pa'
+        ? `ਮੀਂਹ (${maxRainProb}%) ਦੇ ਪਾਣੀ ਨਾਲ ਨਾਈਟ੍ਰੋਜਨ ਵਹਿ ਜਾਵੇਗਾ। ਮੀਂਹ ਰੁਕਣ ਤੋਂ ਬਾਅਦ ਹੀ ਯੂਰੀਆ ਪਾਓ।`
+        : `Rainfall (${maxRainProb}% chance) will leach dissolved nitrogen into runoff. Apply only after rain.`,
       icon: 'pause_circle'
     };
   } else if (windSpeed >= 20) {
     fertilizer = {
       status: 'delay',
-      action: 'DELAY FOLIAR SPRAY',
-      reason: `High winds (${windSpeed} km/h) cause chemical spray drift and poor leaf absorption.`,
+      action: lang === 'hi' ? 'छिड़काव टालें' : lang === 'pa' ? 'ਸਪਰੇਅ ਟਾਲੋ' : 'DELAY FOLIAR SPRAY',
+      reason: lang === 'hi'
+        ? `तेज़ हवा (${windSpeed} किमी/घंटा) से दवा का बहाव और नुकसान होता है।`
+        : lang === 'pa'
+        ? `ਤੇਜ਼ ਹਵਾ (${windSpeed} ਕਿਲੋਮੀਟਰ/ਘੰਟਾ) ਨਾਲ ਦਵਾਈ ਦਾ ਨੁਕਸਾਨ ਹੁੰਦਾ ਹੈ।`
+        : `High winds (${windSpeed} km/h) cause chemical spray drift and poor leaf absorption.`,
       icon: 'air'
     };
   }
@@ -73,31 +93,39 @@ function getCropWeatherSuitability(cropName, weather, forecast) {
     if (isRainImminent) {
       return {
         status: 'good',
-        badge: 'Rain Beneficial (Paddy)',
+        badge: lang === 'hi' ? 'धान के लिए बारिश फायदेमंद' : lang === 'pa' ? 'ਝੋਨੇ ਲਈ ਮੀਂਹ ਲਾਭਦਾਇਕ' : 'Rain Beneficial (Paddy)',
         color: 'text-green-700 bg-green-50 border-green-200',
         icon: 'thunderstorm',
         rainChance: maxRainProb,
         irrigation,
         fertilizer,
-        summary: `Precipitation (${maxRainProb}% chance) helps maintain target 3-5 cm standing water.`,
-        precaution: 'Keep bunds intact to harvest rainwater, but strictly hold urea top-dressing until showers stop.'
+        summary: lang === 'hi'
+          ? `बारिश (${maxRainProb}% संभावना) खेत में 3-5 सेमी पानी का स्तर बनाए रखने में सहायक है।`
+          : lang === 'pa'
+          ? `ਮੀਂਹ (${maxRainProb}% ਸੰਭਾਵਨਾ) ਖੇਤ ਵਿੱਚ 3-5 ਸੈਂਟੀਮੀਟਰ ਪਾਣੀ ਬਣਾਈ ਰੱਖਣ 'ਚ ਮਦਦਗਾਰ ਹੈ।`
+          : `Precipitation (${maxRainProb}% chance) helps maintain target 3-5 cm standing water.`,
+        precaution: lang === 'hi'
+          ? 'खेत की मेड़ मजबूत रखें ताकि बारिश का पानी जमा हो सके, लेकिन बारिश थमने तक यूरिया टॉप-ड्रेसिंग न करें।'
+          : lang === 'pa'
+          ? 'ਖੇਤ ਦੀ ਵੱਟ ਮਜ਼ਬੂਤ ਰੱਖੋ ਤਾਂ ਜੋ ਮੀਂਹ ਦਾ ਪਾਣੀ ਇਕੱਠਾ ਹੋ ਸਕੇ, ਪਰ ਮੀਂਹ ਰੁਕਣ ਤੱਕ ਯੂਰੀਆ ਨਾ ਪਾਓ।'
+          : 'Keep bunds intact to harvest rainwater, but strictly hold urea top-dressing until showers stop.'
       };
     } else if (temp > 37) {
       return {
         status: 'caution',
-        badge: 'High Heat Watch',
+        badge: lang === 'hi' ? 'अत्यधिक गर्मी चेतावनी' : lang === 'pa' ? 'ਵੱਧ ਗਰਮੀ ਚੇਤਾਵਨੀ' : 'High Heat Watch',
         color: 'text-amber-700 bg-amber-50 border-amber-200',
         icon: 'warning',
         rainChance: maxRainProb,
         irrigation: {
           status: 'needed',
-          action: 'TOP UP WATER LEVEL',
-          reason: 'High heat accelerates evaporation from paddy beds.',
+          action: lang === 'hi' ? 'पानी का स्तर बढ़ाएं' : lang === 'pa' ? 'ਪਾਣੀ ਦਾ ਪੱਧਰ ਵਧਾਓ' : 'TOP UP WATER LEVEL',
+          reason: lang === 'hi' ? 'अधिक गर्मी से धान के खेत में पानी जल्दी सूखता है।' : lang === 'pa' ? 'ਗਰਮੀ ਕਾਰਨ ਪਾਣੀ ਜਲਦੀ ਸੁੱਕਦਾ ਹੈ।' : 'High heat accelerates evaporation from paddy beds.',
           icon: 'water_drop'
         },
         fertilizer,
-        summary: 'Intense heat can dry standing water and cause leaf tip burn.',
-        precaution: 'Replenish field water to 5cm during early morning or evening hours.'
+        summary: lang === 'hi' ? 'तेज़ धूप से खेत का पानी सूख सकता है और पत्तियों के सिरे झुलस सकते हैं।' : lang === 'pa' ? 'ਧੁੱਪ ਨਾਲ ਪੱਤਿਆਂ ਦੇ ਸਿਰੇ ਝੁਲਸ ਸਕਦੇ ਹਨ।' : 'Intense heat can dry standing water and cause leaf tip burn.',
+        precaution: lang === 'hi' ? 'सुबह या शाम के समय खेत में पानी का स्तर 5 सेमी तक बनाए रखें।' : lang === 'pa' ? 'ਸਵੇਰੇ ਜਾਂ ਸ਼ਾਮ ਨੂੰ ਪਾਣੀ 5 ਸੈਂਟੀਮੀਟਰ ਤੱਕ ਰੱਖੋ।' : 'Replenish field water to 5cm during early morning or evening hours.'
       };
     }
   }
@@ -107,26 +135,14 @@ function getCropWeatherSuitability(cropName, weather, forecast) {
     if (isRainImminent) {
       return {
         status: 'bad',
-        badge: 'Waterlogging Alert',
+        badge: lang === 'hi' ? 'जलभराव चेतावनी' : lang === 'pa' ? 'ਪਾਣੀ ਖੜ੍ਹਨ ਦੀ ਚੇਤਾਵਨੀ' : 'Waterlogging Alert',
         color: 'text-red-700 bg-red-50 border-red-200',
         icon: 'gpp_bad',
         rainChance: maxRainProb,
         irrigation,
         fertilizer,
-        summary: `Maize roots are highly sensitive to standing water (${maxRainProb}% rain probability).`,
-        precaution: 'Open drainage furrows immediately and postpone all fertilizer applications.'
-      };
-    } else if (humidity > 78) {
-      return {
-        status: 'caution',
-        badge: 'Blight / Borer Watch',
-        color: 'text-amber-700 bg-amber-50 border-amber-200',
-        icon: 'warning',
-        rainChance: maxRainProb,
-        irrigation,
-        fertilizer,
-        summary: 'High moisture elevates Fall Armyworm & leaf blight risk.',
-        precaution: 'Inspect central leaf whorls; spray biopesticides only in calm winds.'
+        summary: lang === 'hi' ? `मक्के की जड़ें खड़े पानी के प्रति बहुत संवेदनशील हैं (${maxRainProb}% बारिश)।` : lang === 'pa' ? `ਮੱਕੀ ਦੀਆਂ ਜੜ੍ਹਾਂ ਖੜ੍ਹੇ ਪਾਣੀ ਨਾਲ ਖਰਾਬ ਹੁੰਦੀਆਂ ਹਨ (${maxRainProb}% ਮੀਂਹ)।` : `Maize roots are highly sensitive to standing water (${maxRainProb}% rain probability).`,
+        precaution: lang === 'hi' ? 'खेत में तुरंत जल निकासी की नालियां खोलें और सभी उर्वरक प्रयोग टालें।' : lang === 'pa' ? 'ਪਾਣੀ ਦੀ ਨਿਕਾਸੀ ਯਕੀਨੀ ਬਣਾਓ ਅਤੇ ਖਾਦ ਪਾਉਣਾ ਰੋਕੋ।' : 'Open drainage furrows immediately and postpone all fertilizer applications.'
       };
     }
   }
@@ -136,65 +152,31 @@ function getCropWeatherSuitability(cropName, weather, forecast) {
     if (isRainImminent || humidity > 78) {
       return {
         status: 'bad',
-        badge: 'Boll Rot / Pest Alert',
+        badge: lang === 'hi' ? 'टिंडे सड़ने और कीट का खतरा' : lang === 'pa' ? 'ਟੀਂਡੇ ਗਲਣ ਦਾ ਖਤਰਾ' : 'Boll Rot / Pest Alert',
         color: 'text-red-700 bg-red-50 border-red-200',
         icon: 'gpp_bad',
         rainChance: maxRainProb,
         irrigation,
         fertilizer,
-        summary: `High moisture (${maxRainProb}% rain, ${humidity}% humidity) promotes boll shedding & Whitefly.`,
-        precaution: 'Ensure rapid drainage and delay all pesticide sprays until foliage dries.'
+        summary: lang === 'hi' ? `अधिक नमी (${maxRainProb}% बारिश, ${humidity}% नमी) से सफेद मक्खी का प्रकोप बढ़ता है।` : lang === 'pa' ? `ਨਮੀ (${maxRainProb}% ਮੀਂਹ, ${humidity}% ਨਮੀ) ਨਾਲ ਚਿੱਟੀ ਮੱਖੀ ਦਾ ਖਤਰਾ ਵਧਦਾ ਹੈ।` : `High moisture (${maxRainProb}% rain, ${humidity}% humidity) promotes boll shedding & Whitefly.`,
+        precaution: lang === 'hi' ? 'खेत से तुरंत पानी निकालें और पत्तियां सूखने तक छिड़काव टालें।' : lang === 'pa' ? 'ਖੇਤ ਵਿੱਚੋਂ ਪਾਣੀ ਕੱਢੋ ਅਤੇ ਪੱਤੇ ਸੁੱਕਣ ਤੱਕ ਸਪਰੇਅ ਰੋਕੋ।' : 'Ensure rapid drainage and delay all pesticide sprays until foliage dries.'
       };
     }
   }
 
-  // 4d. Pulses (Chickpea, Lentil, Pigeonpeas, Kidneybeans, Mungbean, Blackgram, Mothbeans)
+  // 4d. Pulses
   if (['chickpea', 'lentil', 'pigeonpeas', 'kidneybeans', 'mungbean', 'blackgram', 'mothbeans'].includes(crop)) {
     if (isRainImminent || humidity > 75) {
       return {
         status: 'bad',
-        badge: 'Rust / Wilt Hazard',
+        badge: lang === 'hi' ? 'उकठा / झुलसा रोग का खतरा' : lang === 'pa' ? 'ਝੁਲਸ ਰੋਗ ਦਾ ਖਤਰਾ' : 'Rust / Wilt Hazard',
         color: 'text-red-700 bg-red-50 border-red-200',
         icon: 'gpp_bad',
         rainChance: maxRainProb,
         irrigation,
         fertilizer,
-        summary: `Pulses cannot tolerate saturated root zones (${maxRainProb}% rain risk).`,
-        precaution: 'Strictly stop irrigation, ensure clear perimeter drains, and pause foliar feeds.'
-      };
-    }
-  }
-
-  // 4e. Fruit Trees & Plantation (Mango, Apple, Grapes, Coconut, Orange, Papaya, Pomegranate, Banana, Coffee)
-  if (['mango', 'apple', 'grapes', 'coconut', 'orange', 'papaya', 'pomegranate', 'banana', 'coffee'].includes(crop)) {
-    if (isRainImminent && humidity > 80) {
-      return {
-        status: 'caution',
-        badge: 'Mildew / Fungal Watch',
-        color: 'text-amber-700 bg-amber-50 border-amber-200',
-        icon: 'warning',
-        rainChance: maxRainProb,
-        irrigation,
-        fertilizer,
-        summary: `High humidity and upcoming rain (${maxRainProb}%) favor powdery mildew & fruit drop.`,
-        precaution: 'Ensure tree basin drainage and avoid overhead sprinkler irrigation.'
-      };
-    } else if (temp > 35) {
-      return {
-        status: 'caution',
-        badge: 'Heat Stress Alert',
-        color: 'text-amber-700 bg-amber-50 border-amber-200',
-        icon: 'warning',
-        rainChance: maxRainProb,
-        irrigation: {
-          status: 'needed',
-          action: 'DRIP IRRIGATE BASIN',
-          reason: 'Intense heat can induce flower & fruit drop.',
-          icon: 'water_drop'
-        },
-        fertilizer,
-        summary: 'Hot dry spell can desiccate root zone.',
-        precaution: 'Apply straw mulch at tree basins and drip irrigate at sunrise.'
+        summary: lang === 'hi' ? `दलहनी फसलें जलभराव सहन नहीं कर सकतीं (${maxRainProb}% बारिश का जोखिम)।` : lang === 'pa' ? `ਦਾਲਾਂ ਦੀਆਂ ਫਸਲਾਂ ਪਾਣੀ ਖੜ੍ਹਨਾ ਬਰਦਾਸ਼ਤ ਨਹੀਂ ਕਰ ਸਕਦੀਆਂ (${maxRainProb}% ਮੀਂਹ)।` : `Pulses cannot tolerate saturated root zones (${maxRainProb}% rain risk).`,
+        precaution: lang === 'hi' ? 'सिंचाई तुरंत रोकें और चारों ओर जल निकासी की व्यवस्था करें।' : lang === 'pa' ? 'ਸਿੰਚਾਈ ਰੋਕੋ ਅਤੇ ਪਾਣੀ ਦੀ ਨਿਕਾਸੀ ਸਾਫ਼ ਕਰੋ।' : 'Strictly stop irrigation, ensure clear perimeter drains, and pause foliar feeds.'
       };
     }
   }
@@ -202,18 +184,20 @@ function getCropWeatherSuitability(cropName, weather, forecast) {
   // Default fallback
   return {
     status: 'good',
-    badge: isRainImminent ? `Rain Watch (${maxRainProb}%)` : 'Weather Favorable',
+    badge: isRainImminent 
+      ? (lang === 'hi' ? `बारिश निगरानी (${maxRainProb}%)` : lang === 'pa' ? `ਮੀਂਹ ਨਿਗਰਾਨੀ (${maxRainProb}%)` : `Rain Watch (${maxRainProb}%)`) 
+      : (lang === 'hi' ? 'मौसम अनुकूल' : lang === 'pa' ? 'ਮੌਸਮ ਅਨੁਕੂਲ' : 'Weather Favorable'),
     color: isRainImminent ? 'text-blue-700 bg-blue-50 border-blue-200' : 'text-green-700 bg-green-50 border-green-200',
     icon: isRainImminent ? 'cloud' : 'check_circle',
     rainChance: maxRainProb,
     irrigation,
     fertilizer,
     summary: isRainImminent 
-      ? `Upcoming precipitation (${maxRainProb}% chance). Natural soil replenishment expected.`
-      : 'Current temperature and weather parameters are within normal growth bounds.',
+      ? (lang === 'hi' ? `संभावित बारिश (${maxRainProb}% संभावना)। प्राकृतिक रूप से मिट्टी में नमी की पूर्ति।` : lang === 'pa' ? `ਸੰਭਾਵੀ ਮੀਂਹ (${maxRainProb}%)। ਮਿੱਟੀ ਵਿੱਚ ਕੁਦਰਤੀ ਨਮੀ ਦੀ ਪੂਰਤੀ।` : `Upcoming precipitation (${maxRainProb}% chance). Natural soil replenishment expected.`)
+      : (lang === 'hi' ? 'वर्तमान तापमान और मौसमी पैरामीटर सामान्य विकास सीमा में हैं।' : lang === 'pa' ? 'ਤਾਪਮਾਨ ਅਤੇ ਮੌਸਮ ਆਮ ਵਿਕਾਸ ਸੀਮਾ ਵਿੱਚ ਹਨ।' : 'Current temperature and weather parameters are within normal growth bounds.'),
     precaution: isRainImminent 
-      ? 'Postpone fertilizer application and monitor field drainage.'
-      : 'Follow standard irrigation and crop care schedule.'
+      ? (lang === 'hi' ? 'उर्वरक प्रयोग टालें और खेत में जल निकासी की निगरानी करें।' : lang === 'pa' ? 'ਖਾਦ ਪਾਉਣਾ ਮੁਲਤਵੀ ਕਰੋ ਅਤੇ ਨਿਕਾਸੀ ਦੀ ਨਿਗਰਾਨੀ ਕਰੋ।' : 'Postpone fertilizer application and monitor field drainage.')
+      : (lang === 'hi' ? 'नियमित सिंचाई और मानक फसल देखभाल जारी रखें।' : lang === 'pa' ? 'ਆਮ ਸਿੰਚਾਈ ਅਤੇ ਫਸਲ ਦੀ ਦੇਖਭਾਲ ਜਾਰੀ ਰੱਖੋ।' : 'Follow standard irrigation and crop care schedule.')
   };
 }
 
@@ -431,7 +415,11 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-xl">agriculture</span>
             <h2 className="text-sm font-bold text-on-surface">
-              My Farm Crops ({activeCrops.length > 0 ? activeCrops.length : '1 Default'})
+              {i18n.language === 'hi'
+                ? `पंजीकृत फसलें (${activeCrops.length > 0 ? activeCrops.length : '1 मुख्य'})`
+                : i18n.language === 'pa'
+                ? `ਦਰਜ ਕੀਤੀਆਂ ਫਸਲਾਂ (${activeCrops.length > 0 ? activeCrops.length : '1 ਮੁੱਖ'})`
+                : `My Farm Crops (${activeCrops.length > 0 ? activeCrops.length : '1 Default'})`}
             </h2>
           </div>
           <button
@@ -439,7 +427,9 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
             className="text-xs font-bold text-primary hover:underline flex items-center gap-0.5 bg-secondary-container/40 px-2.5 py-1 rounded-full"
           >
             <span className="material-symbols-outlined text-[14px]">add</span>
-            <span>Add / Manage</span>
+            <span>
+              {i18n.language === 'hi' ? '+ फसल जोड़ें / प्रबंधन' : i18n.language === 'pa' ? '+ ਫਸਲ ਜੋੜੋ / ਪ੍ਰਬੰਧ' : '+ Add / Manage'}
+            </span>
           </button>
         </div>
 
@@ -461,18 +451,18 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
                     {getLocalizedCropName(primaryCropName, i18n.language)}
                   </h3>
                   <span className="text-[10px] font-bold bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">
-                    Primary Crop
+                    {i18n.language === 'hi' ? 'मुख्य फसल' : i18n.language === 'pa' ? 'ਮੁੱਖ ਫਸਲ' : 'Primary Crop'}
                   </span>
                 </div>
                 <p className="text-xs text-on-surface-variant mt-0.5">
-                  Region: <strong className="text-on-surface">{profile?.state || 'Punjab'}</strong>
+                  {i18n.language === 'hi' ? 'राज्य:' : i18n.language === 'pa' ? 'ਰਾਜ:' : 'Region:'} <strong className="text-on-surface">{profile?.state || 'Punjab'}</strong>
                 </p>
               </div>
             </div>
 
             {/* Weather Suitability Verdict & Action Directives */}
             {(() => {
-              const suit = getCropWeatherSuitability(primaryCropName, weather, forecast);
+              const suit = getCropWeatherSuitability(primaryCropName, weather, forecast, i18n.language);
               return (
                 <div className={`p-3.5 rounded-2xl border text-xs flex flex-col gap-2.5 ${suit.color}`}>
                   <div className="flex items-center justify-between font-bold">
@@ -481,7 +471,7 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
                       <span className="text-xs">{suit.badge}</span>
                     </div>
                     <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/80 shadow-xs border border-current/20">
-                      🌧️ {suit.rainChance}% Rain Risk
+                      🌧️ {suit.rainChance}% {i18n.language === 'hi' ? 'बारिश जोखिम' : i18n.language === 'pa' ? 'ਮੀਂਹ ਜੋਖਮ' : 'Rain Risk'}
                     </span>
                   </div>
 
@@ -528,7 +518,11 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
               onClick={() => onNavigate('farming')}
               className="w-full bg-primary/10 text-primary font-bold py-2 rounded-xl text-xs hover:bg-primary/20 transition-colors text-center"
             >
-              + Register Active Sowing Details in My Farm
+              {i18n.language === 'hi'
+                ? '+ मेरा खेत में बुवाई की जानकारी दर्ज करें'
+                : i18n.language === 'pa'
+                ? '+ ਮੇਰਾ ਖੇਤ ਵਿੱਚ ਬਿਜਾਈ ਦਰਜ ਕਰੋ'
+                : '+ Register Active Sowing Details in My Farm'}
             </button>
           </div>
         ) : (
@@ -537,7 +531,7 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
             {activeCrops.map((crop) => {
               const cropMeta = CROP_TRANSLATIONS[crop.crop_name?.toLowerCase()] || {};
               const isPrimary = profile?.selected_crop?.toLowerCase() === crop.crop_name?.toLowerCase();
-              const suit = getCropWeatherSuitability(crop.crop_name, weather, forecast);
+              const suit = getCropWeatherSuitability(crop.crop_name, weather, forecast, i18n.language);
 
               return (
                 <div 
@@ -563,15 +557,15 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
                           {isPrimary && (
                             <span className="text-[10px] font-extrabold bg-primary text-on-primary px-2 py-0.5 rounded-full flex items-center gap-0.5 shadow-sm">
                               <span className="material-symbols-filled text-[11px] text-yellow-300">star</span>
-                              Primary
+                              {i18n.language === 'hi' ? 'मुख्य' : i18n.language === 'pa' ? 'ਮੁੱਖ' : 'Primary'}
                             </span>
                           )}
                           <span className="text-[10px] font-bold bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full capitalize">
-                            {crop.season}
+                            {getLocalizedSeason(crop.season, i18n.language)}
                           </span>
                         </div>
                         <p className="text-xs text-on-surface-variant mt-0.5">
-                          Stage: <strong className="text-on-surface">{crop.current_stage || 'Growing'}</strong> ({crop.stage_progress_pct || 0}%)
+                          {i18n.language === 'hi' ? 'चरण:' : i18n.language === 'pa' ? 'ਪੜਾਅ:' : 'Stage:'} <strong className="text-on-surface">{getLocalizedStageName(crop.current_stage || 'Growing', i18n.language)}</strong> ({crop.stage_progress_pct || 0}%)
                         </p>
                       </div>
                     </div>
@@ -582,7 +576,7 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
                         className="text-[10px] font-bold text-primary bg-primary/10 hover:bg-primary/20 px-2 py-1 rounded-lg transition-colors"
                         title="Set as Primary Crop"
                       >
-                        Make Primary
+                        {i18n.language === 'hi' ? 'मुख्य बनाएं' : i18n.language === 'pa' ? 'ਮੁੱਖ ਬਣਾਓ' : 'Make Primary'}
                       </button>
                     )}
                   </div>
@@ -592,10 +586,16 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
                     <div className="flex items-center justify-between font-bold">
                       <div className="flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-[18px]">{suit.icon}</span>
-                        <span className="text-xs">{suit.badge} for {getLocalizedCropName(crop.crop_name, i18n.language)}</span>
+                        <span className="text-xs">
+                          {i18n.language === 'hi'
+                            ? `${suit.badge} (${getLocalizedCropName(crop.crop_name, i18n.language)})`
+                            : i18n.language === 'pa'
+                            ? `${suit.badge} (${getLocalizedCropName(crop.crop_name, i18n.language)})`
+                            : `${suit.badge} for ${getLocalizedCropName(crop.crop_name, i18n.language)}`}
+                        </span>
                       </div>
                       <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/80 shadow-xs border border-current/20">
-                        🌧️ {suit.rainChance}% Rain Risk
+                        🌧️ {suit.rainChance}% {i18n.language === 'hi' ? 'बारिश जोखिम' : i18n.language === 'pa' ? 'ਮੀਂਹ ਜੋਖਮ' : 'Rain Risk'}
                       </span>
                     </div>
 
@@ -653,8 +653,12 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
             <span className="material-symbols-filled text-2xl">potted_plant</span>
           </div>
           <div>
-            <div className="text-xs font-black text-on-surface">Personalised Farming</div>
-            <div className="text-[10px] text-on-surface-variant">My Farm & AI Proofs</div>
+            <div className="text-xs font-black text-on-surface">
+              {i18n.language === 'hi' ? 'व्यक्तिगत खेती' : i18n.language === 'pa' ? 'ਨਿੱਜੀ ਖੇਤੀ' : 'Personalised Farming'}
+            </div>
+            <div className="text-[10px] text-on-surface-variant">
+              {i18n.language === 'hi' ? 'मेरा खेत और AI प्रमाण' : i18n.language === 'pa' ? 'ਮੇਰਾ ਖੇਤ ਅਤੇ AI ਸਬੂਤ' : 'My Farm & AI Proofs'}
+            </div>
           </div>
         </div>
 
@@ -668,7 +672,9 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
           </div>
           <div>
             <div className="text-xs font-black text-on-surface">{t('dashboard.action_mandi')}</div>
-            <div className="text-[10px] text-on-surface-variant">Live Agmarknet Prices</div>
+            <div className="text-[10px] text-on-surface-variant">
+              {i18n.language === 'hi' ? 'ताजा एगमार्कनेट मंडी भाव' : i18n.language === 'pa' ? 'ਤਾਜ਼ਾ ਮੰਡੀ ਭਾਅ' : 'Live Agmarknet Prices'}
+            </div>
           </div>
         </div>
       </div>
