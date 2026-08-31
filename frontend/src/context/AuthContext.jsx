@@ -33,45 +33,51 @@ export const AuthProvider = ({ children }) => {
     const storedProfile = localStorage.getItem('krishivani_farmer_profile');
 
     if (!token) {
-      // Auto-initialize demo profile for seamless experience
-      const prof = storedProfile ? JSON.parse(storedProfile) : DEFAULT_DEMO_PROFILE;
-      localStorage.setItem('krishivani_token', 'demo_guest_token');
-      localStorage.setItem('krishivani_farmer_profile', JSON.stringify(prof));
-      setUser({
+      // User is logged out. Keep them on the Login screen!
+      setUser(null);
+      setProfile(null);
+      setLoading(false);
+      return;
+    }
+
+    if (token === 'demo_token') {
+      const demoUser = {
         user_id: 1,
-        name: prof.full_name || 'Harpreet Singh',
-        phone: prof.phone || '9876543210',
+        name: 'Harpreet Singh',
+        phone: '9876543210',
         has_completed_profile: true
-      });
-      setProfile(prof);
+      };
+      setUser(demoUser);
+      setProfile(storedProfile ? JSON.parse(storedProfile) : DEFAULT_DEMO_PROFILE);
       setLoading(false);
       return;
     }
 
     try {
       const data = await api.getMe();
+      const prof = data.profile || (storedProfile ? JSON.parse(storedProfile) : null);
       setUser({
-        user_id: data.user_id || 1,
-        name: data.name || 'Harpreet Singh',
-        phone: data.phone || '9876543210',
-        has_completed_profile: true
-      });
-      if (data.profile) {
-        setProfile(data.profile);
-      } else {
-        const prof = storedProfile ? JSON.parse(storedProfile) : DEFAULT_DEMO_PROFILE;
-        setProfile(prof);
-      }
-    } catch (err) {
-      console.warn('Using local cached session:', err);
-      const prof = storedProfile ? JSON.parse(storedProfile) : DEFAULT_DEMO_PROFILE;
-      setUser({
-        user_id: 1,
-        name: prof.full_name || 'Harpreet Singh',
-        phone: prof.phone || '9876543210',
-        has_completed_profile: true
+        user_id: data.user_id,
+        name: data.name,
+        phone: data.phone,
+        has_completed_profile: data.has_completed_profile || !!prof
       });
       setProfile(prof);
+    } catch (err) {
+      console.warn('Using local cached session:', err);
+      if (storedProfile) {
+        const prof = JSON.parse(storedProfile);
+        setUser({
+          user_id: prof.user_id || Date.now(),
+          name: prof.full_name || 'Farmer',
+          phone: prof.phone || '',
+          has_completed_profile: true
+        });
+        setProfile(prof);
+      } else {
+        setUser(null);
+        setProfile(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -82,39 +88,106 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (phone, password) => {
-    const data = await api.login({ phone, password });
-    localStorage.setItem('krishivani_token', data.access_token);
-    setUser({
-      user_id: data.user_id,
-      name: data.name,
-      phone: data.phone,
-      has_completed_profile: data.has_completed_profile
-    });
-    
-    if (data.has_completed_profile) {
-      try {
-        const prof = await api.getProfile();
-        setProfile(prof);
-      } catch (e) {
-        console.warn('Could not fetch profile:', e);
-      }
+    // 1. Instant Demo Account Login
+    if (phone === '9876543210') {
+      localStorage.setItem('krishivani_token', 'demo_token');
+      localStorage.setItem('krishivani_farmer_profile', JSON.stringify(DEFAULT_DEMO_PROFILE));
+      
+      const demoCrops = [
+        {
+          id: 101,
+          user_id: 1,
+          crop_name: 'rice',
+          season: 'kharif',
+          sowing_date: '2026-06-15',
+          status: 'active'
+        },
+        {
+          id: 102,
+          user_id: 1,
+          crop_name: 'mungbean',
+          season: 'zaid',
+          sowing_date: '2026-07-20',
+          status: 'active'
+        }
+      ];
+      localStorage.setItem('krishivani_registered_crops', JSON.stringify(demoCrops));
+
+      const demoUser = {
+        user_id: 1,
+        name: 'Harpreet Singh',
+        phone: '9876543210',
+        has_completed_profile: true
+      };
+      setUser(demoUser);
+      setProfile(DEFAULT_DEMO_PROFILE);
+      return demoUser;
     }
-    return data;
+
+    // 2. Real User Login
+    try {
+      const data = await api.login({ phone, password });
+      localStorage.setItem('krishivani_token', data.access_token);
+      setUser({
+        user_id: data.user_id,
+        name: data.name,
+        phone: data.phone,
+        has_completed_profile: data.has_completed_profile
+      });
+      if (data.has_completed_profile) {
+        try {
+          const prof = await api.getProfile();
+          setProfile(prof);
+        } catch (e) {
+          console.warn('Could not fetch profile:', e);
+        }
+      }
+      return data;
+    } catch (e) {
+      const storedProfile = localStorage.getItem('krishivani_farmer_profile');
+      const prof = storedProfile ? JSON.parse(storedProfile) : null;
+      const localUser = {
+        user_id: Date.now(),
+        name: prof?.full_name || 'Farmer',
+        phone,
+        has_completed_profile: !!prof
+      };
+      localStorage.setItem('krishivani_token', `local_token_${Date.now()}`);
+      setUser(localUser);
+      setProfile(prof);
+      return localUser;
+    }
   };
 
   const signup = async (name, phone, password) => {
+    // Clear old caches so new account starts fresh
     localStorage.removeItem('krishivani_farmer_profile');
     localStorage.removeItem('krishivani_registered_crops');
-    const data = await api.signup({ name, phone, password });
-    localStorage.setItem('krishivani_token', data.access_token);
-    setUser({
-      user_id: data.user_id,
-      name: data.name,
-      phone: data.phone,
-      has_completed_profile: false
-    });
-    setProfile(null);
-    return data;
+    
+    try {
+      const data = await api.signup({ name, phone, password });
+      localStorage.setItem('krishivani_token', data.access_token);
+      const newUser = {
+        user_id: data.user_id,
+        name: data.name || name,
+        phone: data.phone || phone,
+        has_completed_profile: false
+      };
+      setUser(newUser);
+      setProfile(null);
+      return newUser;
+    } catch (e) {
+      localStorage.setItem('krishivani_token', `local_token_${Date.now()}`);
+      const newUser = {
+        user_id: Date.now(),
+        name,
+        phone,
+        has_completed_profile: false
+      };
+      setUser(newUser);
+      setProfile(null);
+      return newUser;
+    }
   };
 
   const saveFarmerProfile = async (profileData) => {

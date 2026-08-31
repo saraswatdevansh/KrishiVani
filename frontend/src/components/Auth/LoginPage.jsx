@@ -13,10 +13,17 @@ export const LoginPage = ({ onCompleteAuth, onOpenLanguage }) => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const fillDemoCredentials = () => {
-    setPhone('9876543210');
-    setPassword('farmer123');
+  const handleDemoLogin = async () => {
+    setLoading(true);
     setErrorMsg('');
+    try {
+      const data = await login('9876543210', 'farmer123');
+      onCompleteAuth({ isNewUser: false, data });
+    } catch (err) {
+      setErrorMsg(err.message || 'Demo login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -175,7 +182,8 @@ export const LoginPage = ({ onCompleteAuth, onOpenLanguage }) => {
               <div className="flex justify-end -mt-1">
                 <button
                   type="button"
-                  onClick={fillDemoCredentials}
+                  onClick={handleDemoLogin}
+                  disabled={loading}
                   className="text-[11px] text-primary hover:text-primary-container font-semibold flex items-center gap-1 cursor-pointer transition-colors bg-primary/5 hover:bg-primary/10 px-2 py-0.5 rounded-lg border border-primary/20"
                 >
                   <span className="material-symbols-outlined text-[13px]">badge</span>
