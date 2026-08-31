@@ -52,20 +52,33 @@ app.include_router(soil.router)
 app.include_router(farm.router)
 app.include_router(alerts.router)
 
-@app.get("/api")
-def root():
-    return {
-        "message": "Welcome to KrishiVani Smart Crop Advisory API",
-        "status": "online",
-        "version": "1.0.0",
-        "features": [
-            "AI Crop Suggestion (profit-aware)",
-            "Weather-Based Crop Management & 5-Day Advisory",
-            "Real-time Mandi Market Prices (Agmarknet)",
-            "Multilingual & Voice Support"
-        ]
-    }
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
-@app.get("/api/health")
-def health():
-    return {"status": "healthy"}
+# Static files & SPA handling
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DIST_CANDIDATES = [
+    os.path.abspath(os.path.join(BASE_DIR, "..", "..", "frontend", "dist")),
+    os.path.abspath(os.path.join(BASE_DIR, "..", "frontend", "dist")),
+    os.path.abspath(os.path.join(os.getcwd(), "frontend", "dist")),
+    os.path.abspath(os.path.join(os.getcwd(), "dist")),
+]
+
+DIST_DIR = next((d for d in DIST_CANDIDATES if os.path.exists(d)), None)
+
+if DIST_DIR:
+    assets_dir = os.path.join(DIST_DIR, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        if full_path.startswith("api"):
+            return {"error": "Endpoint not found"}
+        target_file = os.path.join(DIST_DIR, full_path)
+        if full_path and os.path.isfile(target_file):
+            return FileResponse(target_file)
+        index_file = os.path.join(DIST_DIR, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        return {"message": "KrishiVani Frontend built dist not found"}
