@@ -317,7 +317,7 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
           <p className="text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
             <span className="material-symbols-outlined text-[15px] text-primary">pin_drop</span>
             <span className="font-bold text-on-surface">
-              {profile?.village_or_city || profile?.district || 'Ludhiana'}, {profile?.state || 'Punjab'}
+              {profile?.village_or_city || profile?.district || 'Farm Location'}{profile?.state ? `, ${profile.state}` : ''}
             </span>
             <span className="mx-1">•</span>
             <span>{profile?.farm_size || '2.0'} {profile?.farm_size_unit || 'Acres'}</span>

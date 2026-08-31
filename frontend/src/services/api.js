@@ -108,28 +108,17 @@ function getStoredCrops() {
     const raw = localStorage.getItem('krishivani_registered_crops');
     if (raw) {
       const list = JSON.parse(raw);
-      return list.map(c => ({
-        ...c,
-        ...computeCropStageClient(c.crop_name, c.sowing_date)
-      }));
+      if (Array.isArray(list)) {
+        return list.map(c => ({
+          ...c,
+          ...computeCropStageClient(c.crop_name, c.sowing_date)
+        }));
+      }
     }
   } catch (e) {
     console.warn('Error reading stored crops', e);
   }
-  // Default fallback crop if empty
-  const defaultCrops = [
-    {
-      id: 1,
-      user_id: 1,
-      crop_name: 'rice',
-      season: 'kharif',
-      sowing_date: '2026-07-15',
-      status: 'active',
-      ...computeCropStageClient('rice', '2026-07-15')
-    }
-  ];
-  localStorage.setItem('krishivani_registered_crops', JSON.stringify(defaultCrops));
-  return defaultCrops;
+  return [];
 }
 
 export const api = {
@@ -715,10 +704,37 @@ export const api = {
   async getLiveAlerts() {
     const profile = await this.getProfile();
     const crops = await this.getMyCrops();
-    const lat = profile?.latitude || 30.9010;
-    const lon = profile?.longitude || 75.8573;
-    const state = profile?.state || 'Punjab';
-    const district = profile?.district || 'Ludhiana';
+    
+    const STATE_COORDINATES = {
+      'punjab': { lat: 30.9010, lon: 75.8573, defaultCity: 'Ludhiana' },
+      'haryana': { lat: 29.0588, lon: 76.0856, defaultCity: 'Hisar' },
+      'uttar pradesh': { lat: 26.8467, lon: 80.9462, defaultCity: 'Lucknow' },
+      'madhya pradesh': { lat: 22.9734, lon: 78.6569, defaultCity: 'Bhopal' },
+      'maharashtra': { lat: 19.7515, lon: 75.7139, defaultCity: 'Pune' },
+      'rajasthan': { lat: 27.0238, lon: 74.2179, defaultCity: 'Jaipur' },
+      'gujarat': { lat: 22.2587, lon: 71.1924, defaultCity: 'Ahmedabad' },
+      'karnataka': { lat: 15.3173, lon: 75.7139, defaultCity: 'Bengaluru' },
+      'andhra pradesh': { lat: 15.9129, lon: 79.7400, defaultCity: 'Vijayawada' },
+      'tamil nadu': { lat: 11.1271, lon: 78.6569, defaultCity: 'Chennai' },
+      'west bengal': { lat: 22.9868, lon: 87.8550, defaultCity: 'Kolkata' },
+      'bihar': { lat: 25.5941, lon: 85.1376, defaultCity: 'Patna' },
+      'odisha': { lat: 20.9517, lon: 85.0985, defaultCity: 'Bhubaneswar' },
+      'kerala': { lat: 10.8505, lon: 76.2711, defaultCity: 'Kochi' },
+      'assam': { lat: 26.2006, lon: 92.9376, defaultCity: 'Guwahati' },
+      'himachal pradesh': { lat: 31.1048, lon: 77.1734, defaultCity: 'Shimla' },
+      'uttarakhand': { lat: 30.0668, lon: 79.0193, defaultCity: 'Dehradun' },
+      'jammu and kashmir': { lat: 33.7782, lon: 76.5762, defaultCity: 'Srinagar' },
+      'chhattisgarh': { lat: 21.2787, lon: 81.8661, defaultCity: 'Raipur' },
+      'jharkhand': { lat: 23.6102, lon: 85.2799, defaultCity: 'Ranchi' },
+      'telangana': { lat: 18.1124, lon: 79.0193, defaultCity: 'Hyderabad' }
+    };
+
+    const stateKey = (profile?.state || '').toLowerCase().trim();
+    const stateConfig = STATE_COORDINATES[stateKey] || { lat: 25.5941, lon: 85.1376, defaultCity: 'Patna' };
+    const lat = profile?.latitude || stateConfig.lat;
+    const lon = profile?.longitude || stateConfig.lon;
+    const state = profile?.state || 'Bihar';
+    const targetLocation = profile?.village_or_city || profile?.district || stateConfig.defaultCity;
     const apiKey = '3353f59123d2feedf26fce5b178a1fea';
     const govKey = '579b464db66ec23bdd000001da78d01d004f473c5ba558a7ca1b2eec';
 
@@ -757,7 +773,7 @@ export const api = {
     const currentTemp = weatherData ? Math.round(weatherData.main.temp) : 31;
     const currentHumidity = weatherData ? weatherData.main.humidity : 55;
     const currentWind = weatherData ? Math.round(weatherData.wind.speed * 3.6) : 12;
-    const cityName = weatherData?.name || district;
+    const cityName = targetLocation;
 
     // Calculate max rain probability in next 48 hours from real-time 3h forecast
     let maxRainProb = 0;
@@ -856,9 +872,9 @@ export const api = {
         id: 'mandi-price-active-crop',
         category: 'market',
         severity: 'normal',
-        title: `💰 Mandi Rate: Paddy (Dhan) @ ₹2,450/q (+4.2%)`,
+        title: `💰 Mandi Rate: Benchmark @ ₹2,450/q (+4.2%)`,
         time: 'Agmarknet APMC • Today',
-        description: `${state} APMC modal price is ₹2,450/quintal (Range: ₹2,300 - ₹2,550). Prices are trending higher (+4.2%) due to strong miller procurement demand.`,
+        description: `${state} APMC modal price benchmark is ₹2,450/quintal. Prices are trending higher (+4.2%) due to strong procurement demand in ${state}.`,
         icon: 'payments',
         isUnread: false
       });
@@ -872,7 +888,7 @@ export const api = {
           category: 'crop_stage',
           severity: 'normal',
           title: `🌱 Crop Stage: ${c.crop_name?.toUpperCase()} (${c.current_stage || 'Tillering'})`,
-          time: `Day ${c.days_in_stage || 15} of Stage`,
+          time: `${c.days_remaining || 30} Days to Harvest`,
           description: `Your ${c.crop_name} crop is currently in the ${c.current_stage || 'Tillering'} stage (${c.stage_progress_pct || 50}% progress). ${c.stage_advisory?.[0] || 'Maintain proper irrigation and nutrient schedules.'}`,
           icon: 'eco',
           isUnread: false
@@ -884,7 +900,7 @@ export const api = {
 
     return {
       status: 'success',
-      location: { city: cityName, district: district, state: state },
+      location: { city: targetLocation, district: profile?.district || stateConfig.defaultCity, state: state },
       weather_summary: {
         temperature: currentTemp,
         humidity: currentHumidity,

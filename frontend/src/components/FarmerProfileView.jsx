@@ -37,7 +37,7 @@ export const FarmerProfileView = ({ onEditProfile, onOpenLanguage }) => {
         
         <p className="text-xs text-on-surface-variant flex items-center gap-1 z-10 mt-1">
           <span className="material-symbols-outlined text-[15px] text-primary">location_on</span>
-          <span>{profile?.village_or_city || 'Ludhiana'}, {profile?.state || 'Punjab'}</span>
+          <span>{profile?.village_or_city || profile?.district || 'Farm Location'}{profile?.state ? `, ${profile.state}` : ''}</span>
         </p>
 
         <div className="mt-3 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[11px] font-bold flex items-center gap-1 z-10 border border-secondary/30">

@@ -103,6 +103,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (name, phone, password) => {
+    localStorage.removeItem('krishivani_farmer_profile');
+    localStorage.removeItem('krishivani_registered_crops');
     const data = await api.signup({ name, phone, password });
     localStorage.setItem('krishivani_token', data.access_token);
     setUser({
@@ -116,6 +118,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const saveFarmerProfile = async (profileData) => {
+    localStorage.setItem('krishivani_farmer_profile', JSON.stringify(profileData));
     const saved = await api.saveProfile(profileData);
     setProfile(saved);
     setUser(prev => prev ? { ...prev, has_completed_profile: true } : prev);
@@ -129,6 +132,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('krishivani_token');
+    localStorage.removeItem('krishivani_farmer_profile');
+    localStorage.removeItem('krishivani_registered_crops');
     setUser(null);
     setProfile(null);
   };
