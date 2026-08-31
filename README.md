@@ -2,7 +2,7 @@
 
 > **SIH25010**: Smart Crop Advisory System for Small and Marginal Farmers.
 >
-> 🌐 **Live Web App**: [https://krishivani-app.vercel.app](https://krishivani-app.vercel.app) | [https://krishivani-ruby.vercel.app](https://krishivani-ruby.vercel.app)
+> 🌐 **Live Web App**: [https://krishivani-app.vercel.app](https://krishivani-app.vercel.app)
 
 KrishiVani is a modern, profit-aware agricultural advisory web application built with **React**, **FastAPI**, and **scikit-learn**. It leverages offline Random Forest machine learning models alongside real-time data from **OpenWeatherMap** and **data.gov.in (Agmarknet)** to deliver personalized crop recommendations, live mandi price intelligence, and weather-based daily farm management advisories with browser-based automatic voice readout (TTS) in **English**, **हिन्दी (Hindi)**, and **ਪੰਜਾਬੀ (Punjabi)**.
 
