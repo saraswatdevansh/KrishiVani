@@ -180,36 +180,106 @@ export const CROP_TRANSLATIONS = {
 };
 
 export const COMMODITY_TRANSLATIONS = {
-  garlic: { en: "Garlic", hi: "लहसुन", pa: "ਲਸਣ" },
-  firewood: { en: "Firewood", hi: "ईंधन लकड़ी", pa: "ਬਾਲਣ ਦੀ ਲੱਕੜ" },
-  paddy: { en: "Paddy (Dhan)", hi: "धान / चावल", pa: "ਝੋਨਾ / ਚੌਲ" },
-  rice: { en: "Rice / Paddy", hi: "धान / चावल", pa: "ਝੋਨਾ / ਚੌਲ" },
-  wheat: { en: "Wheat", hi: "गेहूं", pa: "ਕਣਕ" },
-  maize: { en: "Maize (Corn)", hi: "मक्का", pa: "ਮੱਕੀ" },
-  cotton: { en: "Cotton", hi: "कपास (नरमा)", pa: "ਕਪਾਹ / ਨਰਮਾ" },
-  moong: { en: "Moong (Green Gram)", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
-  mungbean: { en: "Green Gram / Moong", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
-  arhar: { en: "Arhar / Toor", hi: "अरहर / तूर", pa: "ਅਰਹਰ / ਤੂਰ" },
-  pigeonpeas: { en: "Arhar / Pigeon Peas", hi: "अरहर / तूर", pa: "ਅਰਹਰ / ਤੂਰ" },
-  potato: { en: "Potato", hi: "आलू", pa: "ਆਲੂ" },
-  onion: { en: "Onion", hi: "प्याज", pa: "ਪਿਆਜ਼" },
-  tomato: { en: "Tomato", hi: "टमाटर", pa: "ਟਮਾਟਰ" },
-  mustard: { en: "Mustard", hi: "सरसों / राई", pa: "ਸਰ੍ਹੋਂ / ਰਾਈ" },
-  sugarcane: { en: "Sugarcane", hi: "गन्ना", pa: "ਗੰਨਾ" },
-  soyabean: { en: "Soybean", hi: "सोयाबीन", pa: "ਸੋਇਆਬੀਨ" },
-  groundnut: { en: "Groundnut / Peanut", hi: "मूंगफली", pa: "ਮੂੰਗਫਲੀ" },
-  gram: { en: "Gram / Chana", hi: "चना", pa: "ਛੋਲੇ" },
-  chickpea: { en: "Chickpea", hi: "चना", pa: "ਛੋਲੇ" },
-  ginger: { en: "Ginger", hi: "अदरक", pa: "ਅਦਰਕ" },
-  turmeric: { en: "Turmeric", hi: "हल्दी", pa: "ਹਲਦੀ" },
-  chilli: { en: "Green Chilli", hi: "हरी मिर्च", pa: "ਹਰੀ ਮਿਰਚ" },
-  capsicum: { en: "Capsicum", hi: "शिमला मिर्च", pa: "ਸ਼ਿਮਲਾ ਮਿਰਚ" },
-  cauliflower: { en: "Cauliflower", hi: "फूलगोभी", pa: "ਫੁੱਲਗੋਭੀ" },
-  cabbage: { en: "Cabbage", hi: "पत्तागोभी", pa: "ਬੰਦਗੋਭੀ" },
-  brinjal: { en: "Brinjal / Eggplant", hi: "बैंगन", pa: "ਬੈਂਗਣ" },
-  apple: { en: "Apple", hi: "सेब", pa: "ਸੇਬ" },
-  banana: { en: "Banana", hi: "केला", pa: "ਕੇਲਾ" },
-  mango: { en: "Mango", hi: "आम", pa: "ਅੰਬ" }
+  "gur": { en: "Gur (Jaggery)", hi: "गुड़", pa: "ਗੁੜ" },
+  "jaggery": { en: "Jaggery (Gur)", hi: "गुड़", pa: "ਗੁੜ" },
+  "wood": { en: "Wood / Firewood", hi: "लकड़ी / ईंधन", pa: "ਲੱਕੜ" },
+  "firewood": { en: "Firewood", hi: "ईंधन लकड़ी", pa: "ਬਾਲਣ ਦੀ ਲੱਕੜ" },
+  "garlic": { en: "Garlic", hi: "लहसुन", pa: "ਲਸਣ" },
+  "green chilli": { en: "Green Chilli", hi: "हरी मिर्च", pa: "ਹਰੀ ਮਿਰਚ" },
+  "chilli": { en: "Chilli / Mirch", hi: "मिर्च", pa: "ਮਿਰਚ" },
+  "chili": { en: "Chilli", hi: "मिर्च", pa: "ਮਿਰਚ" },
+  "green gram": { en: "Green Gram (Moong)", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
+  "moong": { en: "Moong (Green Gram)", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
+  "mung": { en: "Green Gram / Moong", hi: "मूंग दाल", pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ" },
+  "black gram": { en: "Black Gram (Urad)", hi: "उड़द दाल", pa: "ਮਾਂਹ ਦੀ ਦਾਲ (ਉੜਦ)" },
+  "urad": { en: "Urad (Black Gram)", hi: "उड़द दाल", pa: "ਮਾਂਹ ਦੀ ਦਾਲ" },
+  "urd": { en: "Urad (Black Gram)", hi: "उड़द दाल", pa: "ਮਾਂਹ ਦੀ ਦਾਲ" },
+  "bengal gram": { en: "Bengal Gram (Chana)", hi: "चना", pa: "ਛੋਲੇ" },
+  "gram": { en: "Gram / Chana", hi: "चना", pa: "ਛੋਲੇ" },
+  "chana": { en: "Chana / Gram", hi: "चना", pa: "ਛੋਲੇ" },
+  "chickpea": { en: "Chickpea / Chana", hi: "चना", pa: "ਛੋਲੇ" },
+  "paddy": { en: "Paddy (Dhan)", hi: "धान", pa: "ਝੋਨਾ" },
+  "dhan": { en: "Paddy / Dhan", hi: "धान", pa: "ਝੋਨਾ" },
+  "rice": { en: "Rice / Paddy", hi: "धान / चावल", pa: "ਝੋਨਾ / ਚੌਲ" },
+  "wheat": { en: "Wheat", hi: "गेहूं", pa: "ਕਣਕ" },
+  "maize": { en: "Maize (Makka)", hi: "मक्का", pa: "ਮੱਕੀ" },
+  "makka": { en: "Maize", hi: "मक्का", pa: "ਮੱਕੀ" },
+  "cotton": { en: "Cotton (Kapas)", hi: "कपास (नरमा)", pa: "ਕਪਾਹ / ਨਰਮਾ" },
+  "kapas": { en: "Cotton (Kapas)", hi: "कपास (नरमा)", pa: "ਕਪਾਹ / ਨਰਮਾ" },
+  "arhar": { en: "Arhar / Toor", hi: "अरहर / तूर दाल", pa: "ਅਰਹਰ / ਤੂਰ ਦਾਲ" },
+  "tur": { en: "Toor / Arhar", hi: "अरहर / तूर दाल", pa: "ਅਰਹਰ / ਤੂਰ ਦਾਲ" },
+  "toor": { en: "Toor / Arhar", hi: "अरहर / तूर दाल", pa: "ਅਰਹਰ / ਤੂਰ ਦਾਲ" },
+  "pigeonpeas": { en: "Pigeon Peas / Arhar", hi: "अरहर / तूर दाल", pa: "ਅਰਹਰ / ਤੂਰ ਦਾਲ" },
+  "potato": { en: "Potato", hi: "आलू", pa: "ਆਲੂ" },
+  "aloo": { en: "Potato", hi: "आलू", pa: "ਆਲੂ" },
+  "onion": { en: "Onion", hi: "प्याज", pa: "ਪਿਆਜ਼" },
+  "pyaz": { en: "Onion", hi: "प्याज", pa: "ਪਿਆਜ਼" },
+  "tomato": { en: "Tomato", hi: "टमाटर", pa: "ਟਮਾਟਰ" },
+  "mustard": { en: "Mustard (Sarson)", hi: "सरसों / राई", pa: "ਸਰ੍ਹੋਂ / ਰਾਈ" },
+  "sarson": { en: "Mustard", hi: "सरसों", pa: "ਸਰ੍ਹੋਂ" },
+  "sugarcane": { en: "Sugarcane (Ganna)", hi: "गन्ना", pa: "ਗੰਨਾ" },
+  "ganna": { en: "Sugarcane", hi: "गन्ना", pa: "ਗੰਨਾ" },
+  "soyabean": { en: "Soybean", hi: "सोयाबीन", pa: "ਸੋਇਆਬੀਨ" },
+  "soybean": { en: "Soybean", hi: "सोयाबीन", pa: "ਸੋਇਆਬੀਨ" },
+  "groundnut": { en: "Groundnut (Moongfali)", hi: "मूंगफली", pa: "ਮੂੰਗਫਲੀ" },
+  "peanut": { en: "Groundnut / Peanut", hi: "मूंगफली", pa: "ਮੂੰਗਫਲੀ" },
+  "ginger": { en: "Ginger (Adrak)", hi: "अदरक", pa: "ਅਦਰਕ" },
+  "turmeric": { en: "Turmeric (Haldi)", hi: "हल्दी", pa: "ਹਲਦੀ" },
+  "capsicum": { en: "Capsicum (Shimla Mirch)", hi: "शिमला मिर्च", pa: "ਸ਼ਿਮਲਾ ਮਿਰਚ" },
+  "cauliflower": { en: "Cauliflower (Gobhi)", hi: "फूलगोभी", pa: "ਫੁੱਲਗੋਭੀ" },
+  "cabbage": { en: "Cabbage (Patta Gobhi)", hi: "पत्तागोभी", pa: "ਬੰਦਗੋਭੀ" },
+  "brinjal": { en: "Brinjal (Baingan)", hi: "बैंगन", pa: "ਬੈਂਗਣ" },
+  "apple": { en: "Apple (Seb)", hi: "सेब", pa: "ਸੇਬ" },
+  "banana": { en: "Banana (Kela)", hi: "केला", pa: "ਕੇਲਾ" },
+  "mango": { en: "Mango (Aam)", hi: "आम", pa: "ਅੰਬ" },
+  "pomegranate": { en: "Pomegranate (Anaar)", hi: "अनार", pa: "ਅਨार" },
+  "watermelon": { en: "Watermelon (Tarbooz)", hi: "तरबूज", pa: "ਹਦਵਾਣਾ / ਤਰਬੂਜ਼" },
+  "muskmelon": { en: "Muskmelon (Kharbooja)", hi: "खरबूजा", pa: "ਖਰਬੂਜ਼ਾ" },
+  "orange": { en: "Orange (Santra)", hi: "संतरा / किन्नू", pa: "ਸੰਤਰਾ / ਕਿੰਨੂ" },
+  "papaya": { en: "Papaya (Papita)", hi: "पपीता", pa: "ਪਪੀਤਾ" },
+  "coconut": { en: "Coconut (Nariyal)", hi: "नारियल", pa: "ਨਾਰੀਅਲ" },
+  "jute": { en: "Jute (Pat)", hi: "पटसन / जूट", pa: "ਪਟਸਨ / ਜੂਟ" },
+  "coffee": { en: "Coffee", hi: "कॉफ़ी", pa: "ਕੌਫੀ" },
+  "lentil": { en: "Lentil (Masoor)", hi: "मसूर दाल", pa: "ਮਸਰਾਂ ਦੀ ਦਾਲ" },
+  "masoor": { en: "Masoor (Lentil)", hi: "मसूर दाल", pa: "ਮਸਰਾਂ ਦੀ ਦਾਲ" }
+};
+
+export const STAGE_TRANSLATIONS = {
+  "nursery / germination": { hi: "नर्सरी और अंकुरण", pa: "ਨਰਸਰੀ ਅਤੇ ਅੰਕੁਰਣ" },
+  "germination": { hi: "अंकुरण", pa: "ਅੰਕੁਰਣ" },
+  "transplanting & tillering": { hi: "प्रत्यारोपण और कल्ले फूटना", pa: "ਪ੍ਰਤੀਰੋਪਣ ਅਤੇ ਸ਼ਾਖਾਵਾਂ" },
+  "panicle initiation": { hi: "बाली बनना / कली निकलना", pa: "ਸਿੱਟੇ ਬਣਨਾ" },
+  "flowering": { hi: "फूल आना / पुष्पन", pa: "ਫੁੱਲ ਪੈਣਾ" },
+  "grain filling": { hi: "दाना भरना", pa: "ਦਾਣੇ ਭਰਨਾ" },
+  "grain fill": { hi: "दाना भरना", pa: "ਦਾਣੇ ਭਰਨਾ" },
+  "maturity / harvest": { hi: "परिपक्वता एवं कटाई", pa: "ਪੱਕਣਾ ਅਤੇ ਵਾਢੀ" },
+  "maturity": { hi: "परिपक्वता", pa: "ਪੱਕਣਾ" },
+  "vegetative": { hi: "वानस्पतिक विकास", pa: "ਵਧਣ-ਫੁੱਲਣ ਦਾ ਸਮਾਂ" },
+  "vegetative growth": { hi: "पौधे की बढ़वार", pa: "ਪੌਦੇ ਦਾ ਵਾਧਾ" },
+  "pod formation": { hi: "फलियां बनना", pa: "ਫਲੀਆਂ ਬਣਨਾ" },
+  "pod development": { hi: "फलियों का विकास", pa: "ਫਲੀਆਂ ਦਾ ਵਿਕਾਸ" },
+  "tasseling / silking": { hi: "मंजर और सिल्क निकलना", pa: "ਮੁੰਜਰਾਂ ਨਿਕਲਣਾ" },
+  "squaring": { hi: "कपास की कलियां बनना", pa: "ਕਪਾਹ ਦੀਆਂ ਡੋਡੀਆਂ ਬਣਨਾ" },
+  "boll formation": { hi: "टिंडे बनना", pa: "ਟੀਂਡੇ ਬਣਨਾ" },
+  "boll opening": { hi: "कपास खिलना", pa: "ਕਪਾਹ ਖਿੜਨਾ" },
+  "dormancy / rest": { hi: "सुप्तावस्था / विश्राम", pa: "ਸੁਸਤ ਅਵਸਥਾ" },
+  "bud break / bloom": { hi: "नई कोपलें / फूल खिलना", pa: "ਨਵੀਆਂ ਪੱਤੀਆਂ / ਫੁੱਲ" },
+  "fruit set": { hi: "फल लगना", pa: "ਫਲ ਲੱਗਣਾ" },
+  "fruit development": { hi: "फलों का विकास", pa: "ਫਲਾਂ ਦਾ ਵਾਧਾ" },
+  "veraison / ripening": { hi: "फलों का पकना", pa: "ਫਲ ਪੱਕਣਾ" },
+  "harvest complete": { hi: "कटाई पूर्ण", pa: "ਵਾਢੀ ਪੂਰੀ" },
+  "harvest": { hi: "कटाई", pa: "ਵਾਢੀ" },
+  "harvest ready": { hi: "कटाई के लिए तैयार", pa: "ਵਾਢੀ ਲਈ ਤਿਆਰ" }
+};
+
+export const SEASON_TRANSLATIONS = {
+  "kharif": { en: "Kharif", hi: "खरीफ", pa: "ਖਰੀਫ" },
+  "rabi": { en: "Rabi", hi: "रबी", pa: "ਰਬੀ" },
+  "zaid": { en: "Zaid", hi: "जायद", pa: "ਜ਼ਾਇਦ" },
+  "perennial": { en: "Perennial", hi: "बारहमासी", pa: "ਬਾਰਾਮਾਸੀ" },
+  "active": { en: "Active", hi: "सक्रिय", pa: "ਸਰਗਰਮ" },
+  "harvested": { en: "Harvested", hi: "कटाई पूर्ण", pa: "ਵਾਢੀ ਪੂਰੀ" },
+  "failed": { en: "Failed", hi: "फसल नष्ट", pa: "ਨਸ਼ਟ" }
 };
 
 export const WEATHER_TRANSLATIONS = {
@@ -255,12 +325,46 @@ export const getLocalizedCropName = (cropKey, lang = 'en') => {
 
 export const getLocalizedCommodityName = (commodityName, lang = 'en') => {
   if (!commodityName) return '';
-  const firstWord = commodityName.toLowerCase().split(/[\s(/]/)[0];
-  const item = COMMODITY_TRANSLATIONS[firstWord] || COMMODITY_TRANSLATIONS[commodityName.toLowerCase().trim()];
-  if (item && item[lang]) {
-    return item[lang];
+  if (lang === 'en') return commodityName;
+
+  const clean = commodityName.toLowerCase().replace(/[()]/g, ' ').trim();
+  
+  if (COMMODITY_TRANSLATIONS[clean] && COMMODITY_TRANSLATIONS[clean][lang]) {
+    return COMMODITY_TRANSLATIONS[clean][lang];
   }
+
+  const keys = Object.keys(COMMODITY_TRANSLATIONS);
+  for (const k of keys) {
+    if (clean.includes(k)) {
+      return COMMODITY_TRANSLATIONS[k][lang];
+    }
+  }
+
   return commodityName;
+};
+
+export const getLocalizedStageName = (stageName, lang = 'en') => {
+  if (!stageName) return '';
+  if (lang === 'en') return stageName;
+  const k = stageName.toLowerCase().trim();
+  if (STAGE_TRANSLATIONS[k] && STAGE_TRANSLATIONS[k][lang]) {
+    return STAGE_TRANSLATIONS[k][lang];
+  }
+  for (const [key, val] of Object.entries(STAGE_TRANSLATIONS)) {
+    if (k.includes(key) || key.includes(k)) {
+      return val[lang] || stageName;
+    }
+  }
+  return stageName;
+};
+
+export const getLocalizedSeason = (seasonKey, lang = 'en') => {
+  if (!seasonKey) return '';
+  const k = seasonKey.toLowerCase().trim();
+  if (SEASON_TRANSLATIONS[k] && SEASON_TRANSLATIONS[k][lang]) {
+    return SEASON_TRANSLATIONS[k][lang];
+  }
+  return seasonKey;
 };
 
 export const getLocalizedWeatherCondition = (condition, lang = 'en') => {
@@ -281,6 +385,39 @@ export const getLocalizedDayName = (dayName, lang = 'en') => {
     return found[lang];
   }
   return dayName;
+};
+
+export const localizeCareTip = (tip, lang = 'en') => {
+  if (!tip) return '';
+  if (lang === 'en') return tip;
+
+  if (lang === 'hi') {
+    if (tip.includes('Maintain 3-5cm water') || tip.includes('3-5cm water level')) return 'खेत में 3-5 सेमी पानी का स्तर बनाए रखें।';
+    if (tip.includes('Apply first top dressing of nitrogen') || tip.includes('top dressing of nitrogen')) return 'नाइट्रोजन / यूरिया की पहली टॉप ड्रेसिंग दें।';
+    if (tip.includes('Keep field weed-free') || tip.includes('weed-free')) return 'खेत को खरपतवार मुक्त रखें और नियमित निराई-गुड़ाई करें।';
+    if (tip.includes('Maintain 2-3cm standing water in nursery')) return 'नर्सरी में 2-3 सेमी पानी बनाए रखें।';
+    if (tip.includes('Apply 2-3 kg Urea')) return '100 वर्ग मीटर नर्सरी में 2-3 किग्रा यूरिया डालें।';
+    if (tip.includes('Watch for brown plant hopper')) return 'भूरा माहू (BPH) कीट की निगरानी करें।';
+    if (tip.includes('Ensure adequate drainage')) return 'खेत में उचित जल निकासी सुनिश्चित करें।';
+    if (tip.includes('Inspect for early pest')) return 'शुरुआती कीटों और रोगों के प्रकोप की निगरानी करें।';
+    if (tip.includes('reached physiological maturity') || tip.includes('harvest')) return 'फसल परिपक्व हो चुकी है। कटाई की तैयारी करें।';
+    if (tip.includes('Cease irrigation') || tip.includes('Stop irrigation')) return 'कटाई से 7-10 दिन पहले सिंचाई पूरी तरह बंद करें।';
+  }
+
+  if (lang === 'pa') {
+    if (tip.includes('Maintain 3-5cm water') || tip.includes('3-5cm water level')) return 'ਖੇਤ ਵਿੱਚ 3-5 ਸੈਂਟੀਮੀਟਰ ਪਾਣੀ ਦਾ ਪੱਧਰ ਬਣਾਈ ਰੱਖੋ।';
+    if (tip.includes('Apply first top dressing of nitrogen') || tip.includes('top dressing of nitrogen')) return 'ਨਾਈਟ੍ਰੋਜਨ / ਯੂਰੀਆ ਦੀ ਪਹਿਲੀ ਖੁਰਾਕ ਪਾਓ।';
+    if (tip.includes('Keep field weed-free') || tip.includes('weed-free')) return 'ਖੇਤ ਨੂੰ ਨਦੀਨ ਮੁਕਤ ਰੱਖੋ ਅਤੇ ਗੋਡੀ ਕਰੋ।';
+    if (tip.includes('Maintain 2-3cm standing water in nursery')) return 'ਨਰਸਰੀ ਵਿੱਚ 2-3 ਸੈਂਟੀਮੀਟਰ ਪਾਣੀ ਰੱਖੋ।';
+    if (tip.includes('Apply 2-3 kg Urea')) return '100 ਵਰਗ ਮੀਟਰ ਨਰਸਰੀ ਵਿੱਚ 2-3 ਕਿਲੋ ਯੂਰੀਆ ਪਾਓ।';
+    if (tip.includes('Watch for brown plant hopper')) return 'ਭੂਰੇ ਟਿੱਡੇ (BPH) ਕੀੜੇ ਦੀ ਨਿਗਰਾਨੀ ਕਰੋ।';
+    if (tip.includes('Ensure adequate drainage')) return 'ਖੇਤ ਵਿੱਚ ਪਾਣੀ ਦੀ ਨਿਕਾਸੀ ਯਕੀਨੀ ਬਣਾਓ।';
+    if (tip.includes('Inspect for early pest')) return 'ਕੀੜਿਆਂ ਅਤੇ ਬਿਮਾਰੀਆਂ ਦੀ ਨਿਗਰਾਨੀ ਕਰੋ।';
+    if (tip.includes('reached physiological maturity') || tip.includes('harvest')) return 'ਫਸਲ ਪੱਕ ਚੁੱਕੀ ਹੈ। ਵਾਢੀ ਦੀ ਤਿਆਰੀ ਕਰੋ।';
+    if (tip.includes('Cease irrigation') || tip.includes('Stop irrigation')) return 'ਵਾਢੀ ਤੋਂ 7-10 ਦਿਨ ਪਹਿਲਾਂ ਸਿੰਚਾਈ ਬੰਦ ਕਰੋ।';
+  }
+
+  return tip;
 };
 
 export const localizeAdvisory = (text, lang = 'en') => {

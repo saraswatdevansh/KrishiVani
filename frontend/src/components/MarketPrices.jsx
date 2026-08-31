@@ -135,7 +135,7 @@ export const MarketPrices = () => {
           </div>
         ) : (
           filteredPrices.map((item, idx) => {
-            const cropKey = item.crop?.toLowerCase();
+            const cropKey = (item.crop || item.commodity || '').toLowerCase();
             const meta = CROP_TRANSLATIONS[cropKey] || {};
             const isHighDemand = item.demand === 'High';
             const localizedName = getLocalizedCommodityName(item.commodity || item.crop, i18n.language);
@@ -151,16 +151,18 @@ export const MarketPrices = () => {
                     <div className="w-12 h-12 rounded-2xl overflow-hidden bg-surface-container-low flex-shrink-0 border border-outline-variant/30">
                       <img
                         src={meta.image || 'https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80'}
-                        alt={item.crop}
+                        alt={item.commodity || item.crop}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
                       <h3 className="font-extrabold text-sm text-on-surface">
                         {localizedName}
-                        <span className="text-[11px] font-normal text-on-surface-variant ml-1">
-                          ({item.commodity})
-                        </span>
+                        {localizedName !== item.commodity && (
+                          <span className="text-[11px] font-normal text-on-surface-variant ml-1">
+                            ({item.commodity})
+                          </span>
+                        )}
                       </h3>
                       <div className="text-[11px] text-on-surface-variant flex items-center gap-1 mt-0.5">
                         <span className="material-symbols-outlined text-[14px] text-primary">storefront</span>

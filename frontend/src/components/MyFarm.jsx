@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { getLocalizedCropName, CROP_TRANSLATIONS } from '../data/cropTranslations';
+import { getLocalizedCropName, getLocalizedStageName, getLocalizedSeason, localizeCareTip, CROP_TRANSLATIONS } from '../data/cropTranslations';
 import { RegisterCropForm } from './RegisterCropForm';
 
 export const MyFarm = () => {
@@ -138,7 +138,7 @@ export const MyFarm = () => {
                           crop.status === 'active' ? 'bg-secondary-container text-on-secondary-container' : 
                           crop.status === 'harvested' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          {crop.status === 'active' ? crop.season : crop.status}
+                          {crop.status === 'active' ? getLocalizedSeason(crop.season, i18n.language) : getLocalizedSeason(crop.status, i18n.language)}
                         </span>
                       </div>
                       <div className="text-xs text-on-surface-variant flex gap-2 mt-0.5">
@@ -174,7 +174,9 @@ export const MyFarm = () => {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <p className="text-[10px] text-on-surface-variant font-bold uppercase">{t('farming.current_stage')}</p>
-                          <p className="text-sm font-extrabold text-primary">{crop.current_stage || 'Growing'}</p>
+                          <p className="text-sm font-extrabold text-primary">
+                            {getLocalizedStageName(crop.current_stage || 'Growing', i18n.language)}
+                          </p>
                           {crop.days_in_stage !== undefined && (
                             <p className="text-[10px] text-on-surface-variant">
                               {i18n.language === 'hi' ? `इस चरण में दिन ${crop.days_in_stage}` : i18n.language === 'pa' ? `ਇਸ ਪੜਾਅ 'ਚ ਦਿਨ ${crop.days_in_stage}` : `Day ${crop.days_in_stage} in this stage`}
@@ -207,10 +209,12 @@ export const MyFarm = () => {
                           <div className="text-[10px] text-on-surface-variant flex items-center justify-between mt-1 pt-1 border-t border-outline-variant/30">
                             <span>
                               {i18n.language === 'hi' ? 'अगला: ' : i18n.language === 'pa' ? 'ਅਗਲਾ: ' : 'Next: '}
-                              <strong>{crop.next_stage}</strong>
+                              <strong>{getLocalizedStageName(crop.next_stage, i18n.language)}</strong>
                             </span>
                             {crop.next_stage_date && (
-                              <span>{crop.next_stage_date}</span>
+                              <span>
+                                {crop.next_stage_date.replace(/Stage ends in (\d+) days/i, i18n.language === 'hi' ? '$1 दिनों में यह चरण पूरा होगा' : i18n.language === 'pa' ? '$1 ਦਿਨਾਂ ਵਿੱਚ ਪੜਾਅ ਪੂਰਾ ਹੋਵੇਗਾ' : 'Stage ends in $1 days')}
+                              </span>
                             )}
                           </div>
                         )}
@@ -225,7 +229,7 @@ export const MyFarm = () => {
                         </p>
                         <ul className="text-xs text-on-surface-variant pl-5 list-disc space-y-0.5">
                           {crop.stage_advisory.map((adv, i) => (
-                            <li key={i}>{adv}</li>
+                            <li key={i}>{localizeCareTip(adv, i18n.language)}</li>
                           ))}
                         </ul>
                       </div>
