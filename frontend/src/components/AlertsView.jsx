@@ -18,7 +18,7 @@ export const AlertsView = ({ onMarkAllRead, hasUnreadAlerts }) => {
   const fetchAlerts = async () => {
     try {
       setLoading(true);
-      const res = await api.getLiveAlerts();
+      const res = await api.getLiveAlerts(profile);
       if (res && res.alerts) {
         setAlerts(res.alerts);
         setWeatherMeta(res.weather_summary);
@@ -34,7 +34,7 @@ export const AlertsView = ({ onMarkAllRead, hasUnreadAlerts }) => {
 
   useEffect(() => {
     fetchAlerts();
-  }, [profile?.selected_crop, profile?.state, profile?.district]);
+  }, [profile?.id, profile?.village_or_city, profile?.district, profile?.state, profile?.selected_crop]);
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -156,10 +156,10 @@ export const AlertsView = ({ onMarkAllRead, hasUnreadAlerts }) => {
           <h1 className="text-xl font-bold text-on-surface">{t('alerts.title')}</h1>
           <p className="text-xs text-on-surface-variant mt-0.5">
             {i18n.language === 'hi'
-              ? `${locationMeta?.city || profile?.village_or_city || 'आपके क्षेत्र'} के लिए लाइव अलर्ट`
+              ? `${locationMeta?.city || profile?.village_or_city || profile?.district || 'आपके क्षेत्र'} के लिए लाइव अलर्ट`
               : i18n.language === 'pa'
-              ? `${locationMeta?.city || profile?.village_or_city || 'ਤੁਹਾਡੇ ਖੇਤਰ'} ਲਈ ਲਾਈਵ ਅਲਰਟ`
-              : `Real-time API alerts for ${locationMeta?.city || profile?.village_or_city || 'your region'}`}
+              ? `${locationMeta?.city || profile?.village_or_city || profile?.district || 'ਤੁਹਾਡੇ ਖੇਤਰ'} ਲਈ ਲਾਈਵ ਅਲਰਟ`
+              : `Real-time API alerts for ${locationMeta?.city || profile?.village_or_city || profile?.district || 'your region'}`}
           </p>
         </div>
 

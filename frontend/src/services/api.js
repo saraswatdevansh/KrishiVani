@@ -826,14 +826,14 @@ export const api = {
   },
 
   // Live Alerts & Real Warnings
-  async getLiveAlerts() {
-    const profile = await this.getProfile();
+  async getLiveAlerts(profileParam) {
+    const profile = profileParam || await this.getProfile();
     const crops = await this.getMyCrops();
     
     const STATE_COORDINATES = {
-      'punjab': { lat: 30.9010, lon: 75.8573, defaultCity: 'Ludhiana' },
+      'punjab': { lat: 30.7046, lon: 76.2215, defaultCity: 'Khanna' },
       'haryana': { lat: 29.0588, lon: 76.0856, defaultCity: 'Hisar' },
-      'uttar pradesh': { lat: 26.8467, lon: 80.9462, defaultCity: 'Lucknow' },
+      'uttar pradesh': { lat: 28.6667, lon: 77.4333, defaultCity: 'Ghaziabad' },
       'madhya pradesh': { lat: 22.9734, lon: 78.6569, defaultCity: 'Bhopal' },
       'maharashtra': { lat: 19.7515, lon: 75.7139, defaultCity: 'Pune' },
       'rajasthan': { lat: 27.0238, lon: 74.2179, defaultCity: 'Jaipur' },
@@ -854,12 +854,12 @@ export const api = {
       'telangana': { lat: 18.1124, lon: 79.0193, defaultCity: 'Hyderabad' }
     };
 
-    const stateKey = (profile?.state || '').toLowerCase().trim();
-    const stateConfig = STATE_COORDINATES[stateKey] || { lat: 25.5941, lon: 85.1376, defaultCity: 'Patna' };
+    const stateKey = (profile?.state || 'Punjab').toLowerCase().trim();
+    const stateConfig = STATE_COORDINATES[stateKey] || { lat: 30.7046, lon: 76.2215, defaultCity: 'Khanna' };
+    const state = profile?.state || 'Punjab';
+    const targetLocation = profile?.village_or_city || profile?.district || stateConfig.defaultCity;
     const lat = profile?.latitude || stateConfig.lat;
     const lon = profile?.longitude || stateConfig.lon;
-    const state = profile?.state || 'Bihar';
-    const targetLocation = profile?.village_or_city || profile?.district || stateConfig.defaultCity;
     const apiKey = '3353f59123d2feedf26fce5b178a1fea';
     const govKey = '579b464db66ec23bdd000001da78d01d004f473c5ba558a7ca1b2eec';
 
@@ -879,10 +879,14 @@ export const api = {
     let mandiRecords = [];
 
     try {
+      const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(targetLocation + ',IN')}&units=metric&appid=${apiKey}`;
+      const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(targetLocation + ',IN')}&units=metric&appid=${apiKey}`;
+      const agmarknetUrl = `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${govKey}&format=json&limit=20&filters[state]=${encodeURIComponent(state)}`;
+
       const [wRes, fcRes, agRes] = await Promise.all([
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`),
-        fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`),
-        fetch(`https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070?api-key=${govKey}&format=json&limit=20&filters[state]=${encodeURIComponent(state)}`)
+        fetch(weatherUrl).then(r => r.ok ? r : fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)),
+        fetch(forecastUrl).then(r => r.ok ? r : fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`)),
+        fetch(agmarknetUrl)
       ]);
 
       if (wRes.ok) weatherData = await wRes.json();
