@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from .database import engine, Base
-from .routers import auth, profile, predict, forecast, market, soil
+from .routers import auth, profile, predict, forecast, market, soil, farm, alerts
 from .ml.model import get_model
 
 # Create database tables
@@ -46,6 +46,8 @@ app.include_router(predict.router)
 app.include_router(forecast.router)
 app.include_router(market.router)
 app.include_router(soil.router)
+app.include_router(farm.router)
+app.include_router(alerts.router)
 
 @app.get("/")
 def root():

@@ -56,6 +56,28 @@ def train_and_save():
         json.dump(meta, f, indent=2)
     print(f"Metadata saved to: {META_SAVE_PATH}")
     
+    # Generate crop profiles
+    PROFILES_SAVE_PATH = os.path.join(os.path.dirname(__file__), "crop_profiles.json")
+    profiles = {}
+    grouped = df.groupby('label')
+    for crop, group in grouped:
+        crop_data = {}
+        for feature in feature_cols:
+            desc = group[feature].describe()
+            crop_data[feature] = {
+                "mean": round(float(desc['mean']), 2),
+                "std": round(float(desc['std']), 2),
+                "min": round(float(desc['min']), 2),
+                "max": round(float(desc['max']), 2),
+                "q1": round(float(desc['25%']), 2),
+                "q3": round(float(desc['75%']), 2)
+            }
+        profiles[crop] = crop_data
+        
+    with open(PROFILES_SAVE_PATH, "w") as f:
+        json.dump(profiles, f, indent=2)
+    print(f"Crop profiles saved to: {PROFILES_SAVE_PATH}")
+    
     return clf, accuracy
 
 if __name__ == "__main__":

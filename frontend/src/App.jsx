@@ -5,7 +5,7 @@ import { BottomNav } from './components/BottomNav';
 import { LoginPage } from './components/Auth/LoginPage';
 import { RegisterFarmer } from './components/Auth/RegisterFarmer';
 import { Dashboard } from './components/Dashboard';
-import { CropRecommendations } from './components/CropRecommendations';
+import { PersonalisedFarming } from './components/PersonalisedFarming';
 import { WeatherForecast } from './components/WeatherForecast';
 import { MarketPrices } from './components/MarketPrices';
 import { AlertsView } from './components/AlertsView';
@@ -19,14 +19,14 @@ export const App = () => {
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
   const [isManualRegisterMode, setIsManualRegisterMode] = useState(false);
   const [targetWeatherCrop, setTargetWeatherCrop] = useState(null);
+  const [hasUnreadAlerts, setHasUnreadAlerts] = useState(true);
 
   // 1. Loading Splash Screen
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-        <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center p-2 border border-primary/20 animate-pulse">
-          <img src="/assets/logo.png" alt="Logo" className="w-full h-full object-contain" onError={(e) => { e.target.style.display = 'none'; }} />
-          <span className="material-symbols-filled text-primary text-4xl">eco</span>
+        <div className="w-16 h-16 rounded-3xl bg-white flex items-center justify-center p-1.5 shadow-md border border-primary/20 overflow-hidden animate-pulse">
+          <img src="/assets/logo.png" alt="KrishiVani Logo" className="w-full h-full object-contain" />
         </div>
         <div className="text-center">
           <h1 className="font-extrabold text-xl text-primary tracking-tight">KRISHIVANI</h1>
@@ -80,6 +80,7 @@ export const App = () => {
       {/* Top Header */}
       <Header
         activeTab={activeTab}
+        hasUnreadAlerts={hasUnreadAlerts}
         onOpenLanguage={() => setIsLanguageModalOpen(true)}
         onOpenProfile={() => setActiveTab('profile')}
         onOpenAlerts={() => setActiveTab('advise')}
@@ -90,12 +91,12 @@ export const App = () => {
         {activeTab === 'home' && (
           <Dashboard
             onNavigate={(tab) => setActiveTab(tab)}
-            onOpenSoilModal={() => setActiveTab('crops')}
+            onOpenSoilModal={() => setActiveTab('farming')}
           />
         )}
 
-        {activeTab === 'crops' && (
-          <CropRecommendations
+        {activeTab === 'farming' && (
+          <PersonalisedFarming
             onNavigateWeather={(crop) => {
               setTargetWeatherCrop(crop);
               setActiveTab('weather');
@@ -111,7 +112,12 @@ export const App = () => {
           />
         )}
 
-        {activeTab === 'advise' && <AlertsView />}
+        {activeTab === 'advise' && (
+          <AlertsView 
+            hasUnreadAlerts={hasUnreadAlerts}
+            onMarkAllRead={() => setHasUnreadAlerts(false)}
+          />
+        )}
 
         {activeTab === 'profile' && (
           <FarmerProfileView

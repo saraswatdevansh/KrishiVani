@@ -16,7 +16,15 @@ async function handleResponse(response) {
     let errorMsg = `Request failed (${response.status})`;
     try {
       const errorData = await response.json();
-      errorMsg = errorData.detail || errorData.message || errorMsg;
+      if (Array.isArray(errorData.detail)) {
+        errorMsg = errorData.detail
+          .map(d => `${d.loc ? d.loc.filter(x => x !== 'body').join('.') : ''}: ${d.msg}`)
+          .join(', ');
+      } else if (typeof errorData.detail === 'string') {
+        errorMsg = errorData.detail;
+      } else if (errorData.message) {
+        errorMsg = errorData.message;
+      }
     } catch {
       // ignore
     }
@@ -125,6 +133,63 @@ export const api = {
 
   async reverseGeocode(lat, lon) {
     const res = await fetch(`${API_BASE}/geocode/reverse?lat=${lat}&lon=${lon}`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+  },
+
+  // Farm - Crop Registration
+  async registerCrop(data) {
+    const res = await fetch(`${API_BASE}/farm/register-crop`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    return handleResponse(res);
+  },
+
+  async getMyCrops() {
+    const res = await fetch(`${API_BASE}/farm/my-crops`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+  },
+
+  async getCropAdvisory(cropId) {
+    const res = await fetch(`${API_BASE}/farm/crop/${cropId}/advisory`, {
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+  },
+
+  async updateCropStatus(cropId, status) {
+    const res = await fetch(`${API_BASE}/farm/crop/${cropId}/status`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ status }),
+    });
+    return handleResponse(res);
+  },
+
+  async setPrimaryCrop(cropId) {
+    const res = await fetch(`${API_BASE}/farm/crop/${cropId}/set-primary`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+  },
+
+  async deleteCrop(cropId) {
+    const res = await fetch(`${API_BASE}/farm/crop/${cropId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse(res);
+  },
+
+  // Live Alerts & Real Warnings
+  async getLiveAlerts() {
+    const res = await fetch(`${API_BASE}/alerts`, {
       headers: getAuthHeaders(),
     });
     return handleResponse(res);

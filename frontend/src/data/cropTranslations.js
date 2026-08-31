@@ -39,7 +39,7 @@ export const CROP_TRANSLATIONS = {
     pa: "ਅਰਹਰ / ਤੂਰ ਦਾਲ",
     category: "Pulse / Legume",
     growing_season: "Kharif (Jun - Dec)",
-    image: "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=600&q=80"
+    image: "/assets/crops/pigeonpeas.jpg"
   },
   mothbeans: {
     en: "Moth Beans",
@@ -55,7 +55,7 @@ export const CROP_TRANSLATIONS = {
     pa: "ਮੂੰਗੀ ਦੀ ਦਾਲ",
     category: "Pulse / Legume",
     growing_season: "Kharif / Zaid",
-    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80"
+    image: "/assets/crops/mungbean.png"
   },
   blackgram: {
     en: "Black Gram / Urad",
@@ -71,7 +71,7 @@ export const CROP_TRANSLATIONS = {
     pa: "ਮਸਰਾਂ ਦੀ ਦਾਲ",
     category: "Pulse / Legume",
     growing_season: "Rabi (Oct - Apr)",
-    image: "https://images.unsplash.com/photo-1585994192701-f1a505c817ee?auto=format&fit=crop&w=600&q=80"
+    image: "https://images.unsplash.com/photo-1599307767316-776533bb941c?auto=format&fit=crop&w=600&q=80"
   },
   pomegranate: {
     en: "Pomegranate",

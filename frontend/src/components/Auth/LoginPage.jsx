@@ -73,14 +73,12 @@ export const LoginPage = ({ onCompleteAuth, onOpenLanguage }) => {
           
           {/* Logo Badge */}
           <div className="absolute bottom-2 left-6 flex items-center gap-2">
-            <div className="w-12 h-12 rounded-2xl bg-surface-container-lowest p-1 shadow-md border border-outline-variant/30 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-white p-1 shadow-md border border-outline-variant/30 flex items-center justify-center overflow-hidden">
               <img 
                 src="/assets/logo.png" 
                 alt="KrishiVani Logo" 
                 className="w-full h-full object-contain"
-                onError={(e) => { e.target.style.display = 'none'; }}
               />
-              <span className="material-symbols-filled text-primary text-3xl">eco</span>
             </div>
             <div>
               <h1 className="font-bold text-xl text-primary tracking-tight">KRISHIVANI</h1>

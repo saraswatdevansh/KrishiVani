@@ -1,10 +1,12 @@
 import asyncio
 from fastapi import APIRouter, HTTPException
 from typing import List
-from ..schemas import PredictRequest, PredictResponse, CropRecommendation
+import json
+import os
+from ..schemas import PredictRequest, EvidencePredictResponse, EvidenceCropRecommendation
 from ..services.weather import get_current_weather
 from ..services.market import get_mandi_prices, fetch_state_records_from_agmarknet
-from ..ml.model import predict_crops
+from ..ml.model import predict_crops, predict_crops_with_evidence
 
 router = APIRouter(prefix="/api", tags=["Crop Prediction"])
 
@@ -42,6 +44,19 @@ GEO_RESTRICTED_CROPS = {
     "jute": ["west bengal", "assam", "bihar", "odisha"]
 }
 
+LIFECYCLE_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "crop_lifecycle.json")
+_lifecycle_data = None
+
+def get_lifecycle_data():
+    global _lifecycle_data
+    if _lifecycle_data is None:
+        try:
+            with open(LIFECYCLE_PATH, "r") as f:
+                _lifecycle_data = json.load(f)
+        except Exception:
+            _lifecycle_data = {}
+    return _lifecycle_data
+
 def is_crop_geographically_viable(crop: str, state: str) -> bool:
     crop_lower = crop.lower().strip()
     state_lower = state.lower().strip()
@@ -50,7 +65,7 @@ def is_crop_geographically_viable(crop: str, state: str) -> bool:
         return any(st in state_lower or state_lower in st for st in allowed_states)
     return True
 
-@router.post("/predict", response_model=PredictResponse)
+@router.post("/predict", response_model=EvidencePredictResponse)
 async def predict_crop_suitability(req: PredictRequest):
     target_state = (req.state or "Punjab").strip().title()
     
@@ -75,8 +90,8 @@ async def predict_crop_suitability(req: PredictRequest):
         float(req.rainfall)
     ]
     
-    # 3. Predict suitability for all 22 crops
-    all_crop_predictions = predict_crops(features, top_n=22)
+    # 3. Predict suitability with evidence for all 22 crops
+    all_crop_predictions = predict_crops_with_evidence(features, top_n=22)
     
     # 4. Filter by regional agro-climatic viability and minimum suitability threshold
     viable_candidates = []
@@ -100,12 +115,18 @@ async def predict_crop_suitability(req: PredictRequest):
     market_results = await asyncio.gather(*price_tasks)
     
     candidates_with_prices = []
+    lifecycle_data = get_lifecycle_data()
     for item, market_data in zip(viable_candidates, market_results):
         crop_name = item["crop"]
         if market_data.get("is_live", False):
             market_avail = True
             
         modal_price = market_data.get("modal_price", 2500.0)
+        crop_lifecycle = lifecycle_data.get(crop_name.lower(), {})
+        season = crop_lifecycle.get("season")
+        if isinstance(season, list):
+            season = ", ".join(season)
+            
         candidates_with_prices.append({
             "crop": crop_name,
             "suitability_score": item["suitability_score"],
@@ -115,7 +136,9 @@ async def predict_crop_suitability(req: PredictRequest):
             "max_price": market_data.get("max_price", modal_price * 1.1),
             "market": market_data.get("market", f"{target_state} Mandi"),
             "price_trend": market_data.get("trend", "stable"),
-            "demand_level": market_data.get("demand", "Medium")
+            "demand_level": market_data.get("demand", "Medium"),
+            "season": season,
+            "evidence": item.get("evidence")
         })
         
     # 6. Gated Profit-Aware Re-ranking Formula
@@ -135,9 +158,9 @@ async def predict_crop_suitability(req: PredictRequest):
     top_3 = candidates_with_prices[:3]
     
     # Format recommendations
-    recommendations: List[CropRecommendation] = []
+    recommendations: List[EvidenceCropRecommendation] = []
     for idx, c in enumerate(top_3):
-        recommendations.append(CropRecommendation(
+        recommendations.append(EvidenceCropRecommendation(
             crop=c["crop"],
             crop_display_name=CROP_PRETTY_NAMES.get(c["crop"], c["crop"].capitalize()),
             suitability_score=c["suitability_score"],
@@ -147,10 +170,12 @@ async def predict_crop_suitability(req: PredictRequest):
             market=c["market"],
             demand_level=c["demand_level"],
             final_score=c["final_score"],
-            is_top_pick=(idx == 0)
+            is_top_pick=(idx == 0),
+            season=c["season"],
+            evidence=c["evidence"]
         ))
         
-    return PredictResponse(
+    return EvidencePredictResponse(
         weather=weather,
         recommendations=recommendations,
         market_data_available=market_avail,

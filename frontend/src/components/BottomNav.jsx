@@ -6,7 +6,7 @@ export const BottomNav = ({ activeTab, onTabChange }) => {
 
   const navItems = [
     { id: 'home', label: t('nav.home'), icon: 'home', activeIcon: 'home' },
-    { id: 'crops', label: t('nav.crops'), icon: 'psychology', activeIcon: 'psychology' },
+    { id: 'farming', label: t('nav.farming'), icon: 'agriculture', activeIcon: 'agriculture' },
     { id: 'mandi', label: t('nav.mandi'), icon: 'storefront', activeIcon: 'storefront' },
     { id: 'weather', label: t('nav.weather'), icon: 'partly_cloudy_day', activeIcon: 'partly_cloudy_day' },
     { id: 'advise', label: t('nav.advise'), icon: 'notifications_active', activeIcon: 'notifications_active' },

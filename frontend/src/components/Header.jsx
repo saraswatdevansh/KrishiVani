@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 
-export const Header = ({ onOpenLanguage, onOpenProfile, onOpenAlerts, activeTab }) => {
+export const Header = ({ onOpenLanguage, onOpenProfile, onOpenAlerts, activeTab, hasUnreadAlerts }) => {
   const { t, i18n } = useTranslation();
   const { user, profile } = useAuth();
 
@@ -18,16 +18,12 @@ export const Header = ({ onOpenLanguage, onOpenProfile, onOpenAlerts, activeTab 
     <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur-md border-b border-outline-variant/40 px-4 py-2.5 flex items-center justify-between shadow-sm">
       {/* Brand Logo & Name */}
       <div className="flex items-center gap-2.5 cursor-pointer">
-        <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20">
+        <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center overflow-hidden border border-primary/20 p-0.5 shadow-xs">
           <img 
             src="/assets/logo.png" 
             alt="KrishiVani Logo" 
-            className="w-full h-full object-contain p-0.5"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
+            className="w-full h-full object-contain"
           />
-          <span className="material-symbols-filled text-primary text-2xl">eco</span>
         </div>
         <div>
           <div className="flex items-center gap-1.5">
@@ -64,7 +60,9 @@ export const Header = ({ onOpenLanguage, onOpenProfile, onOpenAlerts, activeTab 
           title="Alerts"
         >
           <span className="material-symbols-outlined text-[22px]">notifications</span>
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface"></span>
+          {hasUnreadAlerts && (
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface animate-pulse"></span>
+          )}
         </button>
 
         {/* Profile Avatar */}
