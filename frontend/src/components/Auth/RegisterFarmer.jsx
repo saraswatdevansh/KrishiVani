@@ -153,7 +153,7 @@ export const RegisterFarmer = ({ onRegistrationComplete }) => {
         potassium: parseFloat(potassium),
         ph: parseFloat(ph),
         rainfall: parseFloat(rainfall),
-        selected_crop: 'rice'
+        selected_crop: null
       };
 
       await saveFarmerProfile(profileData);

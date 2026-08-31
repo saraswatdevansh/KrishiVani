@@ -268,30 +268,37 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
     const hum = weather?.humidity ? `${weather.humidity}%` : '60%';
     const location = profile?.village_or_city || profile?.state || 'your region';
 
-    const cropsToAdvise = activeCrops.length > 0 ? activeCrops : [{ crop_name: primaryCropName }];
-    
-    let cropReports = cropsToAdvise.map(c => {
-      const cName = getLocalizedCropName(c.crop_name, i18n.language);
-      const suit = getCropWeatherSuitability(c.crop_name, weather, forecast);
-      
-      if (i18n.language === 'hi') {
-        const irrText = suit.irrigation.status === 'stop' 
-          ? 'बारिश के कारण सिंचाई तुरंत रोक दें।' 
-          : suit.irrigation.status === 'needed' 
-          ? 'सूखे मौसम के कारण हल्की सिंचाई करें।' 
-          : 'सिंचाई सामान्य रखें।';
-        const fertText = suit.fertilizer.status === 'delay'
-          ? 'बारिश से खाद बहने का खतरा है, इसलिए यूरिया या खाद का छिड़काव टालें।'
-          : 'खाद और पोषण देने के लिए मौसम सुरक्षित है।';
-        return `आपकी ${cName} फसल के लिए: ${irrText} ${fertText} ${suit.precaution}`;
-      } else if (i18n.language === 'pa') {
-        const irrText = suit.irrigation.status === 'stop' ? 'ਮੀਂਹ ਕਾਰਨ ਸਿੰਚਾਈ ਰੋਕੋ।' : 'ਸਿੰਚਾਈ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ।';
-        const fertText = suit.fertilizer.status === 'delay' ? 'ਖਾਦ ਅਤੇ ਯੂਰੀਆ ਪਾਉਣਾ ਮੁਲਤਵੀ ਕਰੋ।' : 'ਖਾਦ ਪਾਉਣ ਲਈ ਢੁਕਵਾਂ ਸਮਾਂ ਹੈ।';
-        return `ਤੁਹਾਡੀ ${cName} ਫਸਲ ਲਈ: ${irrText} ${fertText} ${suit.precaution}`;
-      } else {
-        return `For your ${cName} crop: Irrigation recommendation is ${suit.irrigation.action}. Fertilizer recommendation is ${suit.fertilizer.action}. ${suit.precaution}`;
-      }
-    }).join(' ');
+    let cropReports = '';
+    if (activeCrops.length === 0) {
+      cropReports = i18n.language === 'hi'
+        ? 'आपके खाते में अभी कोई फसल पंजीकृत नहीं है। व्यक्तिगत कृषि सलाह प्राप्त करने के लिए कृपया मेरा खेत में अपनी फसल दर्ज करें।'
+        : i18n.language === 'pa'
+        ? 'ਤੁਹਾਡੇ ਖਾਤੇ ਵਿੱਚ ਅਜੇ ਕੋਈ ਫਸਲ ਦਰਜ ਨਹੀਂ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਮੇਰਾ ਖੇਤ ਵਿੱਚ ਫਸਲ ਦਰਜ ਕਰੋ।'
+        : 'You have not registered any crops yet. Please register your active crop in the My Farm section to receive customized stage advisories.';
+    } else {
+      cropReports = activeCrops.map(c => {
+        const cName = getLocalizedCropName(c.crop_name, i18n.language);
+        const suit = getCropWeatherSuitability(c.crop_name, weather, forecast);
+        
+        if (i18n.language === 'hi') {
+          const irrText = suit.irrigation.status === 'stop' 
+            ? 'बारिश के कारण सिंचाई तुरंत रोक दें।' 
+            : suit.irrigation.status === 'needed' 
+            ? 'सूखे मौसम के कारण हल्की सिंचाई करें।' 
+            : 'सिंचाई सामान्य रखें।';
+          const fertText = suit.fertilizer.status === 'delay'
+            ? 'बारिश से खाद बहने का खतरा है, इसलिए यूरिया या खाद का छिड़काव टालें।'
+            : 'खाद और पोषण देने के लिए मौसम सुरक्षित है।';
+          return `आपकी ${cName} फसल के लिए: ${irrText} ${fertText} ${suit.precaution}`;
+        } else if (i18n.language === 'pa') {
+          const irrText = suit.irrigation.status === 'stop' ? 'ਮੀਂਹ ਕਾਰਨ ਸਿੰਚਾਈ ਰੋਕੋ।' : 'ਸਿੰਚਾਈ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ।';
+          const fertText = suit.fertilizer.status === 'delay' ? 'ਖਾਦ ਅਤੇ ਯੂਰੀਆ ਪਾਉਣਾ ਮੁਲਤਵੀ ਕਰੋ।' : 'ਖਾਦ ਪਾਉਣ ਲਈ ਢੁਕਵਾਂ ਸਮਾਂ ਹੈ।';
+          return `ਤੁਹਾਡੀ ${cName} ਫਸਲ ਲਈ: ${irrText} ${fertText} ${suit.precaution}`;
+        } else {
+          return `For your ${cName} crop: Irrigation recommendation is ${suit.irrigation.action}. Fertilizer recommendation is ${suit.fertilizer.action}. ${suit.precaution}`;
+        }
+      }).join(' ');
+    }
 
     const todayRainChance = forecast?.[0]?.rain_prob != null ? Math.round(forecast[0].rain_prob * 100) : (weather?.rain_1h > 0 ? 85 : 15);
     let speechText = '';
@@ -416,10 +423,10 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
             <span className="material-symbols-outlined text-primary text-xl">agriculture</span>
             <h2 className="text-sm font-bold text-on-surface">
               {i18n.language === 'hi'
-                ? `पंजीकृत फसलें (${activeCrops.length > 0 ? activeCrops.length : '1 मुख्य'})`
+                ? `पंजीकृत फसलें (${activeCrops.length})`
                 : i18n.language === 'pa'
-                ? `ਦਰਜ ਕੀਤੀਆਂ ਫਸਲਾਂ (${activeCrops.length > 0 ? activeCrops.length : '1 ਮੁੱਖ'})`
-                : `My Farm Crops (${activeCrops.length > 0 ? activeCrops.length : '1 Default'})`}
+                ? `ਦਰਜ ਕੀਤੀਆਂ ਫਸਲਾਂ (${activeCrops.length})`
+                : `My Farm Crops (${activeCrops.length})`}
             </h2>
           </div>
           <button
@@ -428,101 +435,36 @@ export const Dashboard = ({ onNavigate, onOpenSoilModal }) => {
           >
             <span className="material-symbols-outlined text-[14px]">add</span>
             <span>
-              {i18n.language === 'hi' ? '+ फसल जोड़ें / प्रबंधन' : i18n.language === 'pa' ? '+ ਫਸਲ ਜੋੜੋ / ਪ੍ਰਬੰਧ' : '+ Add / Manage'}
+              {i18n.language === 'hi' ? '+ फसल जोड़ें' : i18n.language === 'pa' ? '+ ਫਸਲ ਜੋੜੋ' : '+ Add Crop'}
             </span>
           </button>
         </div>
 
         {/* List of Active Registered Crops */}
         {activeCrops.length === 0 ? (
-          // Default Profile Crop Card when no crops registered in DB yet
-          <div className="bg-surface-container-lowest rounded-3xl p-4 shadow-card border border-outline-variant/40 flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-xl overflow-hidden bg-surface-container flex-shrink-0">
-                <img
-                  src={CROP_TRANSLATIONS[primaryCropName.toLowerCase()]?.image || 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?auto=format&fit=crop&w=600&q=80'}
-                  alt={primaryCropName}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-extrabold text-base text-on-surface truncate">
-                    {getLocalizedCropName(primaryCropName, i18n.language)}
-                  </h3>
-                  <span className="text-[10px] font-bold bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-full">
-                    {i18n.language === 'hi' ? 'मुख्य फसल' : i18n.language === 'pa' ? 'ਮੁੱਖ ਫਸਲ' : 'Primary Crop'}
-                  </span>
-                </div>
-                <p className="text-xs text-on-surface-variant mt-0.5">
-                  {i18n.language === 'hi' ? 'राज्य:' : i18n.language === 'pa' ? 'ਰਾਜ:' : 'Region:'} <strong className="text-on-surface">{profile?.state || 'Punjab'}</strong>
-                </p>
-              </div>
+          // Clean Empty State when no crops registered yet
+          <div className="bg-surface-container-lowest rounded-3xl p-6 shadow-card border border-outline-variant/40 flex flex-col items-center text-center gap-3">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+              <span className="material-symbols-outlined text-3xl">agriculture</span>
             </div>
-
-            {/* Weather Suitability Verdict & Action Directives */}
-            {(() => {
-              const suit = getCropWeatherSuitability(primaryCropName, weather, forecast, i18n.language);
-              return (
-                <div className={`p-3.5 rounded-2xl border text-xs flex flex-col gap-2.5 ${suit.color}`}>
-                  <div className="flex items-center justify-between font-bold">
-                    <div className="flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[18px]">{suit.icon}</span>
-                      <span className="text-xs">{suit.badge}</span>
-                    </div>
-                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/80 shadow-xs border border-current/20">
-                      🌧️ {suit.rainChance}% {i18n.language === 'hi' ? 'बारिश जोखिम' : i18n.language === 'pa' ? 'ਮੀਂਹ ਜੋਖਮ' : 'Rain Risk'}
-                    </span>
-                  </div>
-
-                  <p className="text-[11px] leading-relaxed opacity-95">{suit.summary}</p>
-
-                  {/* 2-Column Action Grid for Irrigation & Fertilizer Directives */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-current/15">
-                    {/* Irrigation Directive */}
-                    <div className={`p-2 rounded-xl text-xs flex flex-col gap-0.5 shadow-xs ${
-                      suit.irrigation.status === 'stop' ? 'bg-red-100/90 text-red-900 border border-red-300' :
-                      suit.irrigation.status === 'needed' ? 'bg-blue-100/90 text-blue-900 border border-blue-300' :
-                      'bg-white/80 text-gray-800 border border-gray-200'
-                    }`}>
-                      <div className="flex items-center gap-1 font-black text-[10px] uppercase tracking-wider">
-                        <span className="material-symbols-outlined text-[13px]">{suit.irrigation.icon}</span>
-                        <span>{suit.irrigation.action}</span>
-                      </div>
-                      <p className="text-[10px] leading-tight font-medium opacity-90">{suit.irrigation.reason}</p>
-                    </div>
-
-                    {/* Fertilizer Directive */}
-                    <div className={`p-2 rounded-xl text-xs flex flex-col gap-0.5 shadow-xs ${
-                      suit.fertilizer.status === 'delay' ? 'bg-amber-100/90 text-amber-900 border border-amber-300' :
-                      suit.fertilizer.status === 'safe' ? 'bg-emerald-100/90 text-emerald-900 border border-emerald-300' :
-                      'bg-white/80 text-gray-800 border border-gray-200'
-                    }`}>
-                      <div className="flex items-center gap-1 font-black text-[10px] uppercase tracking-wider">
-                        <span className="material-symbols-outlined text-[13px]">{suit.fertilizer.icon}</span>
-                        <span>{suit.fertilizer.action}</span>
-                      </div>
-                      <p className="text-[10px] leading-tight font-medium opacity-90">{suit.fertilizer.reason}</p>
-                    </div>
-                  </div>
-
-                  <div className="text-[11px] font-semibold pt-1 flex items-start gap-1 text-on-surface">
-                    <span className="material-symbols-outlined text-[14px] text-primary flex-shrink-0 mt-0.5">tips_and_updates</span>
-                    <span>{suit.precaution}</span>
-                  </div>
-                </div>
-              );
-            })()}
-
+            <div>
+              <h3 className="font-bold text-sm text-on-surface">
+                {i18n.language === 'hi' ? 'अभी कोई फसल पंजीकृत नहीं है' : i18n.language === 'pa' ? 'ਅਜੇ ਕੋਈ ਫਸਲ ਦਰਜ ਨਹੀਂ ਹੈ' : 'No Crops Registered Yet'}
+              </h3>
+              <p className="text-xs text-on-surface-variant/80 mt-1 max-w-xs leading-relaxed">
+                {i18n.language === 'hi'
+                  ? 'अपने खेत में बोई गई फसल दर्ज करें ताकि आपको विकास चरण, सटीक सिंचाई और उर्वरक सलाह मिल सके।'
+                  : i18n.language === 'pa'
+                  ? 'ਆਪਣੇ ਖੇਤ ਦੀ ਫਸਲ ਦਰਜ ਕਰੋ ਤਾਂ ਜੋ ਤੁਹਾਨੂੰ ਸਹੀ ਸਿੰਚਾਈ ਅਤੇ ਖਾਦ ਸਲਾਹ ਮਿਲ ਸਕੇ।'
+                  : 'Register your active farm crop to track growth lifecycle, get stage-specific weather alerts, irrigation schedules and fertilizer advisories.'}
+              </p>
+            </div>
             <button
               onClick={() => onNavigate('farming')}
-              className="w-full bg-primary/10 text-primary font-bold py-2 rounded-xl text-xs hover:bg-primary/20 transition-colors text-center"
+              className="mt-1 bg-primary hover:bg-primary-container text-on-primary font-bold text-xs px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm hover:scale-105 active:scale-95 transition-all"
             >
-              {i18n.language === 'hi'
-                ? '+ मेरा खेत में बुवाई की जानकारी दर्ज करें'
-                : i18n.language === 'pa'
-                ? '+ ਮੇਰਾ ਖੇਤ ਵਿੱਚ ਬਿਜਾਈ ਦਰਜ ਕਰੋ'
-                : '+ Register Active Sowing Details in My Farm'}
+              <span className="material-symbols-outlined text-sm">add_circle</span>
+              <span>{i18n.language === 'hi' ? 'मेरा खेत में फसल दर्ज करें' : i18n.language === 'pa' ? 'ਮੇਰਾ ਖੇਤ ਵਿੱਚ ਫਸਲ ਦਰਜ ਕਰੋ' : 'Register Crop in My Farm'}</span>
             </button>
           </div>
         ) : (
