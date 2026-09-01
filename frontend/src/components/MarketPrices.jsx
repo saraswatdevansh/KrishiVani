@@ -22,19 +22,29 @@ export const MarketPrices = () => {
   const { profile } = useAuth();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedState, setSelectedState] = useState(profile?.state || 'Bihar');
-  const [pricesList, setPricesList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [selectedState, setSelectedState] = useState(profile?.state || 'Punjab');
+  // Initialize synchronously with verified state benchmark data (0ms initial render)
+  const [pricesList, setPricesList] = useState(() => api.getInstantBenchmarks(profile?.state || 'Punjab'));
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (profile?.state) {
+      setSelectedState(profile.state);
+    }
+  }, [profile?.state]);
 
   const fetchPrices = async (stateToFetch) => {
-    setLoading(true);
+    const immediate = api.getInstantBenchmarks(stateToFetch);
+    if (immediate && immediate.length > 0) {
+      setPricesList(immediate);
+    }
     try {
       const data = await api.getMarketPrices(null, stateToFetch, profile?.district);
-      setPricesList(data || []);
+      if (data && data.length > 0) {
+        setPricesList(data);
+      }
     } catch (err) {
-      console.warn('Market prices error:', err);
-    } finally {
-      setLoading(false);
+      console.warn('Market prices background refresh error:', err);
     }
   };
 
