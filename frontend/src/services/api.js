@@ -357,18 +357,22 @@ export const api = {
     const lon = longitude || 77.4333;
 
     try {
-      // 1. Try backend endpoint first
+      // 1. Try backend endpoint with 1.8s timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 1800);
       const res = await fetch(`${API_BASE}/forecast`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ crop, latitude: lat, longitude: lon, state: state || 'Uttar Pradesh' }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       if (res.ok) {
         const data = await handleResponse(res);
         if (data && data.forecast && data.current_weather) return data;
       }
     } catch {
-      // Backend not reachable
+      // Backend not reachable / timed out
     }
 
     // 2. Fetch directly from OpenWeatherMap API in real-time
@@ -615,11 +619,33 @@ export const api = {
         { crop: 'maize', commodity: 'Maize / Makka (मक्का)', market: 'Gulabbagh Mandi', district: 'Purnia', state: 'Bihar', modal_price: 2280, min_price: 2100, max_price: 2450, demand: 'High', trend: 'up', arrival_date: todayStr },
         { crop: 'rice', commodity: 'Paddy / Dhan (धान)', market: 'Patna APMC', district: 'Patna', state: 'Bihar', modal_price: 2320, min_price: 2150, max_price: 2500, demand: 'Medium', trend: 'stable', arrival_date: todayStr },
         { crop: 'wheat', commodity: 'Wheat / Gehun (गेहूं)', market: 'Muzaffarpur Mandi', district: 'Muzaffarpur', state: 'Bihar', modal_price: 2350, min_price: 2200, max_price: 2500, demand: 'High', trend: 'stable', arrival_date: todayStr }
+      ],
+      'Maharashtra': [
+        { crop: 'onion', commodity: 'Nashik Red Onion (लाल प्याज)', market: 'Lasalgaon APMC', district: 'Nashik', state: 'Maharashtra', modal_price: 2450, min_price: 1900, max_price: 2950, demand: 'High', trend: 'up', arrival_date: todayStr },
+        { crop: 'cotton', commodity: 'Cotton / Kapas (कपास)', market: 'Akola Mandi', district: 'Akola', state: 'Maharashtra', modal_price: 7200, min_price: 6700, max_price: 7800, demand: 'High', trend: 'up', arrival_date: todayStr },
+        { crop: 'orange', commodity: 'Nagpur Orange / Santra (संतरा)', market: 'Nagpur Fruit APMC', district: 'Nagpur', state: 'Maharashtra', modal_price: 4200, min_price: 3500, max_price: 5000, demand: 'High', trend: 'up', arrival_date: todayStr }
+      ],
+      'Rajasthan': [
+        { crop: 'mustard', commodity: 'Mustard / Sarson (सरसों)', market: 'Jaipur APMC', district: 'Jaipur', state: 'Rajasthan', modal_price: 5620, min_price: 5300, max_price: 5950, demand: 'High', trend: 'up', arrival_date: todayStr },
+        { crop: 'chickpea', commodity: 'Chana / Gram (चना)', market: 'Bikaner Mandi', district: 'Bikaner', state: 'Rajasthan', modal_price: 5980, min_price: 5500, max_price: 6400, demand: 'High', trend: 'up', arrival_date: todayStr }
+      ],
+      'Gujarat': [
+        { crop: 'cotton', commodity: 'Cotton / Shankar-6 (कपास)', market: 'Rajkot APMC', district: 'Rajkot', state: 'Gujarat', modal_price: 7350, min_price: 6800, max_price: 7900, demand: 'High', trend: 'up', arrival_date: todayStr },
+        { crop: 'groundnut', commodity: 'Groundnut / Mungfali (मूंगफली)', market: 'Gondal APMC', district: 'Rajkot', state: 'Gujarat', modal_price: 6400, min_price: 5900, max_price: 6900, demand: 'High', trend: 'up', arrival_date: todayStr }
+      ],
+      'West Bengal': [
+        { crop: 'rice', commodity: 'Paddy / Aman Dhan (धान)', market: 'Burdwan Grain Mandi', district: 'Purba Bardhaman', state: 'West Bengal', modal_price: 2380, min_price: 2150, max_price: 2600, demand: 'High', trend: 'stable', arrival_date: todayStr },
+        { crop: 'potato', commodity: 'Jyoti Potato / Aloo (आलू)', market: 'Hooghly APMC', district: 'Hooghly', state: 'West Bengal', modal_price: 1380, min_price: 1150, max_price: 1600, demand: 'Medium', trend: 'stable', arrival_date: todayStr },
+        { crop: 'jute', commodity: 'Raw Jute / Pat (जूट)', market: 'Siliguri Mandi', district: 'Darjeeling', state: 'West Bengal', modal_price: 5350, min_price: 4900, max_price: 5800, demand: 'High', trend: 'up', arrival_date: todayStr }
       ]
     };
 
-    if (stateBenchmarks[targetState]) {
-      return stateBenchmarks[targetState];
+    const matchedKey = Object.keys(stateBenchmarks).find(
+      k => k.toLowerCase() === targetState.toLowerCase().trim()
+    );
+
+    if (matchedKey && stateBenchmarks[matchedKey]) {
+      return stateBenchmarks[matchedKey];
     }
 
     return Object.values(stateBenchmarks).flat();
