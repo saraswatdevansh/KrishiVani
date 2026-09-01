@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from .database import engine, Base
-from .routers import auth, profile, predict, forecast, market, soil, farm, alerts
+from .routers import auth, profile, predict, forecast, market, soil, farm, alerts, ivr
 from .ml.model import get_model
 
 # Create database tables safely
@@ -51,6 +51,25 @@ app.include_router(market.router)
 app.include_router(soil.router)
 app.include_router(farm.router)
 app.include_router(alerts.router)
+app.include_router(ivr.router)
+
+@app.get("/api")
+def root():
+    return {
+        "message": "Welcome to KrishiVani Smart Crop Advisory API",
+        "status": "online",
+        "version": "1.0.0",
+        "features": [
+            "AI Crop Suggestion (profit-aware)",
+            "Weather-Based Crop Management & 5-Day Advisory",
+            "Real-time Mandi Market Prices (Agmarknet)",
+            "Multilingual & Voice Support"
+        ]
+    }
+
+@app.get("/api/health")
+def health():
+    return {"status": "healthy"}
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse

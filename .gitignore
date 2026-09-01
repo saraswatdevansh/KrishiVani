@@ -49,3 +49,6 @@ Thumbs.db
 stitch_krishivani_agricultural_assistant_prototype/
 
 .vercel
+ngrok
+backend/ngrok
+*.zip

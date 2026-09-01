@@ -156,7 +156,7 @@ async def fetch_state_records_from_agmarknet(state: str) -> List[Dict[str, Any]]
 
     records_processed = []
     try:
-        async with httpx.AsyncClient(timeout=4.0) as client:
+        async with httpx.AsyncClient(timeout=15.0) as client:
             resp = await client.get(api_url, params=params)
             if resp.status_code == 200:
                 body = resp.json()
