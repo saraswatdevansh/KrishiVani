@@ -5,7 +5,7 @@ import { api } from '../../services/api';
 
 export const RegisterFarmer = ({ onRegistrationComplete }) => {
   const { t, i18n } = useTranslation();
-  const { user, saveFarmerProfile } = useAuth();
+  const { user, saveFarmerProfile, logout } = useAuth();
 
   // Basic Details - dynamic defaults based on user name
   const [fullName, setFullName] = useState(user?.name || '');
@@ -171,14 +171,24 @@ export const RegisterFarmer = ({ onRegistrationComplete }) => {
     <div className="min-h-screen bg-background pb-12 max-w-md mx-auto relative px-4 pt-4">
       {/* Top Banner Card */}
       <div className="bg-surface-container-lowest rounded-3xl p-5 shadow-card border border-outline-variant/40 mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
-            <span className="material-symbols-filled text-2xl">person_pin</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
+              <span className="material-symbols-filled text-2xl">person_pin</span>
+            </div>
+            <div>
+              <h1 className="font-bold text-lg text-on-surface">{t('register.title')}</h1>
+              <p className="text-xs text-on-surface-variant">{t('register.subtitle')}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="font-bold text-lg text-on-surface">{t('register.title')}</h1>
-            <p className="text-xs text-on-surface-variant">{t('register.subtitle')}</p>
-          </div>
+          <button
+            type="button"
+            onClick={logout}
+            className="text-xs text-error font-semibold flex items-center gap-1 px-3 py-1.5 rounded-xl border border-error/30 hover:bg-error/10 transition-all"
+          >
+            <span className="material-symbols-outlined text-[16px]">logout</span>
+            Login
+          </button>
         </div>
       </div>
 
