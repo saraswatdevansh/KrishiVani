@@ -28,23 +28,13 @@ def get_state_soil_defaults(state_name: str) -> Dict[str, Any]:
         "major_crops": ["maize", "rice", "wheat", "chickpea"]
     }
 
-_weather_cache = {}
-CACHE_TTL = 600 # 10 minutes
-
 async def get_current_weather(lat: float, lon: float) -> Dict[str, Any]:
     """
-    Fetches real-time weather from OpenWeatherMap API for exact GPS coordinates with 15s timeout.
+    Fetches real-time weather from OpenWeatherMap API for exact GPS coordinates.
     """
-    cache_key = f"cur_{round(lat, 2)}_{round(lon, 2)}"
-    now = datetime.datetime.utcnow().timestamp()
-    if cache_key in _weather_cache:
-        ts, data = _weather_cache[cache_key]
-        if now - ts < CACHE_TTL:
-            return data
-
     url = f"{OWM_BASE}/weather?lat={lat}&lon={lon}&appid={settings.OPENWEATHER_API_KEY}&units=metric"
     try:
-        async with httpx.AsyncClient(timeout=15.0) as client:
+        async with httpx.AsyncClient(timeout=5.0) as client:
             resp = await client.get(url)
             if resp.status_code == 200:
                 data = resp.json()
@@ -54,7 +44,7 @@ async def get_current_weather(lat: float, lon: float) -> Dict[str, Any]:
                 rain = data.get("rain", {}).get("1h", 0.0)
                 city = data.get("name", "")
                 
-                res = {
+                return {
                     "temperature": round(main.get("temp", 28.0), 1),
                     "feels_like": round(main.get("feels_like", 29.0), 1),
                     "humidity": main.get("humidity", 60),
@@ -69,8 +59,6 @@ async def get_current_weather(lat: float, lon: float) -> Dict[str, Any]:
                     "city_name": city,
                     "is_live": True
                 }
-                _weather_cache[cache_key] = (now, res)
-                return res
     except Exception as e:
         print(f"Weather API error for lat={lat}, lon={lon}: {e}")
     
@@ -90,18 +78,11 @@ async def get_current_weather(lat: float, lon: float) -> Dict[str, Any]:
 
 async def get_5day_forecast(lat: float, lon: float) -> List[Dict[str, Any]]:
     """
-    Fetches 5-day forecast at 3-hour intervals with 15s timeout and memory cache.
+    Fetches 5-day forecast at 3-hour intervals and aggregates into daily summaries.
     """
-    cache_key = f"5day_{round(lat, 2)}_{round(lon, 2)}"
-    now = datetime.datetime.utcnow().timestamp()
-    if cache_key in _weather_cache:
-        ts, data = _weather_cache[cache_key]
-        if now - ts < CACHE_TTL:
-            return data
-
     url = f"{OWM_BASE}/forecast?lat={lat}&lon={lon}&appid={settings.OPENWEATHER_API_KEY}&units=metric"
     try:
-        async with httpx.AsyncClient(timeout=15.0) as client:
+        async with httpx.AsyncClient(timeout=6.0) as client:
             resp = await client.get(url)
             if resp.status_code == 200:
                 data = resp.json()
