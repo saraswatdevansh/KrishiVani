@@ -296,7 +296,7 @@ export const RegisterFarmer = ({ onRegistrationComplete }) => {
                 <input
                   type="number"
                   step="0.5"
-                  min="0.1"
+                  min="0"
                   value={farmSize}
                   onChange={(e) => setFarmSize(e.target.value)}
                   className="w-16 px-2 bg-transparent text-xs font-bold text-on-surface outline-none text-center"
